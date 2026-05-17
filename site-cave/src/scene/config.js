@@ -30,4 +30,14 @@ export const SCENE_CONFIG = {
   flameIntensity: 18,
   flameAngle: 0.7,
   flamePenumbra: 0.75,
+
+  // Shadow quality
+  shadowThreshold: 0.5,
+  shadowSoftness: 0.18,
+
+  // Projection blur (Gaussian softness on gobo)
+  blurRadius: 2.5,
+
+  // Temporal accumulation (ghost trails)
+  accumDecay: 0.88,
 };

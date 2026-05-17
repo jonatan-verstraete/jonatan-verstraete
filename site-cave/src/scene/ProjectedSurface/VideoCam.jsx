@@ -43,7 +43,7 @@ void main() {
  *
  * Use at renderOrder=2 so it paints on top of Mp4Mesh (0) and TextMesh (1).
  */
-export const VideoCam = ({ videoRef, isActive }) => {
+export const VideoCam = ({ videoRef, isActive, threshold, softness }) => {
   const mat = useMemo(
     () =>
       new THREE.ShaderMaterial({
@@ -62,6 +62,14 @@ export const VideoCam = ({ videoRef, isActive }) => {
   );
 
   useEffect(() => () => mat.dispose(), [mat]);
+
+  useEffect(() => {
+    mat.uniforms.uThreshold.value = threshold ?? 0.5;
+  }, [threshold, mat]);
+
+  useEffect(() => {
+    mat.uniforms.uSoftness.value = softness ?? 0.18;
+  }, [softness, mat]);
 
   useEffect(() => {
     if (isActive && videoRef?.current) {

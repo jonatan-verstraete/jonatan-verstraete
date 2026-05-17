@@ -22,6 +22,9 @@ export const Wall = memo(({
         if (child.material) {
           child.material.depthTest = true;
           child.material.depthWrite = true;
+          // Reduce normal/roughness so projected text+shadow read cleanly on the craggy wall
+          if (child.material.normalScale) child.material.normalScale.set(0.35, 0.35);
+          if (child.material.roughness != null) child.material.roughness = 0.65;
         }
       }
     });

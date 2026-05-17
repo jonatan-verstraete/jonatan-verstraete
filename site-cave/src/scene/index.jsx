@@ -16,6 +16,11 @@ let gl = null;
 export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
   const spotRef = useRef();
   const targetRef = useRef();
+  // Receives the accumulation ref from ProjectedSurface to update spotlight.map
+  const surfaceAccumRef = useRef(null);
+  const onAccumRef = useCallback((ref) => {
+    surfaceAccumRef.current = ref;
+  }, []);
   const setHistory = useSetAtom(historyAtom);
 
   useFrame((frame) => {
@@ -24,6 +29,27 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
       gl = frame.gl;
     }
   });
+
+  // Priority-1: runs after ProjectedSurface pipeline (priority 0)
+  // Updates spotlight.map to latest accumulated texture + animates color temperature
+  useFrame(({ clock }) => {
+    const spot = spotRef.current;
+    if (!spot) return;
+
+    // Point spotlight at the latest accumulated gobo output
+    const latestAccum = surfaceAccumRef.current?.current;
+    if (latestAccum) spot.map = latestAccum.texture;
+
+    // Subtle fire-flicker color temperature animation (option G)
+    const t = clock.getElapsedTime();
+    const flicker =
+      Math.sin(t * 2.7) * 0.4 +
+      Math.sin(t * 4.1) * 0.3 +
+      Math.sin(t * 0.9) * 0.3;
+    const n = (flicker + 1) * 0.5; // 0..1
+    // Oscillates between warm amber (1.0, 0.95, 0.78) and slightly cooler (0.97, 0.91, 0.84)
+    spot.color.setRGB(0.97 + n * 0.03, 0.91 + n * 0.04, 0.78 + n * 0.06);
+  }, 1);
 
   useImperativeHandle(globalFunctionRef, () => ({
     captureFrame: (quality) =>
@@ -73,6 +99,10 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
     flameIntensity,
     flameAngle,
     flamePenumbra,
+    shadowThreshold,
+    shadowSoftness,
+    blurRadius,
+    accumDecay,
   } = useControls({
     Projector: folder({
       lightX: { value: C.lightX, min: -5, max: 5, step: 0.01 },
@@ -108,6 +138,12 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
       flameIntensity: { value: C.flameIntensity, min: 0, max: 60, step: 0.5 },
       flameAngle: { value: C.flameAngle, min: 0.05, max: 1.4, step: 0.01 },
       flamePenumbra: { value: C.flamePenumbra, min: 0, max: 1, step: 0.01 },
+    }),
+    Shadow: folder({
+      shadowThreshold: { value: C.shadowThreshold, min: 0, max: 1, step: 0.01 },
+      shadowSoftness: { value: C.shadowSoftness, min: 0, max: 0.5, step: 0.01 },
+      blurRadius: { value: C.blurRadius, min: 0, max: 8, step: 0.1 },
+      accumDecay: { value: C.accumDecay, min: 0, max: 0.97, step: 0.01 },
     }),
   });
 
@@ -148,7 +184,6 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
         intensity={lightIntensity}
         angle={lightAngle}
         penumbra={lightPenumbra}
-        map={projTarget.texture}
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-bias={-0.001}
@@ -184,6 +219,11 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
         target={projTarget}
         videoRef={videoRef}
         isActive={isActive}
+        threshold={shadowThreshold}
+        softness={shadowSoftness}
+        blurRadius={blurRadius}
+        accumDecay={accumDecay}
+        onAccumRef={onAccumRef}
       />
 
       <Preload all />
