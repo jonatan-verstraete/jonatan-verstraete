@@ -7,6 +7,7 @@ import { useAnalyze } from "./hooks/useAnalyze";
 import { Scene } from "./scene";
 import { OracleWidget } from "./components/OracleWidget";
 import { OracleSidebar } from "./components/OracleSidebar";
+import { LiveTextTile } from "./components/LiveTextTile";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ export const App = () => {
         />
 
         <AnalysisRunner captureFrame={captureFrame} />
+        <LiveTextTile />
         <OracleWidget />
         <OracleSidebar />
       </QueryClientProvider>

@@ -68,6 +68,30 @@ body {
   overflow: hidden;
 }
 
+/* ── spinning gradient border shared by Oracle UI ── */
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes gradientSpin {
+  to { --angle: 360deg; }
+}
+
+.oracle-gradient-border {
+  --angle: 0deg;
+  animation: gradientSpin 3.5s linear infinite;
+  background: conic-gradient(
+    from var(--angle) at 50% 50%,
+    rgba(170, 59, 255, 0.9)  0%,
+    rgba(255, 159, 40, 0.9) 30%,
+    rgba(170, 59, 255, 0.3) 60%,
+    rgba(255, 159, 40, 0.9) 80%,
+    rgba(170, 59, 255, 0.9) 100%
+  );
+}
+
 @keyframes glowAmber {
   0%, 100% { box-shadow: 0 0 8px 2px rgba(255,159,40,0.3), 0 0 0 0 rgba(255,159,40,0.1); }
   50%       { box-shadow: 0 0 22px 6px rgba(255,159,40,0.55), 0 0 40px 16px rgba(255,159,40,0.08); }
