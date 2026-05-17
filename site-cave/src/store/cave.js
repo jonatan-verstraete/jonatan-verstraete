@@ -2,7 +2,14 @@ import { atom } from "jotai";
 
 const MAX_HISTORY = 100;
 
-export const historyAtom = atom([]);
+export const historyAtom = atom([
+  {
+    id: String(Math.random()),
+    description: "text ".repeat(40),
+    imageBlob: null,
+    timestamp: Date.now(),
+  },
+]);
 
 export const sidebarOpenAtom = atom(false);
 

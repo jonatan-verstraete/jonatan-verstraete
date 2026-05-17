@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 @theme {
+  --color-primary: #aa3bff;
+  --color-primary-muted: rgba(170, 59, 255, 0.12);
+  --color-primary-border: rgba(170, 59, 255, 0.45);
+  --color-secondary: #ff9f28;
+  --color-secondary-muted: rgba(255, 159, 40, 0.12);
+  --color-secondary-border: rgba(255, 159, 40, 0.4);
   --color-accent: #aa3bff;
   --color-accent-muted: rgba(170, 59, 255, 0.1);
   --color-accent-border: rgba(170, 59, 255, 0.5);
@@ -13,6 +19,12 @@
 }
 
 :root {
+  --primary: #aa3bff;
+  --primary-muted: rgba(170, 59, 255, 0.12);
+  --primary-border: rgba(170, 59, 255, 0.45);
+  --secondary: #ff9f28;
+  --secondary-muted: rgba(255, 159, 40, 0.12);
+  --secondary-border: rgba(255, 159, 40, 0.4);
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -54,4 +66,73 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+@keyframes glowAmber {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255,159,40,0.3), 0 0 0 0 rgba(255,159,40,0.1); }
+  50%       { box-shadow: 0 0 22px 6px rgba(255,159,40,0.55), 0 0 40px 16px rgba(255,159,40,0.08); }
+}
+
+@keyframes glowPrimary {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(170,59,255,0.3), 0 0 0 0 rgba(170,59,255,0.1); }
+  50%       { box-shadow: 0 0 22px 6px rgba(170,59,255,0.55), 0 0 40px 16px rgba(170,59,255,0.08); }
+}
+
+@keyframes glowWhite {
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(255,255,255,0.2), 0 0 0 0 rgba(255,255,255,0.08); }
+  50%       { box-shadow: 0 0 18px 5px rgba(255,255,255,0.45), 0 0 32px 12px rgba(255,255,255,0.06); }
+}
+
+@keyframes oraclePulse {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(0.7); }
+}
+
+.oracle-live-dot {
+  animation: oraclePulse 2.4s ease-in-out infinite;
+}
+
+/* gradient outline hover — no solid border */
+.oracle-close-btn {
+  position: relative;
+}
+.oracle-close-btn:hover {
+  background: rgba(170,59,255,0.08) !important;
+  color: rgba(232,224,245,0.95) !important;
+  box-shadow: 0 0 0 1px rgba(170,59,255,0.4), 0 0 10px rgba(170,59,255,0.12) !important;
+  border-color: transparent !important;
+}
+
+.oracle-widget-btn {
+  position: relative;
+}
+.oracle-widget-btn:hover {
+  box-shadow: 0 0 0 1.5px var(--primary-border), 0 0 24px rgba(170,59,255,0.2) !important;
+  border-color: var(--primary-border) !important;
+  filter: brightness(1.08);
+}
+
+/* oracle entry separator — gradient line, no hard border */
+.oracle-entry-sep {
+  position: relative;
+}
+.oracle-entry-sep::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.055) 30%, rgba(255,255,255,0.055) 70%, transparent);
+}
+
+/* thin custom scrollbar */
+.oracle-scroll::-webkit-scrollbar { width: 3px; }
+.oracle-scroll::-webkit-scrollbar-track { background: transparent; }
+.oracle-scroll::-webkit-scrollbar-thumb {
+  background: var(--secondary-border);
+  border-radius: 2px;
+}
+.oracle-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
 }
