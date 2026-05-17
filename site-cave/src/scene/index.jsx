@@ -1,22 +1,13 @@
 import { forwardRef, useRef, useImperativeHandle, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import SceneContent from "./SceneContent";
-import { captureFrame } from "./utils/captureFrame";
+import Scene from "./Main";
 
-function CaptureSetup({ captureRef }) {
+const CaveScene = forwardRef(({ videoRef, isActive }, ref) => {
   const { gl } = useThree();
-  useEffect(() => {
-    captureRef.current = (quality) => captureFrame(gl, quality);
-  }, [gl, captureRef]);
-  return null;
-}
-
-const CaveScene = forwardRef(function CaveScene({ videoRef, isActive }, ref) {
-  const captureRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
     captureFrame: (quality) =>
-      captureRef.current?.(quality) ?? Promise.resolve(null),
+      captureFrame(gl, quality) ?? Promise.resolve(null),
   }));
 
   return (
@@ -33,10 +24,24 @@ const CaveScene = forwardRef(function CaveScene({ videoRef, isActive }, ref) {
       }}
     >
       <color attach="background" args={["#080604"]} />
-      <CaptureSetup captureRef={captureRef} />
-      <SceneContent videoRef={videoRef} isActive={isActive} />
+      <Scene videoRef={videoRef} isActive={isActive} />
     </Canvas>
   );
 });
+
+function captureFrame(gl, quality = 0.8) {
+  return new Promise((resolve) => {
+    gl.domElement.toBlob(
+      (blob) => {
+        if (!blob) return resolve(null);
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      },
+      "image/jpeg",
+      quality,
+    );
+  });
+}
 
 export default CaveScene;

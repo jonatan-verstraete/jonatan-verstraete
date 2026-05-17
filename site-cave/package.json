@@ -13,12 +13,18 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "@react-three/postprocessing": "^3.0.4",
+    "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-query": "^5.100.10",
     "axios": "^1.16.0",
+    "framer-motion": "^12.38.0",
+    "jotai": "^2.20.0",
     "leva": "^0.10.1",
+    "lucide-react": "0.487",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-type-animation": "^3.2.0"
+    "react-draggable": "^4.5.0",
+    "react-type-animation": "^3.2.0",
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

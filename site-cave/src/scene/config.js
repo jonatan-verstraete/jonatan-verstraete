@@ -1,8 +1,8 @@
 export const SCENE_CONFIG = {
   // Projector spotlight
-  lightX: 0,
-  lightY: 0.5,
-  lightZ: 3.5,
+  lightX: 0.8,
+  lightY: -1.5,
+  lightZ: 7.5,
   lightIntensity: 40,
   lightAngle: 0.45,
   lightPenumbra: 0.35,
@@ -20,9 +20,14 @@ export const SCENE_CONFIG = {
   fogColor: "#000",
   fogDensity: 0.09,
 
-  // Fire point light
+  // Fire point light (warm fill)
   sunX: 0,
   sunY: 0,
   sunZ: 3,
   fireIntensity: 12,
+
+  // Flame spotlight (flame-shader gobo)
+  flameIntensity: 18,
+  flameAngle: 0.7,
+  flamePenumbra: 0.75,
 };
