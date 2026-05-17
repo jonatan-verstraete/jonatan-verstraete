@@ -20,9 +20,9 @@ export function Ground({
 
   // grass blade options (forwarded to GrassBlades)
   grassStrands  = 85000,
-  heightMin     = 0.14,
-  heightMax     = 0.38,
-  windStrength  = 0.12,
+  heightMin     = 0.04,
+  heightMax     = 0.08,
+  windStrength  = 0.01,
   windDir       = [1, 0.3],
   colorRoot     = "#0d1807",
   colorMid      = "#2e5917",
@@ -31,7 +31,7 @@ export function Ground({
   // shrub options (forwarded to GrassShrubs)
   shrubCount    = 350,
   shrubScaleMin = 0.25,
-  shrubScaleMax = 0.65,
+  shrubScaleMax = 0.95,
 }) {
   return (
     <group>
