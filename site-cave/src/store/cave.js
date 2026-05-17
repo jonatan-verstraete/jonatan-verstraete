@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { FALLBACK_PROJECTS } from "../data/projects";
 
 const MAX_HISTORY = 100;
 
@@ -12,6 +13,10 @@ export const historyAtom = atom([
 ]);
 
 export const sidebarOpenAtom = atom(false);
+
+export const selectedProjectAtom = atom(FALLBACK_PROJECTS[0]);
+
+export const pickerOpenAtom = atom(false);
 
 export function pushHistory(get, set, entry) {
   const prev = get(historyAtom);

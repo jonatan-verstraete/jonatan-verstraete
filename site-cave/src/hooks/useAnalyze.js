@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useSetAtom } from "jotai";
-import { historyAtom, pushHistory } from "../store/cave";
+import { useSetAtom, useAtomValue } from "jotai";
+import { historyAtom, selectedProjectAtom } from "../store/cave";
 import { devLog } from "../utils";
 
 const MAX_HIS = 5;
 
 export const useAnalyze = (captureFrame = () => {}) => {
-  const captureRef = useRef(captureFrame);
-  const timeoutRef = useRef(null);
-  const history = useRef([]);
-  const setHistory = useSetAtom(historyAtom);
+  const captureRef    = useRef(captureFrame);
+  const timeoutRef    = useRef(null);
+  const history       = useRef([]);
+  const setHistory    = useSetAtom(historyAtom);
+  const project       = useAtomValue(selectedProjectAtom);
+  const projectRef    = useRef(project);
+
+  useEffect(() => { projectRef.current = project; }, [project]);
 
   const scheduleNext = () => {
     clearTimeout(timeoutRef.current);
@@ -27,9 +31,11 @@ export const useAnalyze = (captureFrame = () => {}) => {
   };
 
   const mutationFn = useCallback(async (imageBase64) => {
+    const p = projectRef.current;
     const response = await axios.post("http://127.0.0.1:8042/analyze", {
-      image: imageBase64,
+      image:   imageBase64,
       history: history.current,
+      ...(p && { project: `${p.name}: ${p.description}` }),
     });
     const text = response.data.result;
 
@@ -37,10 +43,10 @@ export const useAnalyze = (captureFrame = () => {}) => {
       history.current.push(text);
       setHistory((prev) => {
         const entry = {
-          id: crypto.randomUUID(),
+          id:          crypto.randomUUID(),
           description: text,
-          imageBlob: null,
-          timestamp: Date.now(),
+          imageBlob:   null,
+          timestamp:   Date.now(),
         };
         const next = [...prev, entry];
         if (next.length > 100) {
@@ -64,7 +70,6 @@ export const useAnalyze = (captureFrame = () => {}) => {
     onSettled: scheduleNext,
   });
 
-  // Kick off the first request after initial delay
   useEffect(() => {
     scheduleNext();
     return () => clearTimeout(timeoutRef.current);
@@ -76,7 +81,7 @@ export const useAnalyze = (captureFrame = () => {}) => {
 
   return {
     isLoading: isPending,
-    result: data ?? "",
+    result:    data ?? "",
     error,
   };
 };
