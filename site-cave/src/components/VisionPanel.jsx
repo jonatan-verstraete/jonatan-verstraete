@@ -1,6 +1,6 @@
 import { TypeAnimation } from "react-type-animation";
 
-export default function VisionPanel({ status, result }) {
+export const VisionPanel = ({ status, result }) => {
   const statusLabel = status === "analyzing" ? "Consulting the oracle…" : null;
 
   return (
@@ -51,4 +51,4 @@ export default function VisionPanel({ status, result }) {
       />
     </div>
   );
-}
+};
