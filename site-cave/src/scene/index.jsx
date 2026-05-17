@@ -1,4 +1,6 @@
-import { useRef, useEffect, useMemo, useImperativeHandle } from "react";
+import { useRef, useEffect, useMemo, useImperativeHandle, useCallback } from "react";
+import { useSetAtom } from "jotai";
+import { historyAtom } from "../store/cave";
 import { Preload, OrbitControls, Cloud, Environment } from "@react-three/drei";
 import { useControls, folder } from "leva";
 import * as THREE from "three";
@@ -14,11 +16,13 @@ let gl = null;
 export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
   const spotRef = useRef();
   const targetRef = useRef();
+  const setHistory = useSetAtom(historyAtom);
 
-  // const { gl } = useThree();
   useFrame((frame) => {
     // todo: better way than this?
-    gl = frame.gl;
+    if(!gl) {
+      gl = frame.gl;
+    }
   });
 
   useImperativeHandle(globalFunctionRef, () => ({
@@ -27,6 +31,15 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
         gl?.domElement.toBlob(
           (blob) => {
             if (!blob) return resolve(null);
+            setHistory((prev) => {
+              if (!prev.length) return prev;
+              const updated = [...prev];
+              updated[updated.length - 1] = {
+                ...updated[updated.length - 1],
+                imageBlob: blob,
+              };
+              return updated;
+            });
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
             reader.readAsDataURL(blob);

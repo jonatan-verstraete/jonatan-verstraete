@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useSetAtom } from "jotai";
+import { historyAtom, pushHistory } from "../store/cave";
 import { devLog } from "../utils";
 
 const MAX_HIS = 5;
@@ -9,11 +11,12 @@ export const useAnalyze = (captureFrame = () => {}) => {
   const captureRef = useRef(captureFrame);
   const timeoutRef = useRef(null);
   const history = useRef([]);
+  const setHistory = useSetAtom(historyAtom);
 
   const scheduleNext = () => {
-    clearTimeout(timeoutRef.current)
+    clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      captureRef.current?.().then((base64 = "") => {
+      captureRef.current?.()?.then((base64 = "") => {
         if (!base64 || !base64.startsWith("data:image/jpeg;base64")) {
           devLog("Invalid canvas image", base64);
           return;
@@ -32,6 +35,20 @@ export const useAnalyze = (captureFrame = () => {}) => {
 
     if (text) {
       history.current.push(text);
+      setHistory((prev) => {
+        const entry = {
+          id: crypto.randomUUID(),
+          description: text,
+          imageBlob: null,
+          timestamp: Date.now(),
+        };
+        const next = [...prev, entry];
+        if (next.length > 100) {
+          const evicted = next.shift();
+          if (evicted?.objectUrl) URL.revokeObjectURL(evicted.objectUrl);
+        }
+        return next;
+      });
     } else {
       devLog("No data in response");
     }
@@ -51,7 +68,7 @@ export const useAnalyze = (captureFrame = () => {}) => {
   useEffect(() => {
     scheduleNext();
     return () => clearTimeout(timeoutRef.current);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     captureRef.current = captureFrame;

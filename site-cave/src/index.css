@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@theme {
+  --color-accent: #aa3bff;
+  --color-accent-muted: rgba(170, 59, 255, 0.1);
+  --color-accent-border: rgba(170, 59, 255, 0.5);
+  --color-cave-text: #6b6375;
+  --color-cave-text-h: #08060d;
+  --color-cave-bg: #fff;
+  --color-cave-border: #e5e4e7;
+  --color-cave-code: #f4f3ec;
+  --color-cave-social: rgba(244, 243, 236, 0.5);
+}
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -37,10 +49,9 @@
   margin: 0;
 }
 
-html {
-  overflow: hidden;
-}
-
+html,
 body {
-  background: var(--bg);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
