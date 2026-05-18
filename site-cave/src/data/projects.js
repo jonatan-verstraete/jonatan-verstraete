@@ -44,7 +44,7 @@ export const FALLBACK_PROJECTS = [
 const GITHUB_USER = import.meta.env.VITE_GITHUB_USER;
 
 export async function fetchProjects() {
-  return []
+  return [];
   if (!GITHUB_USER) return FALLBACK_PROJECTS;
   const res = await fetch(
     `https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated&type=public`,

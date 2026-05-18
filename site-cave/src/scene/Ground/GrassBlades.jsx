@@ -4,7 +4,10 @@ import { useFrame } from "@react-three/fiber";
 import { cpuVnoise } from "./noiseUtils";
 
 function buildBladeGeometry(segments = 8) {
-  const positions = [], normals = [], uvs = [], indices = [];
+  const positions = [],
+    normals = [],
+    uvs = [],
+    indices = [];
   const BASE_W = 0.045;
   const H = 1.0;
 
@@ -26,25 +29,25 @@ function buildBladeGeometry(segments = 8) {
 
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geo.setAttribute("normal",   new THREE.Float32BufferAttribute(normals,   3));
-  geo.setAttribute("uv",       new THREE.Float32BufferAttribute(uvs,       2));
+  geo.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
   geo.setIndex(indices);
   geo.computeVertexNormals();
   return geo;
 }
 
 export function GrassBlades({
-  strands       = 85000,
-  groundSize    = 6,
-  groundY       = -0.5,
-  heightMin     = 0.14,
-  heightMax     = 0.38,
-  windStrength  = 0.10,
-  windDir       = [1, 0.3],
+  strands = 85000,
+  groundSize = 6,
+  groundY = -0.5,
+  heightMin = 0.14,
+  heightMax = 0.38,
+  windStrength = 0.1,
+  windDir = [1, 0.3],
   // Muted, dark night palette. Let the moonlight and firelight do the heavy lifting!
-  colorRoot     = "#020501", 
-  colorMid      = "#12200a", 
-  colorTip      = "#2c4220", 
+  colorRoot = "#020501",
+  colorMid = "#12200a",
+  colorTip = "#2c4220",
 }) {
   const meshRef = useRef();
   const bladeGeo = useMemo(() => buildBladeGeometry(8), []);
@@ -62,7 +65,9 @@ export function GrassBlades({
       // 1. Inject Uniforms
       shader.uniforms.uTime = { value: 0 };
       shader.uniforms.uWindStrength = { value: windStrength };
-      shader.uniforms.uWindDir = { value: new THREE.Vector2(...windDir).normalize() };
+      shader.uniforms.uWindDir = {
+        value: new THREE.Vector2(...windDir).normalize(),
+      };
       shader.uniforms.uColorRoot = { value: new THREE.Color(colorRoot) };
       shader.uniforms.uColorMid = { value: new THREE.Color(colorMid) };
       shader.uniforms.uColorTip = { value: new THREE.Color(colorTip) };
@@ -70,7 +75,8 @@ export function GrassBlades({
       mat.userData.shader = shader;
 
       // 2. Vertex Shader Injection (Wind Physics)
-      shader.vertexShader = `
+      shader.vertexShader =
+        `
         uniform float uTime;
         uniform float uWindStrength;
         uniform vec2  uWindDir;
@@ -122,11 +128,12 @@ export function GrassBlades({
 
         transformed.x += sin(uTime * 1.3 + randPhase + w1 * 2.0)       * uWindStrength       * t2;
         transformed.z += cos(uTime * 0.9 + randPhase * 0.6 + w2 * 1.5) * uWindStrength * 0.5 * t2;
-        `
+        `,
       );
 
       // 3. Fragment Shader Injection (Coloring & Moonlight Glimmer)
-      shader.fragmentShader = `
+      shader.fragmentShader =
+        `
         varying float vT;
         varying vec3  vLocalPos;
         varying vec3  vWorldRootPos;
@@ -161,7 +168,7 @@ export function GrassBlades({
         // Soft root darkening (Fake Ambient Occlusion)
         float fakeAO = smoothstep(0.0, 0.35, vT) * 0.75 + 0.25;
         diffuseColor.rgb = grassCol * fakeAO;
-        `
+        `,
       );
 
       shader.fragmentShader = shader.fragmentShader.replace(
@@ -185,14 +192,20 @@ export function GrassBlades({
           vec3 sparkleColor = vec3(0.85, 0.95, 1.0) * 3.5 * smoothstep(sparkleThresh, 1.0, sparkleNoise);
           totalEmissiveRadiance += sparkleColor * viewCatch * smoothstep(0.0, 0.35, vT);
         }
-        `
+        `,
       );
     };
 
     return mat;
   }, [windStrength, colorRoot, colorMid, colorTip]);
 
-  useEffect(() => () => { bladeGeo.dispose(); bladeMat.dispose(); }, [bladeGeo, bladeMat]);
+  useEffect(
+    () => () => {
+      bladeGeo.dispose();
+      bladeMat.dispose();
+    },
+    [bladeGeo, bladeMat],
+  );
 
   useFrame(({ clock }) => {
     if (bladeMat.userData.shader) {

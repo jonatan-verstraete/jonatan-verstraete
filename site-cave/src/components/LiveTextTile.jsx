@@ -7,7 +7,12 @@ import { historyAtom } from "../store/cave";
 
 const formatTime = (ts) => {
   const d = new Date(ts);
-  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+  return d.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
 };
 
 export function LiveTextTile() {
@@ -19,7 +24,7 @@ export function LiveTextTile() {
     <Draggable nodeRef={nodeRef} defaultPosition={{ x: 24, y: 0 }}>
       <div
         ref={nodeRef}
-        className="fixed left-0 top-[38%] w-[clamp(200px,22vw,340px)] z-tile cursor-grab select-none"
+        className="z-tile fixed top-[38%] left-0 w-[clamp(200px,22vw,340px)] cursor-grab select-none"
       >
         <AnimatePresence>
           {latest && (
@@ -31,17 +36,16 @@ export function LiveTextTile() {
             >
               {/* spinning gradient border wrapper */}
               <div className="oracle-gradient-border rounded-xl p-[1.5px]">
-                <div className="rounded-[12.5px] bg-overlay-high backdrop-blur-lg overflow-hidden">
-
+                <div className="bg-overlay-high overflow-hidden rounded-[12.5px] backdrop-blur-lg">
                   {/* header */}
-                  <div className="flex items-center justify-between pt-[10px] px-[14px] pb-[9px] bg-gradient-to-b from-primary/6 to-transparent">
+                  <div className="from-primary/6 flex items-center justify-between bg-gradient-to-b to-transparent px-[14px] pt-[10px] pb-[9px]">
                     <div className="flex items-center gap-[7px]">
-                      <span className="oracle-live-dot inline-block w-[5px] h-[5px] rounded-full bg-secondary shrink-0" />
-                      <span className="text-micro font-mono tracking-ultra uppercase text-ink-ghost">
+                      <span className="oracle-live-dot bg-secondary inline-block h-[5px] w-[5px] shrink-0 rounded-full" />
+                      <span className="text-micro tracking-ultra text-ink-ghost font-mono uppercase">
                         Oracle
                       </span>
                     </div>
-                    <span className="text-micro font-mono text-ink-ghost tracking-loose">
+                    <span className="text-micro text-ink-ghost tracking-loose font-mono">
                       {formatTime(latest.timestamp)}
                     </span>
                   </div>
@@ -50,11 +54,11 @@ export function LiveTextTile() {
                   <div className="h-px shrink-0 bg-[linear-gradient(to_right,transparent,rgba(170,59,255,0.25)_30%,rgba(255,159,40,0.2)_70%,transparent)]" />
 
                   {/* text body — ghost sets height, typewriter overlays */}
-                  <div className="p-[13px_16px_16px] relative">
+                  <div className="relative p-[13px_16px_16px]">
                     {/* ghost: full text, invisible — anchors the height */}
                     <div
                       aria-hidden
-                      className="invisible pointer-events-none text-read leading-[1.7] font-sans tracking-fine whitespace-pre-wrap break-words"
+                      className="text-read tracking-fine pointer-events-none invisible font-sans leading-[1.7] break-words whitespace-pre-wrap"
                     >
                       {latest.description}
                     </div>
@@ -65,18 +69,17 @@ export function LiveTextTile() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.3 }}
-                      className="absolute top-[13px] left-[16px] right-[16px] text-read leading-[1.7] text-ink font-sans tracking-fine"
+                      className="text-read text-ink tracking-fine absolute top-[13px] right-[16px] left-[16px] font-sans leading-[1.7]"
                     >
                       <TypeAnimation
                         key={latest.id}
                         sequence={[latest.description]}
                         speed={72}
                         cursor={false}
-                        className="whitespace-pre-wrap break-words"
+                        className="break-words whitespace-pre-wrap"
                       />
                     </motion.div>
                   </div>
-
                 </div>
               </div>
             </motion.div>

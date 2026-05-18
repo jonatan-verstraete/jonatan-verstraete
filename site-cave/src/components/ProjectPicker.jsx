@@ -9,18 +9,18 @@ import { fetchProjects, FALLBACK_PROJECTS } from "../data/projects";
 const GITHUB_USER = import.meta.env.VITE_GITHUB_USER;
 
 export const ProjectPicker = () => {
-  const [open, setOpen]   = useAtom(pickerOpenAtom);
+  const [open, setOpen] = useAtom(pickerOpenAtom);
   const [query, setQuery] = useState("");
   const [activeIdx, setActiveIdx] = useState(0);
-  const [selected, setSelected]   = useAtom(selectedProjectAtom);
+  const [selected, setSelected] = useAtom(selectedProjectAtom);
   const inputRef = useRef(null);
-  const listRef  = useRef(null);
+  const listRef = useRef(null);
 
   const { data: projects = FALLBACK_PROJECTS } = useQuery({
-    queryKey:  ["github-repos", GITHUB_USER ?? "__fallback__"],
-    queryFn:   fetchProjects,
+    queryKey: ["github-repos", GITHUB_USER ?? "__fallback__"],
+    queryFn: fetchProjects,
     staleTime: 5 * 60 * 1000,
-    enabled:   !!GITHUB_USER,
+    enabled: !!GITHUB_USER,
   });
 
   const filtered = query.trim()
@@ -32,7 +32,9 @@ export const ProjectPicker = () => {
       )
     : projects;
 
-  useEffect(() => { setActiveIdx(0); }, [query]);
+  useEffect(() => {
+    setActiveIdx(0);
+  }, [query]);
 
   useEffect(() => {
     if (open) {
@@ -47,7 +49,10 @@ export const ProjectPicker = () => {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
-      if (e.key === "Escape") { setOpen(false); return; }
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
       if (e.key === "ArrowDown") {
         e.preventDefault();
         setActiveIdx((i) => Math.min(i + 1, filtered.length - 1));
@@ -73,7 +78,8 @@ export const ProjectPicker = () => {
   useEffect(() => {
     if (!open) return;
     const onDown = (e) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+      if (wrapRef.current && !wrapRef.current.contains(e.target))
+        setOpen(false);
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
@@ -89,22 +95,22 @@ export const ProjectPicker = () => {
           exit={{ opacity: 0, y: 10, scale: 0.97 }}
           transition={{ type: "spring", stiffness: 440, damping: 36 }}
           style={{ transform: "translateX(-50%)" }}
-          className="fixed bottom-[88px] left-1/2 w-[min(480px,90vw)] z-picker bg-overlay-high backdrop-blur-[20px] rounded-xl shadow-overlay overflow-hidden font-sans"
+          className="z-picker bg-overlay-high shadow-overlay fixed bottom-[88px] left-1/2 w-[min(480px,90vw)] overflow-hidden rounded-xl font-sans backdrop-blur-[20px]"
         >
           {/* Search row */}
-          <div className="flex items-center gap-2.5 py-[13px] px-4 border-b border-white/6">
+          <div className="flex items-center gap-2.5 border-b border-white/6 px-4 py-[13px]">
             <Search size={13} className="text-white-soft shrink-0" />
             <input
               ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search projects…"
-              className="flex-1 bg-transparent border-0 outline-none text-white/80 text-ui tracking-[0.01em]"
+              className="text-ui flex-1 border-0 bg-transparent tracking-[0.01em] text-white/80 outline-none"
             />
             {query && (
               <button
                 onClick={() => setQuery("")}
-                className="bg-transparent border-0 cursor-pointer text-white-soft p-0 flex"
+                className="text-white-soft flex cursor-pointer border-0 bg-transparent p-0"
               >
                 <X size={12} />
               </button>
@@ -114,10 +120,10 @@ export const ProjectPicker = () => {
           {/* Project list */}
           <div
             ref={listRef}
-            className="max-h-[320px] overflow-y-auto oracle-scroll"
+            className="oracle-scroll max-h-[320px] overflow-y-auto"
           >
             {filtered.length === 0 ? (
-              <div className="px-4 py-6 text-center text-ink-ghost text-ui">
+              <div className="text-ink-ghost text-ui px-4 py-6 text-center">
                 No matches
               </div>
             ) : (
@@ -138,13 +144,11 @@ export const ProjectPicker = () => {
           </div>
 
           {/* Keyboard hint footer */}
-          <div className="flex gap-[18px] px-4 py-2 border-t border-white-ghost text-white/[0.18] text-label font-mono">
+          <div className="border-white-ghost text-label flex gap-[18px] border-t px-4 py-2 font-mono text-white/[0.18]">
             <span>↑↓ navigate</span>
             <span>↵ select</span>
             <span>esc close</span>
-            {GITHUB_USER && (
-              <span className="ml-auto">@{GITHUB_USER}</span>
-            )}
+            {GITHUB_USER && <span className="ml-auto">@{GITHUB_USER}</span>}
           </div>
         </motion.div>
       )}
@@ -157,40 +161,46 @@ const ProjectRow = ({ project, active, selected, onHover, onClick }) => (
     onMouseEnter={onHover}
     onClick={onClick}
     className={[
-      "relative flex items-start gap-3 w-full px-4 py-[11px]",
-      "border-0 cursor-pointer text-left transition-colors duration-100",
+      "relative flex w-full items-start gap-3 px-4 py-[11px]",
+      "cursor-pointer border-0 text-left transition-colors duration-100",
       active ? "bg-primary-muted/80" : "bg-transparent",
     ].join(" ")}
   >
     {/* Active bar */}
     {active && (
-      <div className="absolute left-0 top-[6px] bottom-[6px] w-0.5 rounded-[1px] bg-primary" />
+      <div className="bg-primary absolute top-[6px] bottom-[6px] left-0 w-0.5 rounded-[1px]" />
     )}
 
     <FolderOpen
       size={13}
       className={[
         "mt-0.5 shrink-0",
-        selected ? "text-secondary" : active ? "text-primary" : "text-white/[0.22]",
+        selected
+          ? "text-secondary"
+          : active
+            ? "text-primary"
+            : "text-white/[0.22]",
       ].join(" ")}
     />
 
-    <div className="flex-1 min-w-0">
-      <div className={[
-        "text-ui font-medium font-mono mb-0.5",
-        selected ? "text-secondary" : "text-white/80",
-      ].join(" ")}>
+    <div className="min-w-0 flex-1">
+      <div
+        className={[
+          "text-ui mb-0.5 font-mono font-medium",
+          selected ? "text-secondary" : "text-white/80",
+        ].join(" ")}
+      >
         {project.name}
       </div>
       {project.description && (
-        <div className="text-xs text-white/[0.32] leading-[1.4] whitespace-nowrap overflow-hidden text-ellipsis">
+        <div className="overflow-hidden text-xs leading-[1.4] text-ellipsis whitespace-nowrap text-white/[0.32]">
           {project.description}
         </div>
       )}
     </div>
 
     {project.language && (
-      <span className="shrink-0 text-[10px] text-white/[0.18] font-mono pt-0.5">
+      <span className="shrink-0 pt-0.5 font-mono text-[10px] text-white/[0.18]">
         {project.language}
       </span>
     )}

@@ -2,12 +2,16 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import { useTexture } from "@react-three/drei";
 
-export function SoilFloor({ groundSize = 6, groundY = -0.5, textureRepeat = 3 }) {
+export function SoilFloor({
+  groundSize = 6,
+  groundY = -0.5,
+  textureRepeat = 3,
+}) {
   const textures = useTexture({
-    map:          "/textures/Ground068_2K-JPG_Color.jpg",
-    normalMap:    "/textures/Ground068_2K-JPG_NormalGL.jpg",
+    map: "/textures/Ground068_2K-JPG_Color.jpg",
+    normalMap: "/textures/Ground068_2K-JPG_NormalGL.jpg",
     roughnessMap: "/textures/Ground068_2K-JPG_Roughness.jpg",
-    aoMap:        "/textures/Ground068_2K-JPG_AmbientOcclusion.jpg",
+    aoMap: "/textures/Ground068_2K-JPG_AmbientOcclusion.jpg",
   });
 
   useMemo(() => {

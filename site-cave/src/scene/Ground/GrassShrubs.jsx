@@ -4,11 +4,11 @@ import { useGLTF } from "@react-three/drei";
 import { cpuVnoise } from "./noiseUtils";
 
 export function GrassShrubs({
-  count      = 350,
+  count = 350,
   groundSize = 6,
-  groundY    = 0.5,
-  scaleMin   = 0.25,
-  scaleMax   = 1.65,
+  groundY = 0.5,
+  scaleMin = 0.25,
+  scaleMax = 1.65,
 }) {
   const { scene: gltfScene } = useGLTF("/models/grass-shurbs.glb");
   const groupRef = useRef();
@@ -17,14 +17,18 @@ export function GrassShrubs({
     const group = groupRef.current;
     if (!group || !gltfScene) return;
 
-    const dummy   = new THREE.Object3D();
+    const dummy = new THREE.Object3D();
     const created = [];
 
     gltfScene.traverse((obj) => {
       if (!obj.isMesh) return;
 
-      const instanced = new THREE.InstancedMesh(obj.geometry, obj.material, count);
-      instanced.castShadow    = true;
+      const instanced = new THREE.InstancedMesh(
+        obj.geometry,
+        obj.material,
+        count,
+      );
+      instanced.castShadow = true;
       instanced.receiveShadow = true;
       instanced.frustumCulled = false;
 
@@ -33,10 +37,10 @@ export function GrassShrubs({
         const z = (Math.random() - 0.5) * groundSize;
 
         // Cluster in denser areas matching the grass layout
-        const density  = cpuVnoise(x * 1.0 + 50, z * 1.0 + 50);
-        const detail   = cpuVnoise(x * 2.8 + 12,  z * 2.8 + 12);
+        const density = cpuVnoise(x * 1.0 + 50, z * 1.0 + 50);
+        const detail = cpuVnoise(x * 2.8 + 12, z * 2.8 + 12);
         const noiseVal = density * 0.6 + detail * 0.4;
-        const scale    = THREE.MathUtils.lerp(scaleMin, scaleMax, noiseVal);
+        const scale = THREE.MathUtils.lerp(scaleMin, scaleMax, noiseVal);
 
         dummy.position.set(x, 0.01 + groundY, z);
         dummy.rotation.y = Math.random() * Math.PI * 2;

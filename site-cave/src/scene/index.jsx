@@ -1,4 +1,10 @@
-import { useRef, useEffect, useMemo, useImperativeHandle, useCallback } from "react";
+import {
+  useRef,
+  useEffect,
+  useMemo,
+  useImperativeHandle,
+  useCallback,
+} from "react";
 import { useSetAtom } from "jotai";
 import { historyAtom } from "../store/cave";
 import { Preload, OrbitControls, Cloud, Environment } from "@react-three/drei";
@@ -25,7 +31,7 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
 
   useFrame((frame) => {
     // todo: better way than this?
-    if(!gl) {
+    if (!gl) {
       gl = frame.gl;
     }
   });

@@ -73,10 +73,10 @@ export const ProjectText = ({ title, description }) => {
     () =>
       new THREE.ShaderMaterial({
         uniforms: {
-          uMap:  { value: null },
+          uMap: { value: null },
           uPrev: { value: null },
           uTime: { value: 0 },
-          uT:    { value: 1 }, // start at 1: no prev, show current immediately
+          uT: { value: 1 }, // start at 1: no prev, show current immediately
         },
         vertexShader,
         fragmentShader,
@@ -88,21 +88,21 @@ export const ProjectText = ({ title, description }) => {
     [],
   );
 
-  const prevTexRef  = useRef(null);
+  const prevTexRef = useRef(null);
   // NaN = idle, null = "start transition on next frame", number = start clock time
-  const transRef    = useRef(NaN);
+  const transRef = useRef(NaN);
 
   useEffect(() => {
     const canvas = buildGoboCanvas(title, description);
-    const newTex  = new THREE.CanvasTexture(canvas);
-    const oldTex  = mat.uniforms.uMap.value;
+    const newTex = new THREE.CanvasTexture(canvas);
+    const oldTex = mat.uniforms.uMap.value;
 
     if (oldTex) {
       prevTexRef.current?.dispose();
       prevTexRef.current = oldTex;
       mat.uniforms.uPrev.value = oldTex;
-      mat.uniforms.uT.value    = 0;
-      transRef.current         = null; // trigger start on next frame
+      mat.uniforms.uT.value = 0;
+      transRef.current = null; // trigger start on next frame
     }
 
     mat.uniforms.uMap.value = newTex;
@@ -149,48 +149,56 @@ function buildGoboCanvas(title, description) {
   const W = 2048;
   const H = 1024;
   const canvas = document.createElement("canvas");
-  canvas.width  = W;
+  canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d");
 
   const titleSize = Math.round(W * 0.07);
-  const descSize  = Math.round(W * 0.022);
+  const descSize = Math.round(W * 0.022);
 
   ctx.font = `400 ${descSize}px system-ui, sans-serif`;
-  const maxW  = Math.min(W * 0.65, 1400);
+  const maxW = Math.min(W * 0.65, 1400);
   const lines = wrapText(ctx, description, maxW);
 
   ctx.fillStyle = "#000000";
   ctx.fillRect(0, 0, W, H);
 
   ctx.save();
-  ctx.textAlign    = "center";
+  ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   // Glow pass
   ctx.shadowColor = "#ffffff";
-  ctx.shadowBlur  = 80;
-  ctx.font        = `900 ${titleSize}px system-ui, sans-serif`;
-  ctx.fillStyle   = "#ffffff";
+  ctx.shadowBlur = 80;
+  ctx.font = `900 ${titleSize}px system-ui, sans-serif`;
+  ctx.fillStyle = "#ffffff";
   ctx.fillText(title, W / 2, H / 2 - titleSize * 0.9);
 
   ctx.shadowBlur = 40;
-  ctx.font       = `400 ${descSize}px system-ui, sans-serif`;
-  ctx.fillStyle  = "#dddddd";
+  ctx.font = `400 ${descSize}px system-ui, sans-serif`;
+  ctx.fillStyle = "#dddddd";
   for (let i = 0; i < lines.length; i++) {
-    ctx.fillText(lines[i], W / 2, H / 2 + titleSize * 0.4 + i * (descSize * 1.5));
+    ctx.fillText(
+      lines[i],
+      W / 2,
+      H / 2 + titleSize * 0.4 + i * (descSize * 1.5),
+    );
   }
 
   // Sharp pass on top
   ctx.shadowBlur = 0;
-  ctx.font       = `900 ${titleSize}px system-ui, sans-serif`;
-  ctx.fillStyle  = "#ffffff";
+  ctx.font = `900 ${titleSize}px system-ui, sans-serif`;
+  ctx.fillStyle = "#ffffff";
   ctx.fillText(title, W / 2, H / 2 - titleSize * 0.9);
 
-  ctx.font      = `400 ${descSize}px system-ui, sans-serif`;
+  ctx.font = `400 ${descSize}px system-ui, sans-serif`;
   ctx.fillStyle = "#dddddd";
   for (let i = 0; i < lines.length; i++) {
-    ctx.fillText(lines[i], W / 2, H / 2 + titleSize * 0.4 + i * (descSize * 1.5));
+    ctx.fillText(
+      lines[i],
+      W / 2,
+      H / 2 + titleSize * 0.4 + i * (descSize * 1.5),
+    );
   }
   ctx.restore();
 

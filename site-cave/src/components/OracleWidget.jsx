@@ -9,30 +9,38 @@ export const OracleWidget = () => {
   const nodeRef = useRef(null);
   const draggedRef = useRef(false);
 
-  return null
+  return null;
 
   return (
     <Draggable
       nodeRef={nodeRef}
-      onStart={() => { draggedRef.current = false; }}
-      onDrag={() => { draggedRef.current = true; }}
+      onStart={() => {
+        draggedRef.current = false;
+      }}
+      onDrag={() => {
+        draggedRef.current = true;
+      }}
     >
       <div
         ref={nodeRef}
         data-oracle-widget
-        className="fixed bottom-7 left-7 z-widget cursor-grab"
+        className="z-widget fixed bottom-7 left-7 cursor-grab"
       >
         {/* spinning gradient border */}
-        <div className="oracle-gradient-border rounded-full p-[1.5px] inline-flex">
+        <div className="oracle-gradient-border inline-flex rounded-full p-[1.5px]">
           <button
-            onClick={() => { if (!draggedRef.current) setOpen((v) => !v); }}
+            onClick={() => {
+              if (!draggedRef.current) setOpen((v) => !v);
+            }}
             className={[
-              "relative w-12 h-12 rounded-full border-0 cursor-pointer",
+              "relative h-12 w-12 cursor-pointer rounded-full border-0",
               "flex items-center justify-center outline-none",
               "backdrop-blur-[16px] backdrop-saturate-[160%]",
               "transition-all duration-[350ms]",
               "hover:shadow-ring hover:border-primary-border hover:brightness-110",
-              open ? "bg-primary-muted text-primary" : "bg-overlay-mid text-secondary",
+              open
+                ? "bg-primary-muted text-primary"
+                : "bg-overlay-mid text-secondary",
             ].join(" ")}
             style={{
               animation: open

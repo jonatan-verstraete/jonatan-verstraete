@@ -80,8 +80,10 @@ function makePassScene() {
   return { scene, cam, mesh, dispose: () => geo.dispose() };
 }
 
-const BLUR_W = 1024, BLUR_H = 512;   // blur at half-res (fine for soft kernel)
-const GOBO_W = 2048, GOBO_H = 1024;  // full gobo + accumulation res
+const BLUR_W = 1024,
+  BLUR_H = 512; // blur at half-res (fine for soft kernel)
+const GOBO_W = 2048,
+  GOBO_H = 1024; // full gobo + accumulation res
 
 /**
  * ProjectedSurface — renders the gobo scene, then:

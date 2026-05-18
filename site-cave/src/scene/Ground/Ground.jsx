@@ -1,4 +1,4 @@
-import { SoilFloor  } from "./SoilFloor";
+import { SoilFloor } from "./SoilFloor";
 import { GrassBlades } from "./GrassBlades";
 import { GrassShrubs } from "./GrassShrubs";
 
@@ -8,28 +8,28 @@ import { GrassShrubs } from "./GrassShrubs";
 // ─────────────────────────────────────────────────────────────────────────────
 export function Ground({
   // shared layout
-  groundY       = -0.5,
-  groundSize    = 6,
+  groundY = -0.5,
+  groundSize = 6,
 
   // soil
   textureRepeat = 3,
 
   // feature flags
-  enableGrass  = true,
+  enableGrass = true,
   enableShrubs = true,
 
   // grass blade options (forwarded to GrassBlades)
-  grassStrands  = 85000,
-  heightMin     = 0.04,
-  heightMax     = 0.08,
-  windStrength  = 0.01,
-  windDir       = [1, 0.3],
-  colorRoot     = "#0d1807",
-  colorMid      = "#2e5917",
-  colorTip      = "#76b833",
+  grassStrands = 85000,
+  heightMin = 0.04,
+  heightMax = 0.08,
+  windStrength = 0.01,
+  windDir = [1, 0.3],
+  colorRoot = "#0d1807",
+  colorMid = "#2e5917",
+  colorTip = "#76b833",
 
   // shrub options (forwarded to GrassShrubs)
-  shrubCount    = 350,
+  shrubCount = 350,
   shrubScaleMin = 0.25,
   shrubScaleMax = 0.95,
 }) {

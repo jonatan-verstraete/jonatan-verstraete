@@ -1,17 +1,11 @@
-import {  useEffect, memo } from "react";
+import { useEffect, memo } from "react";
 import { useGLTF } from "@react-three/drei";
 
-const MODEL = "/models/wall.glb"
+const MODEL = "/models/wall.glb";
 
 useGLTF.preload(MODEL);
 
-export const Wall = memo(({
-  wallX,
-  wallY,
-  wallZ,
-  wallScale,
-  wallRotX,
-}) => {
+export const Wall = memo(({ wallX, wallY, wallZ, wallScale, wallRotX }) => {
   const { scene } = useGLTF(MODEL);
 
   useEffect(() => {

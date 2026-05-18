@@ -22,12 +22,12 @@ function ProjectPickerTrigger() {
         "fixed bottom-4 left-1/2 -translate-x-1/2",
         "flex items-center gap-[7px]",
         "py-[7px] pr-[14px] pl-[10px]",
-        "rounded-lg text-xs font-mono cursor-pointer",
+        "cursor-pointer rounded-lg font-mono text-xs",
         "backdrop-blur transition-colors duration-200",
         "z-picker-trigger pointer-events-auto",
-        "whitespace-nowrap max-w-[60vw] overflow-hidden",
+        "max-w-[60vw] overflow-hidden whitespace-nowrap",
         pickerOpen
-          ? "bg-primary/18 text-ink border border-primary-border shadow-[0_0_0_1px_rgba(170,59,255,0.3)]"
+          ? "bg-primary/18 text-ink border-primary-border border shadow-[0_0_0_1px_rgba(170,59,255,0.3)]"
           : "bg-overlay-low text-ink-muted border border-white/10",
       ].join(" ")}
     >
@@ -60,10 +60,10 @@ export const App = () => {
         onClick={toggle}
         className={[
           "fixed top-4 right-4 px-4 py-2",
-          "rounded-md text-ui font-sans cursor-pointer",
+          "text-ui cursor-pointer rounded-md font-sans",
           "text-ink border border-white/15",
           "backdrop-blur transition-colors duration-200",
-          "z-20 pointer-events-auto",
+          "pointer-events-auto z-20",
           isActive ? "bg-primary" : "bg-overlay-low",
         ].join(" ")}
       >
