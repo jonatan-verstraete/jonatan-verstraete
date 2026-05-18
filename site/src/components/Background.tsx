@@ -123,10 +123,10 @@ const Void = () => {
             refraction: 0,
           }}
           backgroundColor="radial-gradient(circle at 100%, var(--bg)a, #fff0 50%)"
-          quality={{
-            dpr: 0.1,
-            sim: 0.1
-          }}
+          // quality={{
+          //   dpr: 0.1,
+          //   sim: 0.1
+          // }}
           style={{
             filter: "grayscale(0.4)",
             opacity: 0.9,

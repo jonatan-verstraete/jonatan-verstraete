@@ -1,61 +1,73 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #aa3bff;
-  --color-primary-muted: rgba(170, 59, 255, 0.12);
+  /* ── Brand ── */
+  --color-primary:        #aa3bff;
+  --color-primary-muted:  rgba(170, 59, 255, 0.10);
+  --color-primary-glow:   rgba(170, 59, 255, 0.30);
   --color-primary-border: rgba(170, 59, 255, 0.45);
-  --color-secondary: #ff9f28;
-  --color-secondary-muted: rgba(255, 159, 40, 0.12);
-  --color-secondary-border: rgba(255, 159, 40, 0.4);
-  --color-accent: #aa3bff;
-  --color-accent-muted: rgba(170, 59, 255, 0.1);
-  --color-accent-border: rgba(170, 59, 255, 0.5);
-  --color-cave-text: #6b6375;
-  --color-cave-text-h: #08060d;
-  --color-cave-bg: #fff;
-  --color-cave-border: #e5e4e7;
-  --color-cave-code: #f4f3ec;
-  --color-cave-social: rgba(244, 243, 236, 0.5);
+
+  --color-secondary:        #ff9f28;
+  --color-secondary-muted:  rgba(255, 159, 40, 0.12);
+  --color-secondary-border: rgba(255, 159, 40, 0.40);
+
+  /* ── Dark overlay surfaces (3 stops: light trigger → sidebar → dense modal) ── */
+  --color-overlay-low:  rgba(7, 5, 14, 0.60);
+  --color-overlay-mid:  rgba(7, 5, 14, 0.80);
+  --color-overlay-high: rgba(7, 5, 14, 0.92);
+
+  /* ── Text on dark ── */
+  --color-ink:       rgba(232, 224, 245, 0.88);
+  --color-ink-muted: rgba(232, 224, 245, 0.45);
+  --color-ink-ghost: rgba(232, 224, 245, 0.22);
+
+  /* ── Structural white overlays ── */
+  --color-white-soft:   rgba(255, 255, 255, 0.28);
+  --color-white-subtle: rgba(255, 255, 255, 0.08);
+  --color-white-ghost:  rgba(255, 255, 255, 0.04);
+
+  /* ── Light mode (cave) ── */
+  --color-cave-bg:      #ffffff;
+  --color-cave-surface: #f4f3ec;
+  --color-cave-border:  #e5e4e7;
+  --color-cave-text:    #6b6375;
+  --color-cave-heading: #08060d;
+  --color-cave-social:  rgba(244, 243, 236, 0.50);
+
+  /* ── Typography ── */
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+
+  /* Custom sizes below Tailwind's xs (12px) and between xs→sm, sm→base */
+  --text-micro: 0.5625rem;  /* 9px  — oracle micro-labels, live dot caption */
+  --text-label: 0.6875rem;  /* 11px — timestamps, hints, badges (consolidates 10–11px) */
+  --text-ui:    0.8125rem;  /* 13px — default UI copy */
+  --text-read:  0.9375rem;  /* 15px — tile body, longer reads */
+
+  /* ── Letter spacing ── */
+  --tracking-ultra: 0.2em;    /* oracle all-caps headers (consolidates 0.2–0.22em) */
+  --tracking-loose: 0.08em;   /* secondary labels, captions */
+  --tracking-fine:  0.012em;  /* body copy on dark */
+
+  /* ── Border radius ── */
+  /* TW4 defaults: sm=2px, md=6px, lg=8px — override xl for panels/tiles */
+  --radius-xl: 0.875rem;  /* 14px — panels, picker, live tile */
+
+  /* ── Shadows ── */
+  --shadow-overlay:  0 8px 48px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.055);
+  --shadow-sidebar:  6px 0 48px rgba(0, 0, 0, 0.70), inset -1px 0 0 rgba(255, 255, 255, 0.04);
+  --shadow-inset:    inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.30);
+  --shadow-ring:     0 0 0 1.5px rgba(170, 59, 255, 0.45), 0 0 24px rgba(170, 59, 255, 0.30);
+
+  /* ── Z-index scale ── */
+  --z-tile:           30;
+  --z-widget:         50;
+  --z-sidebar:        60;
+  --z-picker-trigger: 65;
+  --z-picker:         70;
 }
 
-:root {
-  --primary: #aa3bff;
-  --primary-muted: rgba(170, 59, 255, 0.12);
-  --primary-border: rgba(170, 59, 255, 0.45);
-  --secondary: #ff9f28;
-  --secondary-muted: rgba(255, 159, 40, 0.12);
-  --secondary-border: rgba(255, 159, 40, 0.4);
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
+/* ── Base ── */
 * {
   padding: 0;
   margin: 0;
@@ -66,11 +78,24 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  font: 18px / 1.45 var(--font-sans);
+  letter-spacing: 0.01px;
+  color-scheme: light dark;
+  color: var(--color-cave-text);
+  background: var(--color-cave-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
 }
 
-/* ── spinning gradient border shared by Oracle UI ── */
+/* ── Spinning gradient border (Oracle UI) ── */
 @property --angle {
-  syntax: '<angle>';
+  syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
 }
@@ -92,19 +117,20 @@ body {
   );
 }
 
+/* ── Glow keyframes ── */
 @keyframes glowAmber {
-  0%, 100% { box-shadow: 0 0 8px 2px rgba(255,159,40,0.3), 0 0 0 0 rgba(255,159,40,0.1); }
-  50%       { box-shadow: 0 0 22px 6px rgba(255,159,40,0.55), 0 0 40px 16px rgba(255,159,40,0.08); }
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 159, 40, 0.30), 0 0 0 0 rgba(255, 159, 40, 0.10); }
+  50%       { box-shadow: 0 0 22px 6px rgba(255, 159, 40, 0.55), 0 0 40px 16px rgba(255, 159, 40, 0.08); }
 }
 
 @keyframes glowPrimary {
-  0%, 100% { box-shadow: 0 0 8px 2px rgba(170,59,255,0.3), 0 0 0 0 rgba(170,59,255,0.1); }
-  50%       { box-shadow: 0 0 22px 6px rgba(170,59,255,0.55), 0 0 40px 16px rgba(170,59,255,0.08); }
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(170, 59, 255, 0.30), 0 0 0 0 rgba(170, 59, 255, 0.10); }
+  50%       { box-shadow: 0 0 22px 6px rgba(170, 59, 255, 0.55), 0 0 40px 16px rgba(170, 59, 255, 0.08); }
 }
 
 @keyframes glowWhite {
-  0%, 100% { box-shadow: 0 0 6px 1px rgba(255,255,255,0.2), 0 0 0 0 rgba(255,255,255,0.08); }
-  50%       { box-shadow: 0 0 18px 5px rgba(255,255,255,0.45), 0 0 32px 12px rgba(255,255,255,0.06); }
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.20), 0 0 0 0 rgba(255, 255, 255, 0.08); }
+  50%       { box-shadow: 0 0 18px 5px rgba(255, 255, 255, 0.45), 0 0 32px 12px rgba(255, 255, 255, 0.06); }
 }
 
 @keyframes oraclePulse {
@@ -116,27 +142,28 @@ body {
   animation: oraclePulse 2.4s ease-in-out infinite;
 }
 
-/* gradient outline hover — no solid border */
+/* ── Oracle close button hover ── */
 .oracle-close-btn {
   position: relative;
 }
 .oracle-close-btn:hover {
-  background: rgba(170,59,255,0.08) !important;
-  color: rgba(232,224,245,0.95) !important;
-  box-shadow: 0 0 0 1px rgba(170,59,255,0.4), 0 0 10px rgba(170,59,255,0.12) !important;
+  background: rgba(170, 59, 255, 0.08) !important;
+  color: rgba(232, 224, 245, 0.95) !important;
+  box-shadow: 0 0 0 1px rgba(170, 59, 255, 0.40), 0 0 10px rgba(170, 59, 255, 0.12) !important;
   border-color: transparent !important;
 }
 
+/* ── Oracle widget button hover ── */
 .oracle-widget-btn {
   position: relative;
 }
 .oracle-widget-btn:hover {
-  box-shadow: 0 0 0 1.5px var(--primary-border), 0 0 24px rgba(170,59,255,0.2) !important;
-  border-color: var(--primary-border) !important;
+  box-shadow: 0 0 0 1.5px var(--color-primary-border), 0 0 24px rgba(170, 59, 255, 0.20) !important;
+  border-color: var(--color-primary-border) !important;
   filter: brightness(1.08);
 }
 
-/* oracle entry separator — gradient line, no hard border */
+/* ── Oracle entry separator (gradient line) ── */
 .oracle-entry-sep {
   position: relative;
 }
@@ -147,16 +174,16 @@ body {
   left: 20px;
   right: 20px;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.055) 30%, rgba(255,255,255,0.055) 70%, transparent);
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.055) 30%, rgba(255, 255, 255, 0.055) 70%, transparent);
 }
 
-/* thin custom scrollbar */
+/* ── Thin scrollbar ── */
 .oracle-scroll::-webkit-scrollbar { width: 3px; }
 .oracle-scroll::-webkit-scrollbar-track { background: transparent; }
 .oracle-scroll::-webkit-scrollbar-thumb {
-  background: var(--secondary-border);
+  background: var(--color-secondary-border);
   border-radius: 2px;
 }
 .oracle-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
+  background: var(--color-secondary);
 }
