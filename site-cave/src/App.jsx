@@ -27,8 +27,8 @@ function ProjectPickerTrigger() {
         "max-w-[50vw] overflow-hidden whitespace-nowrap",
         "text-label",
         pickerOpen
-          ? "bg-primary/15 text-ink border border-primary-border shadow-[0_0_0_1px_rgba(170,59,255,0.22)]"
-          : "bg-overlay-low text-ink-muted border border-white/8 hover:border-white/15 hover:text-ink",
+          ? "bg-white/[0.05] text-ink/80 border border-white/[0.10]"
+          : "bg-transparent text-ink-ghost border border-white/[0.06] hover:border-white/[0.10] hover:text-ink-muted",
       ].join(" ")}
     >
       <Layers size={12} className="shrink-0 opacity-70" />
@@ -50,8 +50,8 @@ function CameraToggle({ isActive, onToggle }) {
         "text-label backdrop-blur transition-all duration-200",
         "pointer-events-auto z-20",
         isActive
-          ? "bg-secondary/15 text-secondary border border-secondary-border"
-          : "bg-overlay-low text-ink-muted border border-white/8 hover:border-white/15 hover:text-ink",
+          ? "bg-white/[0.05] text-secondary/80 border border-secondary/20"
+          : "bg-transparent text-ink-ghost border border-white/[0.06] hover:border-white/[0.10] hover:text-ink-muted",
       ].join(" ")}
     >
       {isActive ? (

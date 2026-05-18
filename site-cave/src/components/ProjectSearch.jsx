@@ -115,24 +115,27 @@ export function ProjectSearch({
       }}
     >
       {/* Search input row */}
-      <div className="flex items-center gap-2.5 px-4 py-[9px]">
-        <Search size={12} className="text-ink-ghost shrink-0" />
+      <div className="flex items-center gap-2.5 px-4 py-3">
+        <Search size={12} className="text-ink-ghost/50 shrink-0" />
         <input
           ref={inputRef}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search projects…"
-          className="text-label flex-1 border-0 bg-transparent font-mono tracking-fine text-ink/70 placeholder:text-ink-ghost outline-none"
+          className="text-label flex-1 border-0 bg-transparent font-mono tracking-fine text-ink/65 placeholder:text-ink-ghost/40 outline-none"
         />
         {query && (
           <button
             onClick={() => setQuery("")}
-            className="text-ink-ghost flex cursor-pointer border-0 bg-transparent p-0 transition-colors hover:text-ink-muted"
+            className="text-ink-ghost/40 flex cursor-pointer border-0 bg-transparent p-0 transition-colors hover:text-ink-ghost"
           >
             <X size={11} />
           </button>
         )}
       </div>
+
+      {/* Hairline between input and results */}
+      <div className="mx-4 h-px bg-white/[0.04]" />
 
       {/* Results list */}
       <div
@@ -141,8 +144,8 @@ export function ProjectSearch({
         style={{ maxHeight: listMaxHeight }}
       >
         {filtered.length === 0 ? (
-          <div className="text-ink-ghost text-label px-4 py-4 text-center font-mono">
-            {projects.length === 0 ? "No projects" : "No matches"}
+          <div className="text-ink-ghost/40 text-label px-4 py-5 text-center font-mono">
+            {projects.length === 0 ? "no projects" : "no matches"}
           </div>
         ) : (
           filtered.map((project, i) => (
@@ -170,45 +173,38 @@ function ProjectRow({ project, active, selected, onHover, onClick }) {
       onMouseEnter={onHover}
       onClick={onClick}
       className={[
-        "relative flex w-full items-start gap-2.5 px-4 py-[8px]",
+        "relative flex w-full items-center gap-2.5 px-4 py-[9px]",
         "cursor-pointer border-0 text-left transition-colors duration-100",
-        active ? "bg-primary-muted/60" : "bg-transparent",
+        active ? "bg-white/[0.035]" : "bg-transparent",
       ].join(" ")}
     >
+      {/* Active indicator */}
       {active && (
-        <div className="bg-primary absolute top-1.5 bottom-1.5 left-0 w-[2px] rounded-[1px]" />
+        <div className={[
+          "absolute top-2 bottom-2 left-0 w-[2px] rounded-[1px]",
+          selected ? "bg-secondary" : "bg-primary/60",
+        ].join(" ")} />
       )}
 
       <FolderOpen
-        size={12}
+        size={11}
         className={[
-          "mt-0.5 shrink-0",
-          selected
-            ? "text-secondary"
-            : active
-              ? "text-primary"
-              : "text-ink-ghost",
+          "shrink-0",
+          selected ? "text-secondary/70" : active ? "text-ink-muted" : "text-ink-ghost/35",
         ].join(" ")}
       />
 
       <div className="min-w-0 flex-1">
-        <div
-          className={[
-            "text-label mb-0.5 font-mono",
-            selected ? "text-secondary" : "text-ink/75",
-          ].join(" ")}
-        >
+        <div className={[
+          "text-label font-mono truncate",
+          selected ? "text-secondary/80" : active ? "text-ink/80" : "text-ink/55",
+        ].join(" ")}>
           {project.name}
         </div>
-        {project.description && (
-          <div className="overflow-hidden text-ellipsis whitespace-nowrap font-mono text-[10px] text-ink-ghost">
-            {project.description}
-          </div>
-        )}
       </div>
 
       {project.language && (
-        <span className="shrink-0 pt-0.5 font-mono text-[10px] text-ink-ghost/60">
+        <span className="shrink-0 font-mono text-[10px] text-ink-ghost/30">
           {project.language}
         </span>
       )}

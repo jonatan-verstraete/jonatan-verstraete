@@ -1,9 +1,11 @@
 # Allegory of the Cave — Build Plan
+
 This file is editable. If you find things to resolve in a later stage or find better ways, you can edit this file. Do not use this as a changelog, only as a multi-session TODO.
 
 ## Current state
 
 2D canvas POC. Working:
+
 - `src/components/ProjectionCanvas.jsx` — canvas renders hardcoded text (`TITLE`/`DESC` at line 10-13), MediaPipe selfie segmentation shadow mask
 - `src/hooks/useCamera.js` — webcam capture
 - `src/hooks/useAnalyze.js` — polls every 3s, POSTs base64 to `http://127.0.0.1:8042/analyze`, maintains history array
@@ -20,6 +22,7 @@ Stack: Vite + React + @tanstack/react-query + axios. Run with `bun`.
 **Goal:** replace 2D canvas with a Three.js scene that reproduces current visuals.
 
 Tasks:
+
 - ✅ swap raw canvas logic (draw, image capture...) with optimized ThreeJS functions
 - ✅ `captureFrame` uses `preserveDrawingBuffer: true` on the R3F Canvas renderer
   - ⚠️ **TODO (Stage 2+):** `captureFrame` currently captures the full user perspective. We want a second camera facing the wall to capture only the projected image (not the user's viewpoint). Add an off-screen render target with a wall-facing OrthographicCamera and render to it before `toBlob`.
@@ -39,6 +42,7 @@ Tasks:
 **Goal:** make it look like a real cave with projected light.
 
 Tasks:
+
 - Add a `SpotLight` with `map = CanvasTexture` (gobo / light cookie) — text becomes actual projected light, not a texture on a plane
 - Replace flat plane with a GLB rocky cave wall asset in public/wall.glb
   - R3F: `useGLTF` + `meshStandardMaterial`
@@ -55,20 +59,19 @@ Tasks:
 ## Stage 3 — Refine current state
 
 Tasks:
-- `./src/scene/Dust.jsx` needs rewrite to be like fire sparks that come and go. 
+
+- `./src/scene/Dust.jsx` needs rewrite to be like fire sparks that come and go.
   - Currently is just 1 init and no control over reborn
   - Use instancing and upgrade performance
 - `./src/scene/SceneContent.jsx`
-  - Some controls  will allocate too much memory and freeze the browser accumulating 150gb or memory. This is likely because of the `EffectComposer`. Double check there are no obvious issues. For example, if the bloom is too high the browser crashes. Maybe we could add a limit or some way to prevent this. Double check if we can do anything or leave as is.
+  - Some controls will allocate too much memory and freeze the browser accumulating 150gb or memory. This is likely because of the `EffectComposer`. Double check there are no obvious issues. For example, if the bloom is too high the browser crashes. Maybe we could add a limit or some way to prevent this. Double check if we can do anything or leave as is.
   - extract default values into a general config. Leva controls are additional, so that if we remove leva, the flow is exactly the same
   - add a black plane as floor
 - `./src/scene/SceneContent.jsx` + `VideoShadow.jsx`
   - shadow effect is not being projected on the wall and should be in exactly the same fashion as the text.
   - create a wrapper component that positions both the text, video and possible other elements so that they all project in the same perspective
 
-
 **Done when:** scene and code run smooth are are scalable and ready for Stage 4.
-
 
 ---
 
@@ -77,9 +80,10 @@ Tasks:
 **Goal:** Have reliable and realistic projected shadows - part 1
 
 Tasks:
-- add the or or fire light thats more bright than the current light.  
+
+- add the or or fire light thats more bright than the current light.
 - Create a shader for the main lighting using a flame like shader at `./.keep/flame.shader`. The goal is that this is a shader for the main light source, so that the light does not feel like a projector but as from a real fire. So this shader should somewhat influence the shape of the light.
-- all components in  `./src/scene/projected/components/*.jsx` should all either have a custom or shader shader to give it a shadow like feel. This shader does not need to be perfect, but it does need to apply. You could use the shader from `./src/scene/projected/components/VideoCam.jsx` as example.
+- all components in `./src/scene/projected/components/*.jsx` should all either have a custom or shader shader to give it a shadow like feel. This shader does not need to be perfect, but it does need to apply. You could use the shader from `./src/scene/projected/components/VideoCam.jsx` as example.
 
 **Done when:** flames + lighting are realistic.
 
@@ -90,6 +94,7 @@ Tasks:
 All deps already installed: `framer-motion`, `jotai`, `react-draggable`, `lucide-react`, `tailwindcss`.
 
 Style guide (applies to 5b + 5c):
+
 - No hard borders. Smooth shadows, subtle gradients, glass-like surfaces.
 - Hover states: gradient outline masks, not solid borders.
 - Advanced but efficient — no 3D CSS transforms, no heavy repaints.
@@ -100,6 +105,7 @@ Style guide (applies to 5b + 5c):
 **Goal:** wire up the shared state layer and page-entry animation before any UI is built.
 
 Tasks:
+
 - Verify Tailwind v4 config: check `@theme` block in CSS, confirm CSS vars (`--color-*`, spacing) are present and usable as Tailwind utilities. Fix any missing setup.
 - Define jotai atoms in `src/store/cave.js`:
   - `historyAtom`: array of `{ id, imageBlob: Blob | null, description: string, timestamp }`, max 100 items, oldest evicted first.
@@ -119,12 +125,14 @@ Tasks:
 Depends on: Stage 5a (jotai store, atoms defined).
 
 Tasks — Widget (`src/components/OracleWidget.jsx`):
+
 - Draggable via `react-draggable`, default position: bottom-right (`right: 24px, bottom: 24px`).
 - Round button, ~56px. Glows with a pulsing `box-shadow` animation (amber/orange, 2s ease-in-out infinite). On active (sidebar open): glow color shifts to white.
 - Icon from `lucide-react` (placeholder: `Eye` — user swaps later).
 - `z-index: 50`, sits below sidebar (`z-index: 60`). Clicking toggles `sidebarOpenAtom`.
 
 Tasks — Sidebar (`src/components/OracleSidebar.jsx`):
+
 - Overlays canvas, does not resize it. Fixed right, full height. `z-index: 60`.
 - Width: `300px`. Background: `rgba(0,0,0,0.85)` with `backdrop-filter: blur(12px)`.
 - Right edge: black gradient fade (`linear-gradient(to right, transparent, black)`) ~60px wide on the outer edge so it blends into the void.
@@ -144,6 +152,7 @@ Tasks — Sidebar (`src/components/OracleSidebar.jsx`):
 Depends on: Stage 5a (historyAtom).
 
 Tasks — LiveTextTile (`src/components/LiveTextTile.jsx`):
+
 - Draggable via `react-draggable`, default position: `left: 24px, top: 50%` (vertically centered).
 - Width: ~`20vw`, min `180px`. `backdrop-filter: blur(10px)`, background `rgba(255,255,255,0.06)`, no border (subtle `box-shadow` only).
 - Displays the `description` from the latest `historyAtom` entry.
@@ -163,6 +172,7 @@ Tasks — LiveTextTile (`src/components/LiveTextTile.jsx`):
 Reference implementation: `/Users/me/Documents/GitHub/jonatan-verstraete/site/src/pages/Home/ProjectsSearch` — port search/select logic from there.
 
 Tasks:
+
 - ✅ Static project array in `src/data/projects.js` (5 fallback entries)
 - ✅ `selectedProjectAtom` + `pickerOpenAtom` added to `src/store/cave.js`
 - ✅ `ProjectedSurface/index.jsx` reads `selectedProjectAtom` → passes title/description to `ProjectText`
@@ -174,24 +184,21 @@ Tasks:
 
 **Done when:** user can pick any project and the cave responds to it.
 
-
-
 ## Stage 7 — Advanced shadow effect ✅
 
 **Goal:** Have reliable and realistic projected shadows - part 2
 
 Implemented:
+
 - ✅ **B. Projection blur** — separable 5-tap Gaussian ping-pong (H→V) at 1024×512 before gobo is fed to spotlight. Makes projection scatter like light on rough stone.
 - ✅ **E. Temporal accumulation / ghost trails** — ping-pong accumulation buffers at 2048×1024. `mix(current, prev, uDecay)` — shadows and content linger and fade. `accumDecay` leva slider (0–0.97).
 - ✅ **G. Spotlight color temperature animation** — multi-frequency sine flicker oscillates spotlight color between warm amber and slightly cooler, simulating fire flicker.
 - ✅ **H. Shadow sharpness leva controls** — `shadowThreshold` and `shadowSoftness` exposed in Shadow leva folder, wired through to `VideoCam.jsx` uniforms.
 - ✅ **A. Normal map suppression** — wall GLB traversal sets `normalScale(0.35, 0.35)` and `roughness=0.65` so projected text/shadow reads cleanly on the craggy surface.
 
-
 ## Stage 8 — UI hardening & performance
 
 **Goal:** make the frontend production-ready — fast, polished, and fully wired — before backend features land in Stage 9.
-
 
 ### Stage 8a — Prep
 
@@ -201,16 +208,16 @@ Check current UI and check for inconsistencies and resolve these. These could be
 The task is to enhance coherence and balance creativity. Your task will likely involve changing Tailwind config for the better. Your side quest is to make sure that other rebrands can happen smooth and mostly by simply changing tailwind config, rather than inline values.
 You can change config, css, tailwind, code , structure... this is a big feature but needs to happen before anything else.
 
-Research, verify, improve, update configs...etc.  Create a file UI.md, about styles or code rules, but don't bloat it as most tasks are not React UI related in this project.
+Research, verify, improve, update configs...etc. Create a file UI.md, about styles or code rules, but don't bloat it as most tasks are not React UI related in this project.
 
 Optional bonus: You could even put ThreeJS vars inside the tailwind config, so that this config (or css file) is the source of truth for a lot of styling.
-
 
 ### Stage 8b — Sidebar consolidation
 
 **Goal:** consolidate all UI controls into the existing sidebar. Establish final layout for Stage 9 features. Non-functional slots (AI status, history controls) can render as disabled placeholders. A general rebrand would be a nice extra.
 
 Sidebar layout top-to-bottom:
+
 ```
 AI Status widget (placeholder — wired in Stage 9b)
         ↓
@@ -222,20 +229,72 @@ History list
 ```
 
 #### Project search (shared component)
+
 Extract project search/select logic from [`ProjectPicker.jsx`](./src/components/ProjectPicker.jsx) into a new shared `ProjectSearch` component. Both the existing floating picker and the new sidebar slot use it. Keep the shared component layout-agnostic: no hardcoded background colors or fixed widths — callers provide those. The sidebar variant renders inline; the picker variant keeps its current floating panel wrapper.
 
 #### AI Status placeholder
+
 Render a static `"Oracle: idle"` badge at the top of the sidebar. Mark it clearly as a placeholder. Real polling is wired in Stage 9b.
 
 #### History controls placeholder
+
 Render disabled buttons for: **Clear history**, **Disable shadow memory**, **Share memory**. Tooltips can note "coming in Stage 9". Wired in Stage 9d.
 
 **Done when:** sidebar is the single control surface, project search is a shared component, placeholder slots are visible and correctly positioned.
 
+### Stage 8b — Resizable
 
-### Stage 8c — Optimization
+**Goal:** Make certain objects resizable.
+
+Use package `react-resizable-panels` (already installed) to make the following items resizable:
+
+- Sidebar must be resizable with min size it's content and max-size something reasonable. You could optionally make a group and add a gradient overlay on the other side as overlay.
+- oracle popover needs to be resizable on all 4 sides.
+- project picker popover size all 4 sides.
+
+For each make sure that:
+
+- there are reasonable limits to the size. This is meant for readability.
+- all configs are stored in localStorage
+- There is a button in the sidebar with "Clear Sizes" which clears the local storage
+
+**Done when:** Chosen items behave the same, but are resizable.
+
+### Stage 8c — Commands
+
+**Goal:** Turn current "Project Select" into a Raycast like experience.
+
+Task:
+
+- change popover to be central on the screen
+- its a floating search bar with some suggestions like: some commands, possibly even a last search
+- has debounce for search queries and smooth animations
+- can open the search input also with hotkey 'space' - if there is not input focussed, otherwise the hotkey is not active
+- a search executed by typing Enter
+- The search is autocompleted by matching commands and tags.
+- tags (blue) and commands (red) or just text (white) query have different colors or maybe small border like a pill.
+
+**Autocomplete**:
+
+- shows the command or tag that fuzzy match
+- the suggested commands is grayed out but the outlie or border of the possible cell or command that's being autocompleted also shows. So that the user can see clearly commands or
+
+**Commands**:
+
+- Commands are just predefined structured search queries, but in simple form.
+- You can type commands and again submit with enter. Examples:
+  - `list`: shows simply all project
+  - `recent`: shows maybe top 10 recent project or sorts all by recent
+  - `open-sidebar`: opens sidebar (need store trigger)
+  - ... other.
+- these are meant as extra, so just get some working, but can refine later.
+
+**Done when:** Raycast like UX.
+
+### Stage 8d — Three Optimization
 
 GLB loading pipeline:
+
 ```
 PNG/JPG textures
         ↓
@@ -268,12 +327,13 @@ Camera-off (default): the oracle watches and interprets. It narrates the cave, r
 Camera-on: the oracle knows you can hear it. It switches to direct address. It has things it wants to tell you. It interprets your body as a language it is trying to decode — not mockingly, but earnestly, like first contact. The cave bible contains what it believes gestures mean; it reads your shadow against that.
 
 **Implementation:**
+
 - New POST body field: `communicationMode: bool`. Defaults to `false`. Set to `true` when webcam is active (`isActive` in `useAnalyze.js`).
 - Backend: if `communicationMode`, use a different system prompt wrapper that frames the oracle as communicant rather than observer. The bible is still injected — same world, different stance. Example framing:
 
-  *Observer mode:* "You watch the wall. A shape moves. You have seen shapes like this before..."
+  _Observer mode:_ "You watch the wall. A shape moves. You have seen shapes like this before..."
 
-  *Communicant mode:* "You are trying to reach them. They have shown you their arms again. Last time arms meant..."
+  _Communicant mode:_ "You are trying to reach them. They have shown you their arms again. Last time arms meant..."
 
 - The oracle still outputs one short paragraph. The tone shifts, not the format.
 - Frontend: `OracleWidget` (Stage 5b) gets a subtle indicator when communication mode is active — e.g. glow color shifts. No other UI change needed.
@@ -289,6 +349,7 @@ Camera-on: the oracle knows you can hear it. It switches to direct address. It h
 There is only one model at a time. When it's thinking, it is genuinely unavailable. This constraint is part of the experience, not a bug. The status should reflect it.
 
 **Backend (`api/main.py`):**
+
 - New `GET /status` endpoint. Returns a JSON body indicating current model state:
   - `{ "status": "idle" }` — model ready
   - `{ "status": "busy", "queue": 0 }` — model currently generating
@@ -296,6 +357,7 @@ There is only one model at a time. When it's thinking, it is genuinely unavailab
 - Track state with a module-level flag/counter updated around each ollama call. No external queue library needed — the model is single-threaded by design.
 
 **Frontend (`src/`):**
+
 - Add `oracleStatusAtom` to `src/store/cave.js` — stores the latest status object.
 - New `useOracleStatus.js` hook: polls `GET /status` every 5 s via `setInterval`. Updates `oracleStatusAtom`. Stops polling when tab is hidden (`visibilitychange`).
 - Wire the AI Status placeholder in `OracleSidebar` (Stage 8b) to render live from `oracleStatusAtom`: amber dot + text for idle, pulsing red for busy, queue count for queued.
@@ -314,6 +376,7 @@ This is the allegory made literal: the AI inhabits a constructed reality it neve
 
 **Cave Bible (`api/bible.md`):**
 A hand-authored mythology document, ~10–30k tokens. Written in second-person present tense as if the oracle is recalling its own knowledge. Contents:
+
 - The laws of the cave (what gestures mean, what shapes are sacred)
 - Recurring figures and what became of them
 - Prophecies that may or may not have been fulfilled
@@ -325,6 +388,7 @@ This file is injected verbatim at the top of every system prompt, before any mem
 **Architecture — backend (`api/`):**
 
 Storage: SQLite (`api/memory.db`), single table:
+
 ```sql
 CREATE TABLE memories (
   id INTEGER PRIMARY KEY,
@@ -336,9 +400,10 @@ CREATE TABLE memories (
 
 Compression: when `memories` exceeds 80 rows, run a summarization prompt through the existing ollama model — produce ~8 compressed entries, delete the originals, insert the summaries (`session_id = '__compressed__'`). Keeps accumulated entries lean. Bible is never touched.
 
-Responsive injection: after each model response, run a lightweight regex/fuzzy scan of the output. If it matches a trigger pattern (e.g. mentions a specific figure, shape, or ritual), prepend an additional passage from the bible on the *next* call — not as a game mechanic, but as passive narrative deepening. The cave reacts to what the oracle notices. Triggers and their injected passages are defined in a simple config dict in `api/main.py`.
+Responsive injection: after each model response, run a lightweight regex/fuzzy scan of the output. If it matches a trigger pattern (e.g. mentions a specific figure, shape, or ritual), prepend an additional passage from the bible on the _next_ call — not as a game mechanic, but as passive narrative deepening. The cave reacts to what the oracle notices. Triggers and their injected passages are defined in a simple config dict in `api/main.py`.
 
 Injection order at each `/analyze` call:
+
 ```
 [cave bible]
 [responsive passage, if triggered last call]
@@ -350,6 +415,7 @@ Injection order at each `/analyze` call:
 **New POST body field:** add `fresh: bool` — if `true`, skip memory + responsive injection (bible still injected). Wired to the history controls toggle in Stage 9d.
 
 **Frontend (`src/`):**
+
 - Pass `fresh` through `useAnalyze.js` to POST body, sourced from `historyControlsAtom` (Stage 9d).
 
 **Done when:** oracle has a bible, accumulates real memories, responsive passages fire on trigger matches, fresh-mode works.
@@ -363,18 +429,22 @@ Injection order at each `/analyze` call:
 These controls live in the sidebar history controls slot established in Stage 8b.
 
 **Controls:**
+
 - **Clear history** — wipes `historyAtom` in the frontend store and POSTs `DELETE /memory` to the backend, clearing `memories` rows for the current `session_id`. The oracle resets as if the user is new.
 - **Disable shadow memory** (`fresh` toggle) — when enabled, sets `fresh: true` on all subsequent `/analyze` calls (see Stage 9c). The oracle speaks without its accumulated past. Toggle state lives in a `freshModeAtom` in `src/store/cave.js`.
 - **Share memory** (opt-in) — an opt-in flag that marks session memories as `session_id = '__shared__'` on the backend, making them eligible for the nightly compression pass that feeds the general pool. This is purely an opt-in — no memory is shared without explicit toggle. UI: a checkbox with a short description ("Let your shadow join the collective memory. Crunched overnight.").
 
 **Backend (`api/main.py`):**
+
 - `DELETE /memory` — accepts `{ session_id: string }`, deletes matching rows from `memories`.
 - `POST /memory/share` — re-tags rows for the given session as `__shared__`.
 
 **Done when:** all three controls work end-to-end, fresh toggle suppresses memory injection, clear wipes both local and backend state.
 
+---
 
 ## Stage 10 - Backend ready release
+
 - `api/main.py`:
   - refine prompts
   - add authentication with sessions and reconnection
@@ -386,13 +456,11 @@ These controls live in the sidebar history controls slot established in Stage 8b
 
 **Done when:** backend ready for release.
 
-
-
 ## Stage 11 - Hosting & final QA
+
 - backend and frontend hosting
 
 **Done when:** frontend and backend successfully hosted and tested.
-
 
 ---
 

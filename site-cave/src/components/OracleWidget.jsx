@@ -12,41 +12,33 @@ export const OracleWidget = () => {
   return (
     <Draggable
       nodeRef={nodeRef}
-      onStart={() => {
-        draggedRef.current = false;
-      }}
-      onDrag={() => {
-        draggedRef.current = true;
-      }}
+      onStart={() => { draggedRef.current = false; }}
+      onDrag={() => { draggedRef.current = true; }}
     >
       <div
         ref={nodeRef}
         data-oracle-widget
         className="z-widget fixed bottom-6 left-6 cursor-grab active:cursor-grabbing"
       >
-        {/* Spinning gradient border ring */}
-        <div className="oracle-gradient-border inline-flex rounded-full p-[1.5px]">
+        {/* Barely-there rotating halo ring */}
+        <div className="oracle-halo inline-flex rounded-full p-[1px]">
           <button
-            onClick={() => {
-              if (!draggedRef.current) setOpen((v) => !v);
-            }}
+            onClick={() => { if (!draggedRef.current) setOpen((v) => !v); }}
+            title={open ? "Close oracle" : "Open oracle"}
             className={[
-              "relative h-11 w-11 cursor-pointer rounded-full border-0",
-              "flex items-center justify-center outline-none",
-              "backdrop-blur-[16px] backdrop-saturate-[160%]",
-              "transition-all duration-[350ms]",
-              open
-                ? "bg-primary-muted text-primary"
-                : "bg-overlay-mid text-secondary",
+              "relative h-10 w-10 rounded-full cursor-pointer",
+              "flex items-center justify-center outline-none border-0",
+              "backdrop-blur-[18px]",
+              "transition-colors duration-500",
+              open ? "bg-primary-muted text-primary" : "bg-overlay-high text-ink-muted",
             ].join(" ")}
             style={{
               animation: open
-                ? "glowPrimary 2.6s ease-in-out infinite"
-                : "glowAmber 2.6s ease-in-out infinite",
+                ? "glowPrimary 5s ease-in-out infinite"
+                : "glowAmber 5s ease-in-out infinite",
             }}
-            title={open ? "Close oracle" : "Open oracle"}
           >
-            <Eye size={16} strokeWidth={1.4} />
+            <Eye size={15} strokeWidth={1.3} />
           </button>
         </div>
       </div>
