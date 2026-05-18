@@ -135,7 +135,7 @@ export function ProjectSearch({
       </div>
 
       {/* Hairline between input and results */}
-      <div className="mx-4 h-px bg-white/[0.04]" />
+      <div className="mx-4 h-px bg-white-dim" />
 
       {/* Results list */}
       <div
@@ -145,8 +145,7 @@ export function ProjectSearch({
       >
         {filtered.length === 0 ? (
           <div className="text-ink-ghost/40 text-label px-4 py-5 text-center font-mono">
-            {projects.length === 0 ? "no projects" : "no matches"}
-          </div>
+            {projects.length === 0 ? "no projects" : "no matches"}          </div>
         ) : (
           filtered.map((project, i) => (
             <ProjectRow
@@ -175,7 +174,7 @@ function ProjectRow({ project, active, selected, onHover, onClick }) {
       className={[
         "relative flex w-full items-center gap-2.5 px-4 py-[9px]",
         "cursor-pointer border-0 text-left transition-colors duration-100",
-        active ? "bg-white/[0.035]" : "bg-transparent",
+        active ? "bg-white-dim" : "bg-transparent",
       ].join(" ")}
     >
       {/* Active indicator */}
@@ -204,7 +203,7 @@ function ProjectRow({ project, active, selected, onHover, onClick }) {
       </div>
 
       {project.language && (
-        <span className="shrink-0 font-mono text-[10px] text-ink-ghost/30">
+        <span className="shrink-0 font-mono text-micro text-ink-ghost/30">
           {project.language}
         </span>
       )}

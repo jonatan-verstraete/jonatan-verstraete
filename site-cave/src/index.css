@@ -22,8 +22,10 @@
   --color-ink-ghost: rgba(232, 224, 245, 0.18);
 
   /* ── Structural white overlays ── */
+  --color-white-mild:   rgba(255, 255, 255, 0.10);
   --color-white-soft:   rgba(255, 255, 255, 0.22);
   --color-white-subtle: rgba(255, 255, 255, 0.06);
+  --color-white-dim:    rgba(255, 255, 255, 0.05);
   --color-white-ghost:  rgba(255, 255, 255, 0.03);
 
   /* ── Light mode (cave) ── */
@@ -38,7 +40,7 @@
   --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, Consolas, monospace;
 
-  --text-micro: 0.5625rem;  /* 9px  */
+  --text-micro: 0.625rem;   /* 10px */
   --text-label: 0.6875rem;  /* 11px */
   --text-ui:    0.8125rem;  /* 13px */
   --text-read:  0.9375rem;  /* 15px */
@@ -56,6 +58,11 @@
   --shadow-sidebar: 8px 0 40px rgba(0, 0, 0, 0.60), inset -1px 0 0 rgba(255, 255, 255, 0.03);
   --shadow-inset:   inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.25);
   --shadow-ring:    0 0 0 1px rgba(170, 59, 255, 0.35), 0 0 16px rgba(170, 59, 255, 0.18);
+
+  /* ── Blur scale ── */
+  --blur-low:  18px;
+  --blur-mid:  28px;
+  --blur-high: 40px;
 
   /* ── Z-index scale ── */
   --z-tile:           30;

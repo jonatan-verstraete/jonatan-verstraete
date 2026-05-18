@@ -31,7 +31,7 @@ export const ProjectPicker = () => {
           exit={{ opacity: 0, y: 10, scale: 0.97 }}
           transition={{ type: "spring", stiffness: 440, damping: 36 }}
           style={{ transform: "translateX(-50%)" }}
-          className="z-picker bg-overlay-mid/95 shadow-overlay fixed bottom-[88px] left-1/2 w-[min(420px,88vw)] overflow-hidden rounded-2xl border border-white/[0.05] font-sans backdrop-blur-[28px]"
+          className="z-picker bg-overlay-mid/95 shadow-overlay fixed bottom-[88px] left-1/2 w-[min(420px,88vw)] overflow-hidden rounded-2xl border border-white-dim font-sans backdrop-blur-mid"
         >
           <ProjectSearch
             autoFocus={open}
@@ -41,7 +41,7 @@ export const ProjectPicker = () => {
           />
 
           {/* Keyboard hint footer */}
-          <div className="flex gap-[18px] border-t border-white/[0.04] px-4 py-2.5 font-mono text-[10px] text-white/[0.15]">
+          <div className="flex gap-[18px] border-t border-white-dim px-4 py-2.5 font-mono text-micro text-ink-ghost/80">
             <span>↑↓ navigate</span>
             <span>↵ select</span>
             <span>esc close</span>

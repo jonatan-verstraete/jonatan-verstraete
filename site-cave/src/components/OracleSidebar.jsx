@@ -17,7 +17,7 @@ const formatTime = (ts) => {
 
 /** Hairline divider */
 const Divider = ({ className = "" }) => (
-  <div className={`mx-5 h-px bg-white/[0.04] ${className}`} />
+  <div className={`mx-5 h-px bg-white-dim ${className}`} />
 );
 
 /** Icon + label section header with generous spacing */
@@ -51,14 +51,14 @@ const HistoryRow = ({ entry }) => {
       className="flex gap-3 px-5 py-3"
     >
       {/* Thumbnail */}
-      <div className="h-[38px] w-[38px] shrink-0 overflow-hidden rounded-lg bg-white/[0.03] border border-white/[0.05]">
+      <div className="h-[38px] w-[38px] shrink-0 overflow-hidden rounded-lg bg-white-ghost border border-white-dim">
         {url && (
           <img src={url} alt="" className="h-full w-full object-cover opacity-80" />
         )}
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="text-ink-ghost/50 tracking-loose mb-[3px] font-mono text-[10px]">
+        <div className="text-ink-ghost/50 tracking-loose mb-[3px] font-mono text-micro">
           {formatTime(entry.timestamp)}
         </div>
         <div className="text-ink/55 tracking-fine line-clamp-3 text-xs leading-[1.65]">
@@ -101,20 +101,20 @@ export const OracleSidebar = () => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: "-100%", opacity: 0 }}
           transition={{ type: "spring", stiffness: 320, damping: 38, mass: 0.9 }}
-          className="z-sidebar bg-overlay-mid shadow-sidebar fixed inset-y-0 left-0 flex h-screen w-[300px] flex-col overflow-hidden backdrop-blur-[40px] backdrop-saturate-[160%]"
+          className="z-sidebar bg-overlay-mid shadow-sidebar fixed inset-y-0 left-0 flex h-screen w-[300px] flex-col overflow-hidden backdrop-blur-high backdrop-saturate-[160%]"
         >
 
           {/* ── Header ── */}
           <div className="relative flex shrink-0 items-center justify-between px-5 pt-5 pb-4">
             <div className="flex items-center gap-2.5">
               <span className="oracle-live-dot inline-block h-[4px] w-[4px] shrink-0 rounded-full bg-secondary" />
-              <span className="tracking-ultra text-ink-ghost/70 font-mono text-[10px] uppercase">
+              <span className="tracking-ultra text-ink-ghost/70 font-mono text-micro uppercase">
                 Oracle
               </span>
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="text-ink-ghost/50 hover:text-ink-muted flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent transition-colors duration-150 outline-none hover:bg-white/[0.05]"
+              className="text-ink-ghost/50 hover:text-ink-muted flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent transition-colors duration-150 outline-none hover:bg-white-dim"
             >
               <X size={13} strokeWidth={1.5} />
             </button>
@@ -186,7 +186,7 @@ export const OracleSidebar = () => {
           </div>
 
           {/* Bottom edge line */}
-          <div className="h-px shrink-0 bg-white/[0.03]" />
+          <div className="h-px shrink-0 bg-white-ghost" />
         </motion.div>
       )}
     </AnimatePresence>
@@ -198,7 +198,7 @@ function ControlButton({ icon, label }) {
     <button
       disabled
       title="Coming in Stage 9d"
-      className="flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2 font-mono text-[10px] tracking-fine text-ink-ghost/30 transition-opacity"
+      className="flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-white-dim bg-white-ghost px-3 py-2 font-mono text-micro tracking-fine text-ink-ghost/30 transition-opacity"
     >
       {icon}
       {label}

@@ -28,7 +28,7 @@ export const OracleWidget = () => {
             className={[
               "relative h-10 w-10 rounded-full cursor-pointer",
               "flex items-center justify-center outline-none border-0",
-              "backdrop-blur-[18px]",
+              "backdrop-blur-low",
               "transition-colors duration-500",
               open ? "bg-primary-muted text-primary" : "bg-overlay-high text-ink-muted",
             ].join(" ")}

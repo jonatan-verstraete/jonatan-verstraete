@@ -15,8 +15,6 @@ This file is editable. If you find things to resolve in a later stage or find be
 
 Stack: Vite + React + @tanstack/react-query + axios. Run with `bun`.
 
----
-
 ## Stage 1 — Housekeeping + Three.js scene foundation ✅
 
 **Goal:** replace 2D canvas with a Three.js scene that reproduces current visuals.
@@ -35,8 +33,6 @@ Tasks:
 
 **Done when:** visually identical to current POC but running inside R3F.
 
----
-
 ## Stage 2 — Cave atmosphere (lighting + assets)
 
 **Goal:** make it look like a real cave with projected light.
@@ -53,8 +49,6 @@ Tasks:
 - Add leva controls for user to refine scene positioning, lighting... etc.
 
 **Done when:** scene looks atmospheric, shadows read as cave light.
-
----
 
 ## Stage 3 — Refine current state
 
@@ -73,8 +67,6 @@ Tasks:
 
 **Done when:** scene and code run smooth are are scalable and ready for Stage 4.
 
----
-
 ## Stage 4 — Refine fireplace
 
 **Goal:** Have reliable and realistic projected shadows - part 1
@@ -86,8 +78,6 @@ Tasks:
 - all components in `./src/scene/projected/components/*.jsx` should all either have a custom or shader shader to give it a shadow like feel. This shader does not need to be perfect, but it does need to apply. You could use the shader from `./src/scene/projected/components/VideoCam.jsx` as example.
 
 **Done when:** flames + lighting are realistic.
-
----
 
 ## Stage 5
 
@@ -116,8 +106,6 @@ Tasks:
 
 **Done when:** store populates correctly, page bounces in on load, old VisionPanel.jsx kept but unused (remove in 5b).
 
----
-
 ### Stage 5b — Widget + Sidebar ✅
 
 **Goal:** collapsible oracle sidebar and its trigger widget.
@@ -143,8 +131,6 @@ Tasks — Sidebar (`src/components/OracleSidebar.jsx`):
 
 **Done when:** sidebar slides in/out, widget glows, history rows populate.
 
----
-
 ### Stage 5c — Live Text Tile ✅
 
 **Goal:** floating description display on the left side of the screen.
@@ -160,10 +146,6 @@ Tasks — LiveTextTile (`src/components/LiveTextTile.jsx`):
 - Fade in/out with `framer-motion` `AnimatePresence` when content changes.
 
 **Done when:** tile reacts to new oracle responses, drags freely, looks glass-like.
-
----
-
----
 
 ## Stage 6 — GitHub project integration ✅
 
@@ -200,7 +182,7 @@ Implemented:
 
 **Goal:** make the frontend production-ready — fast, polished, and fully wired — before backend features land in Stage 9.
 
-### Stage 8a — Prep
+### Stage 8a — Prep ✅
 
 **Goal:** Make rebrand configurable and clean.
 
@@ -286,8 +268,12 @@ Task:
   - `list`: shows simply all project
   - `recent`: shows maybe top 10 recent project or sorts all by recent
   - `open-sidebar`: opens sidebar (need store trigger)
+  - `set-user $name`: updated the Github user to search projects from
+  - `theater`: goes into theater mode.
+  - `exit-theater`: exists theater mode.
   - ... other.
 - these are meant as extra, so just get some working, but can refine later.
+- commands can simply be created now and if they do not contain a functionality yet, simply add a null value to make sure they dont show disabled ones in the search results. Like theater mode is still a WIP, so the keys can already be added.
 
 **Done when:** Raycast like UX.
 
@@ -314,8 +300,6 @@ load GLB normally with useGLTF()
 
 **Done when:** Lighthouse perf score improved, scene loads with fade, bundle is tree-shaken.
 
----
-
 ## Stage 9 — Features
 
 ### Stage 9a — Communication Mode
@@ -340,8 +324,6 @@ Camera-on: the oracle knows you can hear it. It switches to direct address. It h
 
 **Done when:** camera-on/off toggles oracle persona, bible context is shared between both modes, tone difference is clearly felt.
 
----
-
 ### Stage 9b — AI Status
 
 **Goal:** expose real-time oracle availability so the user knows when the model is busy, queued, or idle — not just waiting in silence.
@@ -363,8 +345,6 @@ There is only one model at a time. When it's thinking, it is genuinely unavailab
 - Wire the AI Status placeholder in `OracleSidebar` (Stage 8b) to render live from `oracleStatusAtom`: amber dot + text for idle, pulsing red for busy, queue count for queued.
 
 **Done when:** sidebar status updates in real time, correctly reflects busy/idle/queued, polling pauses when tab hidden.
-
----
 
 ### Stage 9c — Shadow Memory
 
@@ -420,8 +400,6 @@ Injection order at each `/analyze` call:
 
 **Done when:** oracle has a bible, accumulates real memories, responsive passages fire on trigger matches, fresh-mode works.
 
----
-
 ### Stage 9d — History Controls
 
 **Goal:** give the user agency over the oracle's memory — clear it, suppress it, or share it.
@@ -441,22 +419,44 @@ These controls live in the sidebar history controls slot established in Stage 8b
 
 **Done when:** all three controls work end-to-end, fresh toggle suppresses memory injection, clear wipes both local and backend state.
 
----
+### Stage 9e — username is param in the URL
 
-## Stage 10 - Backend ready release
+**Goal:** App and url connect 
 
-- `api/main.py`:
-  - refine prompts
-  - add authentication with sessions and reconnection
-  - IP based rate limits
-  - queueing of tasks as we only have 1 model to query at a time
-  - model caching and loading optimization
-  - possibly add ws
-- frontend
+- Currently user is defined with `const GITHUB_USER = import.meta.env.VITE_GITHUB_USER;`. Remove the ENV and simple make this a query param in the URL
+- do not add routing. Simply take the optional param from the URL to set the state
+- this way a user can update the URL and reload the page to set a new user.
+- this functionality is reusable and uses a jotai store to sync states.
+- this is scalable so that we can add more config and in that in the future the "Share" URL button is simply a copy of the location.href.
+
+
+
+## Stage 10 - Release
+
+### Stage 10a - Backend ready release
+
+In `api/main.py`:
+- refine prompts
+- add authentication with sessions and reconnection
+- IP based rate limits
+- queueing of tasks as we only have 1 model to query at a time
+- model caching and loading optimization
+- possibly add ws
 
 **Done when:** backend ready for release.
 
-## Stage 11 - Hosting & final QA
+
+### Stage 10b - Frontend ready release
+
+Frontend needs simple changes so that 
+- assets will load in production
+- will work for all major desktop sizes
+- lazy loading for all assets and images
+
+
+**Done when:** frontend ready for release.
+
+### Stage 10c - Hosting & final QA
 
 - backend and frontend hosting
 

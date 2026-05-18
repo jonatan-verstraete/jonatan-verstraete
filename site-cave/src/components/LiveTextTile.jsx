@@ -34,7 +34,7 @@ export function LiveTextTile() {
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-overlay-high/90 backdrop-blur-xl shadow-[0_12px_36px_rgba(0,0,0,0.50)]">
+              <div className="overflow-hidden rounded-2xl border border-white-subtle bg-overlay-high/90 backdrop-blur-xl shadow-overlay">
                 {/* Header row */}
                 <div className="flex items-center justify-between px-4 pt-4 pb-3">
                   <div className="flex items-center gap-2">
@@ -49,7 +49,7 @@ export function LiveTextTile() {
                 </div>
 
                 {/* Hairline separator */}
-                <div className="mx-4 h-px bg-white/[0.04]" />
+                <div className="mx-4 h-px bg-white-dim" />
 
                 {/* Text body — ghost anchors height, typewriter overlays */}
                 <div className="relative px-4 pt-3 pb-4">
