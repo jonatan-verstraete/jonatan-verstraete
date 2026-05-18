@@ -5,12 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>cave</title>
-    <!-- Preload critical 3D assets to reduce first-render stall -->
+    <!-- Preload critical 3D assets — all use as="fetch" crossorigin to match Three.js request mode -->
     <link rel="preload" href="/models/wall.glb" as="fetch" crossorigin />
     <link rel="preload" href="/stars.hdr" as="fetch" crossorigin />
     <link rel="preload" href="/draco/draco_decoder.wasm" as="fetch" crossorigin />
-    <link rel="preload" href="/textures/Ground068_Color.webp" as="image" type="image/webp" />
-    <link rel="preload" href="/textures/Ground068_NormalGL.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/textures/Ground068_Color.webp" as="fetch" crossorigin />
+    <link rel="preload" href="/textures/Ground068_NormalGL.webp" as="fetch" crossorigin />
   </head>
   <body>
     <div id="root"></div>
