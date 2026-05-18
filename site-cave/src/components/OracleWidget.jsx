@@ -9,6 +9,8 @@ export const OracleWidget = () => {
   const nodeRef = useRef(null);
   const draggedRef = useRef(false);
 
+  return null
+
   return (
     <Draggable
       nodeRef={nodeRef}

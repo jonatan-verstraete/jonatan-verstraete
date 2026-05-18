@@ -3,9 +3,6 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { cpuVnoise } from "./noiseUtils";
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Blade geometry — flat quad-strip. Organic bend/twist lives in the shader.
-// ─────────────────────────────────────────────────────────────────────────────
 function buildBladeGeometry(segments = 8) {
   const positions = [], normals = [], uvs = [], indices = [];
   const BASE_W = 0.045;
@@ -16,6 +13,7 @@ function buildBladeGeometry(segments = 8) {
     const y = t * H;
     const w = BASE_W * Math.pow(1.0 - t, 0.7);
 
+    // Geometry tapers to 0 at the tip, eliminating the need for alpha transparency
     positions.push(-w, y, 0, w, y, 0);
     normals.push(0, 0, 1, 0, 0, 1);
     uvs.push(0, t, 1, t);
@@ -35,201 +33,171 @@ function buildBladeGeometry(segments = 8) {
   return geo;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Vertex shader
-//  Per-blade: unique twist, growth curvature, lean + two-octave fluid wind
-// ─────────────────────────────────────────────────────────────────────────────
-const VERT = /* glsl */ `
-precision highp float;
-
-uniform float uTime;
-uniform float uWindStrength;
-uniform vec2  uWindDir;
-
-varying float vT;
-varying vec2  vUv;
-varying vec3  vWorldRoot;
-varying vec3  vNormal;
-varying vec3  vViewPosition;
-
-float hash21(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-float vnoise(vec2 p) {
-  vec2 i = floor(p), f = fract(p);
-  f = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash21(i),             hash21(i + vec2(1,0)), f.x),
-    mix(hash21(i + vec2(0,1)), hash21(i + vec2(1,1)), f.x),
-    f.y);
-}
-
-void main() {
-  vT  = uv.y;
-  vUv = uv;
-
-  vec4 wRoot = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
-  vWorldRoot = wRoot.xyz;
-
-  float randPhase     = hash21(wRoot.xz) * 6.2832;
-  float randCurvature = 0.15 + hash21(wRoot.xz + vec2(1.0, 2.0)) * 0.35;
-  float randTwist     = (hash21(wRoot.xz + vec2(3.4, 1.2)) - 0.5) * 1.8;
-  float randLean      = (hash21(wRoot.xz + vec2(5.6, 7.8)) - 0.5) * 0.25;
-
-  vec3 pos = position;
-
-  // Unique per-blade twist
-  float twistAngle = randTwist * uv.y;
-  float cosA = cos(twistAngle), sinA = sin(twistAngle);
-  float origX = pos.x;
-  pos.x =  origX * cosA - pos.z * sinA;
-  pos.z =  origX * sinA + pos.z * cosA;
-
-  // Permanent growth lean + curvature
-  float t2 = uv.y * uv.y;
-  pos.z += randCurvature * t2;
-  pos.x += randLean * t2;
-
-  // Two-octave fluid wind
-  vec2  wc = wRoot.xz * 0.35 + uTime * uWindDir * 0.18;
-  float w1 = vnoise(wc)              * 2.0 - 1.0;
-  float w2 = vnoise(wc * 2.1 + 1.4) * 2.0 - 1.0;
-
-  pos.x += sin(uTime * 1.3 + randPhase + w1 * 2.0)              * uWindStrength       * t2;
-  pos.z += cos(uTime * 0.9 + randPhase * 0.6 + w2 * 1.5)        * uWindStrength * 0.5 * t2;
-
-  vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(pos, 1.0);
-  vNormal         = normalize(normalMatrix * mat3(instanceMatrix) * normal);
-  vViewPosition   = -mvPosition.xyz;
-
-  gl_Position = projectionMatrix * mvPosition;
-}
-`;
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Fragment shader
-//  Procedural micro-veins, fake SSS backlight, AO root crush, tip feather
-// ─────────────────────────────────────────────────────────────────────────────
-const FRAG = /* glsl */ `
-precision highp float;
-
-uniform vec3 uColorRoot;
-uniform vec3 uColorMid;
-uniform vec3 uColorTip;
-uniform vec3 uLightDirection;
-
-varying float vT;
-varying vec2  vUv;
-varying vec3  vWorldRoot;
-varying vec3  vNormal;
-varying vec3  vViewPosition;
-
-float hash21(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
-void main() {
-  vec3 col = vT < 0.4
-    ? mix(uColorRoot, uColorMid, vT * 2.5)
-    : mix(uColorMid,  uColorTip, (vT - 0.4) * 1.666);
-
-  // Micro-surface fibers/veins
-  float veinNoise    = fract(sin(vUv.x * 40.0 + hash21(vec2(vWorldRoot.x)) * 10.0));
-  float fineStructure = smoothstep(0.4, 0.6, veinNoise) * 0.12;
-  col -= fineStructure * (1.0 - vT * 0.5);
-
-  // Per-patch luminance variation
-  float patchNoise = hash21(floor(vWorldRoot.xz * 2.5));
-  col *= mix(0.88, 1.05, patchNoise);
-
-  vec3 N = normalize(vNormal);
-  vec3 L = normalize(uLightDirection);
-  vec3 V = normalize(vViewPosition);
-
-  float diffuse = max(dot(N, L), 0.0);
-  float SSS     = max(dot(-V, L), 0.0) * pow(1.0 - diffuse, 2.0);
-  vec3 translucentGlow = uColorTip * SSS * 0.45 * smoothstep(0.2, 1.0, vT);
-
-  float fakeAO = smoothstep(0.0, 0.35, vT) * 0.6 + 0.4;
-  col = (col * 0.45 + col * diffuse * 0.75) * fakeAO + translucentGlow;
-
-  float alpha = 1.0 - smoothstep(0.92, 1.0, vT) * 0.85;
-  gl_FragColor = vec4(col, alpha);
-}
-`;
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  GrassBlades component
-// ─────────────────────────────────────────────────────────────────────────────
 export function GrassBlades({
   strands       = 85000,
   groundSize    = 6,
   groundY       = -0.5,
   heightMin     = 0.14,
   heightMax     = 0.38,
-  windStrength  = 0.12,
+  windStrength  = 0.10,
   windDir       = [1, 0.3],
-  colorRoot     = "#0d1807",
-  colorMid      = "#2e5917",
-  colorTip      = "#76b833",
+  // Muted, dark night palette. Let the moonlight and firelight do the heavy lifting!
+  colorRoot     = "#020501", 
+  colorMid      = "#12200a", 
+  colorTip      = "#2c4220", 
 }) {
   const meshRef = useRef();
-
   const bladeGeo = useMemo(() => buildBladeGeometry(8), []);
 
-  const bladeMat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        vertexShader:   VERT,
-        fragmentShader: FRAG,
-        uniforms: {
-          uTime:           { value: 0 },
-          uWindStrength:   { value: windStrength },
-          uWindDir:        { value: new THREE.Vector2(...windDir).normalize() },
-          uColorRoot:      { value: new THREE.Color(colorRoot) },
-          uColorMid:       { value: new THREE.Color(colorMid) },
-          uColorTip:       { value: new THREE.Color(colorTip) },
-          uLightDirection: { value: new THREE.Vector3(1, 1.5, 1).normalize() },
-        },
-        side:        THREE.DoubleSide,
-        transparent: true,
-        depthWrite:  true,
-      }),
-    [windStrength, colorRoot, colorMid, colorTip],
-  );
+  const bladeMat = useMemo(() => {
+    // Standard PBR Material allows automatic interaction with Fog, PointLights, and HDRIs
+    const mat = new THREE.MeshStandardMaterial({
+      roughness: 0.35, // Low roughness to catch sharp light reflections
+      metalness: 0.1,
+      side: THREE.DoubleSide,
+      transparent: false, // Disabling alpha blending prevents sorting glitches at night
+    });
 
-  useEffect(() => {
-    const mesh = meshRef.current;
-    if (!mesh) return;
+    mat.onBeforeCompile = (shader) => {
+      // 1. Inject Uniforms
+      shader.uniforms.uTime = { value: 0 };
+      shader.uniforms.uWindStrength = { value: windStrength };
+      shader.uniforms.uWindDir = { value: new THREE.Vector2(...windDir).normalize() };
+      shader.uniforms.uColorRoot = { value: new THREE.Color(colorRoot) };
+      shader.uniforms.uColorMid = { value: new THREE.Color(colorMid) };
+      shader.uniforms.uColorTip = { value: new THREE.Color(colorTip) };
 
-    const dummy = new THREE.Object3D();
+      mat.userData.shader = shader;
 
-    for (let i = 0; i < strands; i++) {
-      const x = (Math.random() - 0.5) * groundSize;
-      const z = (Math.random() - 0.5) * groundSize;
+      // 2. Vertex Shader Injection (Wind Physics)
+      shader.vertexShader = `
+        uniform float uTime;
+        uniform float uWindStrength;
+        uniform vec2  uWindDir;
+        varying float vT;
+        varying vec3  vLocalPos;
+        varying vec3  vWorldRootPos;
 
-      const density  = cpuVnoise(x * 1.2 + 200, z * 1.2 + 200);
-      const detail   = cpuVnoise(x * 3.5,        z * 3.5);
-      const noiseVal = density * 0.7 + detail * 0.3;
-      const h        = THREE.MathUtils.lerp(heightMin, heightMax, noiseVal);
+        float hash21(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+        }
+        float vnoise(vec2 p) {
+          vec2 i = floor(p), f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
+          return mix(mix(hash21(i), hash21(i + vec2(1,0)), f.x), mix(hash21(i + vec2(0,1)), hash21(i + vec2(1,1)), f.x), f.y);
+        }
+      ` + shader.vertexShader;
 
-      dummy.position.set(x, groundY, z);
-      dummy.rotation.y = Math.random() * Math.PI * 2;
-      dummy.rotation.x = (Math.random() - 0.5) * 0.12;
-      const thick = 0.75 + Math.random() * 0.4;
-      dummy.scale.set(thick, h, thick);
+      shader.vertexShader = shader.vertexShader.replace(
+        `#include <begin_vertex>`,
+        `
+        #include <begin_vertex>
+        vT = uv.y;
+        vLocalPos = position;
 
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    }
+        vec3 wRoot = vec3(0.0);
+        #ifdef USE_INSTANCING
+          wRoot = instanceMatrix[3].xyz;
+        #endif
+        vWorldRootPos = wRoot;
 
-    mesh.instanceMatrix.needsUpdate = true;
-  }, [strands, groundSize, heightMin, heightMax, groundY]);
+        float randPhase     = hash21(wRoot.xz) * 6.2832;
+        float randCurvature = 0.15 + hash21(wRoot.xz + vec2(1.0, 2.0)) * 0.35;
+        float randTwist     = (hash21(wRoot.xz + vec2(3.4, 1.2)) - 0.5) * 1.8;
+        float randLean      = (hash21(wRoot.xz + vec2(5.6, 7.8)) - 0.5) * 0.25;
+
+        float twistAngle = randTwist * uv.y;
+        float cosA = cos(twistAngle), sinA = sin(twistAngle);
+        float origX = transformed.x;
+        transformed.x =  origX * cosA - transformed.z * sinA;
+        transformed.z =  origX * sinA + transformed.z * cosA;
+
+        float t2 = uv.y * uv.y;
+        transformed.z += randCurvature * t2;
+        transformed.x += randLean * t2;
+
+        vec2 wc = wRoot.xz * 0.35 + uTime * uWindDir * 0.18;
+        float w1 = vnoise(wc)              * 2.0 - 1.0;
+        float w2 = vnoise(wc * 2.1 + 1.4) * 2.0 - 1.0;
+
+        transformed.x += sin(uTime * 1.3 + randPhase + w1 * 2.0)       * uWindStrength       * t2;
+        transformed.z += cos(uTime * 0.9 + randPhase * 0.6 + w2 * 1.5) * uWindStrength * 0.5 * t2;
+        `
+      );
+
+      // 3. Fragment Shader Injection (Coloring & Moonlight Glimmer)
+      shader.fragmentShader = `
+        varying float vT;
+        varying vec3  vLocalPos;
+        varying vec3  vWorldRootPos;
+        uniform vec3  uColorRoot;
+        uniform vec3  uColorMid;
+        uniform vec3  uColorTip;
+
+        float hash21(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        float hash31(vec3 p) { return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
+      ` + shader.fragmentShader;
+
+      shader.fragmentShader = shader.fragmentShader.replace(
+        `#include <color_fragment>`,
+        `
+        #include <color_fragment>
+
+        vec3 grassCol = vT < 0.4
+          ? mix(uColorRoot, uColorMid, vT * 2.5)
+          : mix(uColorMid,  uColorTip, (vT - 0.4) * 1.666);
+
+        float veinNoise = fract(sin(vLocalPos.x * 40.0 + hash21(vec2(vWorldRootPos.x)) * 10.0));
+        float fineStructure = smoothstep(0.4, 0.6, veinNoise) * 0.12;
+        grassCol -= fineStructure * (1.0 - vT * 0.5);
+
+        // Grounding variation + Organic dead grass patches (approx 10%)
+        float patchNoise = hash21(floor(vWorldRootPos.xz * 2.0));
+        vec3 dryGrassColor = vec3(0.42, 0.36, 0.24); 
+        float dryMix = smoothstep(0.78, 1.0, patchNoise);
+        grassCol = mix(grassCol, dryGrassColor, dryMix * 0.65);
+        grassCol *= mix(0.82, 1.08, patchNoise);
+
+        // Soft root darkening (Fake Ambient Occlusion)
+        float fakeAO = smoothstep(0.0, 0.35, vT) * 0.75 + 0.25;
+        diffuseColor.rgb = grassCol * fakeAO;
+        `
+      );
+
+      shader.fragmentShader = shader.fragmentShader.replace(
+        `#include <emissivemap_fragment>`,
+        `
+        #include <emissivemap_fragment>
+
+        // High frequency micro-noise mapping for dynamic dew/crystalline glimmer
+        vec3 sparkleSeed = (vWorldRootPos + vLocalPos) * 160.0;
+        float sparkleNoise = hash31(floor(sparkleSeed));
+        
+        // Isolate tiny percentages of the surface to act as sparkle points
+        float sparkleThresh = 0.994; 
+        if (sparkleNoise > sparkleThresh && vT > 0.4) {
+          vec3 normalDir = normalize(vNormal);
+          vec3 viewDir = normalize(vViewPosition);
+          float viewCatch = max(dot(normalDir, viewDir), 0.0);
+          
+          // Pure white-blue moonlight flash effect injected into emissive channel
+          // Moves with the wind and camera perspective natively
+          vec3 sparkleColor = vec3(0.85, 0.95, 1.0) * 3.5 * smoothstep(sparkleThresh, 1.0, sparkleNoise);
+          totalEmissiveRadiance += sparkleColor * viewCatch * smoothstep(0.0, 0.35, vT);
+        }
+        `
+      );
+    };
+
+    return mat;
+  }, [windStrength, colorRoot, colorMid, colorTip]);
 
   useEffect(() => () => { bladeGeo.dispose(); bladeMat.dispose(); }, [bladeGeo, bladeMat]);
 
   useFrame(({ clock }) => {
-    bladeMat.uniforms.uTime.value = clock.getElapsedTime();
+    if (bladeMat.userData.shader) {
+      bladeMat.userData.shader.uniforms.uTime.value = clock.getElapsedTime();
+    }
   });
 
   return (

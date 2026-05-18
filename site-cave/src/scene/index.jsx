@@ -213,9 +213,9 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
 
       <Ground />
 
-      <Dust opacity={dustOpacity} />
+      {/* <Dust opacity={dustOpacity} /> */}
 
-      <ProjectedSurface
+      {/* <ProjectedSurface
         target={projTarget}
         videoRef={videoRef}
         isActive={isActive}
@@ -224,7 +224,7 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
         blurRadius={blurRadius}
         accumDecay={accumDecay}
         onAccumRef={onAccumRef}
-      />
+      /> */}
 
       <Preload all />
     </>
