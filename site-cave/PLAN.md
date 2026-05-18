@@ -224,7 +224,7 @@ Render disabled buttons for: **Clear history**, **Disable shadow memory**, **Sha
 
 **Done when:** sidebar is the single control surface, project search is a shared component, placeholder slots are visible and correctly positioned.
 
-### Stage 8b — Resizable
+### Stage 8c — Resizable
 
 **Goal:** Make certain objects resizable.
 
@@ -242,7 +242,7 @@ For each make sure that:
 
 **Done when:** Chosen items behave the same, but are resizable.
 
-### Stage 8c — Commands
+### Stage 8d — Commands
 
 **Goal:** Turn current "Project Select" into a Raycast like experience.
 
@@ -277,7 +277,7 @@ Task:
 
 **Done when:** Raycast like UX.
 
-### Stage 8d — Three Optimization
+### Stage 8e — Three Optimization
 
 GLB loading pipeline:
 
