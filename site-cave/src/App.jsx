@@ -1,16 +1,14 @@
-import { useRef, useCallback } from "react";
+import { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useAtom, useAtomValue } from "jotai";
-import { Layers } from "lucide-react";
+import { Layers, Video, VideoOff } from "lucide-react";
 import { useCamera } from "./hooks/useCamera";
-import { useAnalyze } from "./hooks/useAnalyze";
 import { Scene } from "./scene";
 import { OracleWidget } from "./components/OracleWidget";
 import { OracleSidebar } from "./components/OracleSidebar";
 import { LiveTextTile } from "./components/LiveTextTile";
 import { ProjectPicker } from "./components/ProjectPicker";
 import { pickerOpenAtom, selectedProjectAtom } from "./store/cave";
-import { Box } from "@react-three/drei";
 
 function ProjectPickerTrigger() {
   const [pickerOpen, setPickerOpen] = useAtom(pickerOpenAtom);
@@ -21,18 +19,19 @@ function ProjectPickerTrigger() {
       onClick={() => setPickerOpen((v) => !v)}
       className={[
         "fixed bottom-4 left-1/2 -translate-x-1/2",
-        "flex items-center gap-[7px]",
-        "py-[7px] pr-[14px] pl-[10px]",
-        "cursor-pointer rounded-lg font-mono text-xs",
-        "backdrop-blur transition-colors duration-200",
+        "flex items-center gap-[6px]",
+        "py-[6px] pr-[12px] pl-[10px]",
+        "cursor-pointer rounded-lg font-mono",
+        "backdrop-blur transition-all duration-200",
         "z-picker-trigger pointer-events-auto",
-        "max-w-[60vw] overflow-hidden whitespace-nowrap",
+        "max-w-[50vw] overflow-hidden whitespace-nowrap",
+        "text-label",
         pickerOpen
-          ? "bg-primary/18 text-ink border-primary-border border shadow-[0_0_0_1px_rgba(170,59,255,0.3)]"
-          : "bg-overlay-low text-ink-muted border border-white/10",
+          ? "bg-primary/15 text-ink border border-primary-border shadow-[0_0_0_1px_rgba(170,59,255,0.22)]"
+          : "bg-overlay-low text-ink-muted border border-white/8 hover:border-white/15 hover:text-ink",
       ].join(" ")}
     >
-      <Layers size={13} className="shrink-0" />
+      <Layers size={12} className="shrink-0 opacity-70" />
       <span className="overflow-hidden text-ellipsis">
         {selected?.name ?? "select project"}
       </span>
@@ -40,11 +39,34 @@ function ProjectPickerTrigger() {
   );
 }
 
+function CameraToggle({ isActive, onToggle }) {
+  return (
+    <button
+      onClick={onToggle}
+      className={[
+        "fixed top-4 right-4",
+        "flex items-center gap-2 p-2! py-[7px]",
+        "cursor-pointer rounded-lg font-mono",
+        "text-label backdrop-blur transition-all duration-200",
+        "pointer-events-auto z-20",
+        isActive
+          ? "bg-secondary/15 text-secondary border border-secondary-border"
+          : "bg-overlay-low text-ink-muted border border-white/8 hover:border-white/15 hover:text-ink",
+      ].join(" ")}
+    >
+      {isActive ? (
+        <Video size={12} className="shrink-0" />
+      ) : (
+        <VideoOff size={12} className="shrink-0 opacity-60" />
+      )}
+      <span>{isActive ? "Shadow on" : "Shadow off"}</span>
+    </button>
+  );
+}
+
 export const App = () => {
   const captureRef = useRef(null);
   const { videoRef, isActive, toggle } = useCamera();
-
-  // useAnalyze(canvasRef.current?.captureFrame);
 
   return (
     <>
@@ -57,29 +79,7 @@ export const App = () => {
         <Scene captureRef={captureRef} videoRef={videoRef} isActive={isActive} />
       </Canvas>
 
-      {/* <Canvas
-        gl={{ preserveDrawingBuffer: true }}
-        shadows
-        camera={{ position: [2, 0.2, 5], fov: 65 }}
-        className="bg-red !absolute inset-0 size-full"
-      >
-        <Box args={[1, 1, 1, 1]} />
-      </Canvas> */}
-
-      <button
-        onClick={toggle}
-        className={[
-          "fixed top-4 right-4 px-4 py-2",
-          "text-ui cursor-pointer rounded-md font-sans",
-          "text-ink border border-white/15",
-          "backdrop-blur transition-colors duration-200",
-          "pointer-events-auto z-20",
-          isActive ? "bg-primary" : "bg-overlay-low",
-        ].join(" ")}
-      >
-        {isActive ? "Shadow On" : "Enable Shadow"}
-      </button>
-
+      <CameraToggle isActive={isActive} onToggle={toggle} />
       <LiveTextTile />
       <OracleWidget />
       <OracleSidebar />

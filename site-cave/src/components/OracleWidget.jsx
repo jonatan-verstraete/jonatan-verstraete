@@ -9,8 +9,6 @@ export const OracleWidget = () => {
   const nodeRef = useRef(null);
   const draggedRef = useRef(false);
 
-  return null;
-
   return (
     <Draggable
       nodeRef={nodeRef}
@@ -24,20 +22,19 @@ export const OracleWidget = () => {
       <div
         ref={nodeRef}
         data-oracle-widget
-        className="z-widget fixed bottom-7 left-7 cursor-grab"
+        className="z-widget fixed bottom-6 left-6 cursor-grab active:cursor-grabbing"
       >
-        {/* spinning gradient border */}
+        {/* Spinning gradient border ring */}
         <div className="oracle-gradient-border inline-flex rounded-full p-[1.5px]">
           <button
             onClick={() => {
               if (!draggedRef.current) setOpen((v) => !v);
             }}
             className={[
-              "relative h-12 w-12 cursor-pointer rounded-full border-0",
+              "relative h-11 w-11 cursor-pointer rounded-full border-0",
               "flex items-center justify-center outline-none",
               "backdrop-blur-[16px] backdrop-saturate-[160%]",
               "transition-all duration-[350ms]",
-              "hover:shadow-ring hover:border-primary-border hover:brightness-110",
               open
                 ? "bg-primary-muted text-primary"
                 : "bg-overlay-mid text-secondary",
@@ -47,8 +44,9 @@ export const OracleWidget = () => {
                 ? "glowPrimary 2.6s ease-in-out infinite"
                 : "glowAmber 2.6s ease-in-out infinite",
             }}
+            title={open ? "Close oracle" : "Open oracle"}
           >
-            <Eye size={17} strokeWidth={1.4} />
+            <Eye size={16} strokeWidth={1.4} />
           </button>
         </div>
       </div>
