@@ -245,7 +245,7 @@ export function ProjectedSurface({
     <>
       <ProjectText />
       {/* {!isActive && <Video />} */}
-      {/* <Video /> */}
+      <Video />
 
       <VideoCam
         videoRef={videoRef}
