@@ -3,7 +3,7 @@ export const SCENE_CONFIG = {
   lightX: 0.8,
   lightY: -1.5,
   lightZ: 7.5,
-  lightIntensity: 220,
+  lightIntensity: 160,
   lightAngle: 0.45,
   lightPenumbra: 0.35,
 
@@ -36,8 +36,11 @@ export const SCENE_CONFIG = {
   shadowSoftness: 0.18,
 
   // Projection blur (Gaussian softness on gobo)
-  blurRadius: 2.5,
+  blurRadius: 1.5,
 
   // Temporal accumulation (ghost trails)
-  accumDecay: 0.88,
+  accumDecay: 0.82,
+
+  // Gobo contrast boost (> 1 punches lights/darks for more visible projection)
+  goboContrast: 1.35,
 };

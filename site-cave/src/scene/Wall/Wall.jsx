@@ -16,9 +16,9 @@ export const Wall = memo(({ wallX, wallY, wallZ, wallScale, wallRotX }) => {
         if (child.material) {
           child.material.depthTest = true;
           child.material.depthWrite = true;
-          // Reduce normal/roughness so projected text+shadow read cleanly on the craggy wall
-          // if (child.material.normalScale) child.material.normalScale.set(0.35, 0.35);
-          // if (child.material.roughness != null) child.material.roughness = 0.65;
+          // Flatten normals and lower roughness so spotlight projection reads cleanly
+          if (child.material.normalScale) child.material.normalScale.set(0.12, 0.12);
+          if (child.material.roughness != null) child.material.roughness = 0.42;
         }
       }
     });

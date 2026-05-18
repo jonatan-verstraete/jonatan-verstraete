@@ -107,6 +107,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
     shadowSoftness,
     blurRadius,
     accumDecay,
+    goboContrast,
   } = useControls({
     Projector: folder({
       lightX: { value: C.lightX, min: -5, max: 5, step: 0.01 },
@@ -148,6 +149,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
       shadowSoftness: { value: C.shadowSoftness, min: 0, max: 0.5, step: 0.01 },
       blurRadius: { value: C.blurRadius, min: 0, max: 8, step: 0.1 },
       accumDecay: { value: C.accumDecay, min: 0, max: 0.97, step: 0.01 },
+      goboContrast: { value: C.goboContrast, min: 1.0, max: 3.0, step: 0.05 },
     }),
   });
 
@@ -224,6 +226,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
         softness={shadowSoftness}
         blurRadius={blurRadius}
         accumDecay={accumDecay}
+        goboContrast={goboContrast}
         onAccumRef={onAccumRef}
       />
 

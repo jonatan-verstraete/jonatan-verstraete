@@ -48,17 +48,21 @@ void main() {
   gl_FragColor = col;
 }`;
 
-// ── Temporal accumulation — mix(current, previous, decay) ──
+// ── Temporal accumulation — mix(current, previous, decay) + contrast boost ──
 // decay=0 → no trail (pure current frame), decay=0.95 → long ghost trails
+// uContrast > 1 pushes lights brighter and darks darker for more visible projection
 const ACCUM_FRAG = `
 uniform sampler2D uCurrent;
 uniform sampler2D uPrev;
 uniform float uDecay;
+uniform float uContrast;
 varying vec2 vUv;
 void main() {
   vec4 curr = texture2D(uCurrent, vUv);
   vec4 prev = texture2D(uPrev, vUv);
-  gl_FragColor = mix(curr, prev, uDecay);
+  vec4 mixed = mix(curr, prev, uDecay);
+  mixed.rgb = clamp((mixed.rgb - 0.5) * uContrast + 0.5, 0.0, 1.0);
+  gl_FragColor = mixed;
 }`;
 
 function makeRT(w, h) {
@@ -99,12 +103,15 @@ export function ProjectedSurface({
   softness,
   blurRadius,
   accumDecay,
+  goboContrast,
   onAccumRef,
 }) {
   // ── Gobo portal scene ──
   const [gobScene, gobCam] = useMemo(() => {
     const s = new THREE.Scene();
-    s.background = new THREE.Color(0x151515);
+    // Bright background so spotlight gobo passes light through base areas.
+    // Without this, dark background blocks all light even when VideoCam has no shadow layer.
+    s.background = new THREE.Color(0xc8c8c8);
     const cam = new THREE.OrthographicCamera(-1, 1, 0.5, -0.5, 0.1, 10);
     cam.position.set(0, 0, 5);
     return [s, cam];
@@ -157,6 +164,7 @@ export function ProjectedSurface({
           uCurrent: { value: null },
           uPrev: { value: null },
           uDecay: { value: 0.88 },
+          uContrast: { value: 1.35 },
         },
         vertexShader: VERT,
         fragmentShader: ACCUM_FRAG,
@@ -193,6 +201,10 @@ export function ProjectedSurface({
   useEffect(() => {
     accumMat.uniforms.uDecay.value = accumDecay ?? 0.88;
   }, [accumDecay, accumMat]);
+
+  useEffect(() => {
+    accumMat.uniforms.uContrast.value = goboContrast ?? 1.35;
+  }, [goboContrast, accumMat]);
 
   // ── Pipeline — runs before parent's spotlight map update (priority 0) ──
   useFrame(({ gl }) => {
@@ -231,8 +243,10 @@ export function ProjectedSurface({
 
   return createPortal(
     <>
-      <Video />
       <ProjectText />
+      {/* {!isActive && <Video />} */}
+      {/* <Video /> */}
+
       <VideoCam
         videoRef={videoRef}
         isActive={isActive}
