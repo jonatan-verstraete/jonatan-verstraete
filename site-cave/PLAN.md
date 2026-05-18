@@ -242,12 +242,13 @@ For each make sure that:
 
 **Done when:** Chosen items behave the same, but are resizable.
 
-### Stage 8d — Commands
+### Stage 8d — Raylast like Project search panel ✅
 
 **Goal:** Turn current "Project Select" into a Raycast like experience.
 
-Task:
+> note: Project search in sidebar works the same way but not floating.
 
+Task:
 - change popover to be central on the screen
 - its a floating search bar with some suggestions like: some commands, possibly even a last search
 - has debounce for search queries and smooth animations
@@ -275,7 +276,7 @@ Task:
 - these are meant as extra, so just get some working, but can refine later.
 - commands can simply be created now and if they do not contain a functionality yet, simply add a null value to make sure they dont show disabled ones in the search results. Like theater mode is still a WIP, so the keys can already be added.
 
-**Done when:** Raycast like UX.
+**Done when:** Raycast like UX. 
 
 ### Stage 8e — Three Optimization
 
@@ -461,6 +462,17 @@ Frontend needs simple changes so that
 - backend and frontend hosting
 
 **Done when:** frontend and backend successfully hosted and tested.
+
+
+
+## Stage 11 - Theater mode
+
+Fixed view with more ambience, better viewing. 
+You could have a a dropdown with:
+- movie selection
+- setting to disable/enable ambient items like: fire, fireflies, starts, lighting...
+- backend streams video directly from webarchive or local upload
+- can use HLS with m3u8
 
 ---
 

@@ -1,5 +1,7 @@
 import { atom } from "jotai";
 
+export const githubUserAtom = atom(import.meta.env.VITE_GITHUB_USER || null);
+
 const MAX_HISTORY = 100;
 
 export const sidebarOpenAtom = atom(false);

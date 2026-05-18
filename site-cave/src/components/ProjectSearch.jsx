@@ -1,16 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, FolderOpen, X } from "lucide-react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useQuery } from "@tanstack/react-query";
-import { selectedProjectAtom } from "../store/cave";
+import { selectedProjectAtom, githubUserAtom } from "../store/cave";
+import { FALLBACK_PROJECTS } from "../data/projects";
 
-const GITHUB_USER = import.meta.env.VITE_GITHUB_USER;
-
-async function fetchProjects() {
-  return [];
-  if (!GITHUB_USER) return [];
+async function fetchProjects(user) {
+  if (!user) return FALLBACK_PROJECTS;
   const res = await fetch(
-    `https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated&type=public`,
+    `https://api.github.com/users/${user}/repos?per_page=100&sort=updated&type=public`,
   );
   if (!res.ok) throw new Error(`GitHub API ${res.status}`);
   const repos = await res.json();
@@ -46,13 +44,14 @@ export function ProjectSearch({
   const [activeIdx, setActiveIdx] = useState(0);
   const [hasFocus, setHasFocus] = useState(false);
   const [selected, setSelected] = useAtom(selectedProjectAtom);
+  const githubUser = useAtomValue(githubUserAtom);
   const inputRef = useRef(null);
   const listRef = useRef(null);
   const containerRef = useRef(null);
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["github-repos", GITHUB_USER ?? "__fallback__"],
-    queryFn: fetchProjects,
+    queryKey: ["github-repos", githubUser ?? "__fallback__"],
+    queryFn: () => fetchProjects(githubUser),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -145,7 +144,8 @@ export function ProjectSearch({
       >
         {filtered.length === 0 ? (
           <div className="text-ink-ghost/40 text-label px-4 py-5 text-center font-mono">
-            {projects.length === 0 ? "no projects" : "no matches"}          </div>
+            {projects.length === 0 ? "no projects" : "no matches"}
+          </div>
         ) : (
           filtered.map((project, i) => (
             <ProjectRow

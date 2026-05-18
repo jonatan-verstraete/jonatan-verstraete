@@ -1,0 +1,42 @@
+export const FALLBACK_PROJECTS = [
+  {
+    id: 1,
+    name: "site-cave",
+    description: "Allegory of the cave — an interactive AI art installation",
+    topics: ["threejs", "react", "ai", "art"],
+    language: "JavaScript",
+    html_url: "#",
+  },
+  {
+    id: 2,
+    name: "neural-fabric",
+    description: "Generative textile patterns derived from neural activations",
+    topics: ["ml", "generative", "art"],
+    language: "Python",
+    html_url: "#",
+  },
+  {
+    id: 3,
+    name: "shadow-protocol",
+    description: "Distributed shadow rendering across edge nodes",
+    topics: ["distributed", "webgpu", "rendering"],
+    language: "TypeScript",
+    html_url: "#",
+  },
+  {
+    id: 4,
+    name: "void-cartography",
+    description: "Mapping unmappable spaces with procedural geometry",
+    topics: ["procedural", "threejs", "3d"],
+    language: "JavaScript",
+    html_url: "#",
+  },
+  {
+    id: 5,
+    name: "whisper-net",
+    description: "Ephemeral peer-to-peer messaging that leaves no trace",
+    topics: ["p2p", "crypto", "privacy"],
+    language: "Rust",
+    html_url: "#",
+  },
+];
