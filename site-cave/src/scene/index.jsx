@@ -30,27 +30,26 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
   }, []);
   const setHistory = useSetAtom(historyAtom);
 
-  // Priority-1: runs after ProjectedSurface pipeline (priority 0)
-  // Updates spotlight.map to latest accumulated texture + animates color temperature
-  // useFrame(({ clock, gl }) => {
-  //   getCanvasBlobRef.current = gl.domElement?.toBlob
-  //   const spot = spotRef.current;
-  //   if (!spot) return;
 
-  //   // Point spotlight at the latest accumulated gobo output
-  //   const latestAccum = surfaceAccumRef.current?.current;
-  //   if (latestAccum) spot.map = latestAccum.texture;
+  useFrame(({ clock, gl }) => {
+    getCanvasBlobRef.current = gl.domElement?.toBlob;
+    const spot = spotRef.current;
+    if (!spot) return;
 
-  //   // Subtle fire-flicker color temperature animation (option G)
-  //   const t = clock.getElapsedTime();
-  //   const flicker =
-  //     Math.sin(t * 2.7) * 0.4 +
-  //     Math.sin(t * 4.1) * 0.3 +
-  //     Math.sin(t * 0.9) * 0.3;
-  //   const n = (flicker + 1) * 0.5; // 0..1
-  //   // Oscillates between warm amber (1.0, 0.95, 0.78) and slightly cooler (0.97, 0.91, 0.84)
-  //   spot.color.setRGB(0.97 + n * 0.03, 0.91 + n * 0.04, 0.78 + n * 0.06);
-  // }, 1);
+    // Point spotlight at the latest accumulated gobo output
+    const latestAccum = surfaceAccumRef.current?.current;
+    if (latestAccum) spot.map = latestAccum.texture;
+
+    // Subtle fire-flicker color temperature animation (option G)
+    const t = clock.getElapsedTime();
+    const flicker =
+      Math.sin(t * 2.7) * 0.4 +
+      Math.sin(t * 4.1) * 0.3 +
+      Math.sin(t * 0.9) * 0.3;
+    const n = (flicker + 1) * 0.5; // 0..1
+    // Oscillates between warm amber (1.0, 0.95, 0.78) and slightly cooler (0.97, 0.91, 0.84)
+    spot.color.setRGB(0.97 + n * 0.03, 0.91 + n * 0.04, 0.78 + n * 0.06);
+  });
 
   useImperativeHandle(captureRef, () => ({
     captureFrame: (quality) =>
