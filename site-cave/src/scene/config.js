@@ -3,7 +3,7 @@ export const SCENE_CONFIG = {
   lightX: 0.8,
   lightY: -1.5,
   lightZ: 7.5,
-  lightIntensity: 40,
+  lightIntensity: 220,
   lightAngle: 0.45,
   lightPenumbra: 0.35,
 

@@ -112,7 +112,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
       lightX: { value: C.lightX, min: -5, max: 5, step: 0.01 },
       lightY: { value: C.lightY, min: -5, max: 5, step: 0.01 },
       lightZ: { value: C.lightZ, min: -5, max: 5, step: 0.01 },
-      lightIntensity: { value: C.lightIntensity, min: 0, max: 80, step: 0.5 },
+      lightIntensity: { value: C.lightIntensity, min: 10, max: 500, step: 1 },
       lightAngle: { value: C.lightAngle, min: 0.05, max: 1.2, step: 0.01 },
       lightPenumbra: { value: C.lightPenumbra, min: 0, max: 1, step: 0.01 },
     }),
