@@ -30,7 +30,6 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
   }, []);
   const setHistory = useSetAtom(historyAtom);
 
-
   useFrame(({ clock, gl }) => {
     getCanvasBlobRef.current = gl.domElement?.toBlob;
     const spot = spotRef.current;

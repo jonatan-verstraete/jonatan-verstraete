@@ -12,6 +12,7 @@ import { SceneLoader } from "./components/SceneLoader";
 import { pickerOpenAtom, selectedProjectAtom } from "./store/cave";
 // Configure Draco decoder path (local, no CDN)
 import "./scene/utils/assets.js";
+import { PerformanceMonitor, StatsGl } from "@react-three/drei";
 
 function ProjectPickerTrigger() {
   const [pickerOpen, setPickerOpen] = useAtom(pickerOpenAtom);
@@ -30,8 +31,8 @@ function ProjectPickerTrigger() {
         "max-w-[50vw] overflow-hidden whitespace-nowrap",
         "text-label",
         pickerOpen
-          ? "bg-white-dim text-ink/80 border border-white-mild"
-          : "bg-transparent text-ink-ghost border border-white-subtle hover:border-white-mild hover:text-ink-muted",
+          ? "bg-white-dim text-ink/80 border-white-mild border"
+          : "text-ink-ghost border-white-subtle hover:border-white-mild hover:text-ink-muted border bg-transparent",
       ].join(" ")}
     >
       <Layers size={12} className="shrink-0 opacity-70" />
@@ -53,8 +54,8 @@ function CameraToggle({ isActive, onToggle }) {
         "text-label backdrop-blur transition-all duration-200",
         "pointer-events-auto z-20",
         isActive
-          ? "bg-white-dim text-secondary/80 border border-secondary/20"
-          : "bg-transparent text-ink-ghost border border-white-subtle hover:border-white-mild hover:text-ink-muted",
+          ? "bg-white-dim text-secondary/80 border-secondary/20 border"
+          : "text-ink-ghost border-white-subtle hover:border-white-mild hover:text-ink-muted border bg-transparent",
       ].join(" ")}
     >
       {isActive ? (
@@ -80,7 +81,15 @@ export const App = () => {
         style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh" }}
       >
         <Suspense fallback={null}>
-          <Scene captureRef={captureRef} videoRef={videoRef} isActive={isActive} />
+          {/* <StatsGl />
+
+          <PerformanceMonitor> */}
+            <Scene
+              captureRef={captureRef}
+              videoRef={videoRef}
+              isActive={isActive}
+            />
+          {/* </PerformanceMonitor> */}
         </Suspense>
       </Canvas>
 
