@@ -19,15 +19,7 @@ export function LiveTextTile() {
     <Draggable nodeRef={nodeRef} defaultPosition={{ x: 24, y: 0 }}>
       <div
         ref={nodeRef}
-        style={{
-          position: "fixed",
-          left: 0,
-          top: "38%",
-          width: "clamp(200px, 22vw, 340px)",
-          zIndex: 30,
-          cursor: "grab",
-          userSelect: "none",
-        }}
+        className="fixed left-0 top-[38%] w-[clamp(200px,22vw,340px)] z-tile cursor-grab select-none"
       >
         <AnimatePresence>
           {latest && (
@@ -38,91 +30,31 @@ export function LiveTextTile() {
               transition={{ duration: 0.35 }}
             >
               {/* spinning gradient border wrapper */}
-              <div
-                className="oracle-gradient-border"
-                style={{ borderRadius: 14, padding: 1.5 }}
-              >
-                <div
-                  style={{
-                    borderRadius: 12.5,
-                    background: "rgba(7,5,14,0.88)",
-                    backdropFilter: "blur(14px)",
-                    WebkitBackdropFilter: "blur(14px)",
-                    overflow: "hidden",
-                  }}
-                >
+              <div className="oracle-gradient-border rounded-xl p-[1.5px]">
+                <div className="rounded-[12.5px] bg-overlay-high backdrop-blur-lg overflow-hidden">
+
                   {/* header */}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "10px 14px 9px",
-                      background:
-                        "linear-gradient(to bottom, rgba(170,59,255,0.06), transparent)",
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                      <span
-                        className="oracle-live-dot"
-                        style={{
-                          display: "inline-block",
-                          width: 5,
-                          height: 5,
-                          borderRadius: "50%",
-                          background: "var(--secondary)",
-                          flexShrink: 0,
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontSize: 9,
-                          fontFamily: "var(--mono)",
-                          letterSpacing: "0.22em",
-                          textTransform: "uppercase",
-                          color: "rgba(232,224,245,0.4)",
-                        }}
-                      >
+                  <div className="flex items-center justify-between pt-[10px] px-[14px] pb-[9px] bg-gradient-to-b from-primary/6 to-transparent">
+                    <div className="flex items-center gap-[7px]">
+                      <span className="oracle-live-dot inline-block w-[5px] h-[5px] rounded-full bg-secondary shrink-0" />
+                      <span className="text-micro font-mono tracking-ultra uppercase text-ink-ghost">
                         Oracle
                       </span>
                     </div>
-                    <span
-                      style={{
-                        fontSize: 9,
-                        fontFamily: "var(--mono)",
-                        color: "rgba(232,224,245,0.22)",
-                        letterSpacing: "0.06em",
-                      }}
-                    >
+                    <span className="text-micro font-mono text-ink-ghost tracking-loose">
                       {formatTime(latest.timestamp)}
                     </span>
                   </div>
 
                   {/* separator */}
-                  <div
-                    style={{
-                      height: 1,
-                      background:
-                        "linear-gradient(to right, transparent, rgba(170,59,255,0.25) 30%, rgba(255,159,40,0.2) 70%, transparent)",
-                      flexShrink: 0,
-                    }}
-                  />
+                  <div className="h-px shrink-0 bg-[linear-gradient(to_right,transparent,rgba(170,59,255,0.25)_30%,rgba(255,159,40,0.2)_70%,transparent)]" />
 
                   {/* text body — ghost sets height, typewriter overlays */}
-                  <div style={{ padding: "13px 16px 16px", position: "relative" }}>
+                  <div className="p-[13px_16px_16px] relative">
                     {/* ghost: full text, invisible — anchors the height */}
                     <div
                       aria-hidden
-                      style={{
-                        visibility: "hidden",
-                        pointerEvents: "none",
-                        fontSize: 15,
-                        lineHeight: 1.7,
-                        fontFamily: "var(--sans)",
-                        letterSpacing: "0.014em",
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
-                      }}
+                      className="invisible pointer-events-none text-read leading-[1.7] font-sans tracking-fine whitespace-pre-wrap break-words"
                     >
                       {latest.description}
                     </div>
@@ -133,27 +65,18 @@ export function LiveTextTile() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.3 }}
-                      style={{
-                        position: "absolute",
-                        top: 13,
-                        left: 16,
-                        right: 16,
-                        fontSize: 15,
-                        lineHeight: 1.7,
-                        color: "rgba(232,224,245,0.88)",
-                        fontFamily: "var(--sans)",
-                        letterSpacing: "0.014em",
-                      }}
+                      className="absolute top-[13px] left-[16px] right-[16px] text-read leading-[1.7] text-ink font-sans tracking-fine"
                     >
                       <TypeAnimation
                         key={latest.id}
                         sequence={[latest.description]}
                         speed={72}
                         cursor={false}
-                        style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                        className="whitespace-pre-wrap break-words"
                       />
                     </motion.div>
                   </div>
+
                 </div>
               </div>
             </motion.div>

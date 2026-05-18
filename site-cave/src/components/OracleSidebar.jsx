@@ -21,64 +21,25 @@ const HistoryRow = ({ entry }) => {
 
   return (
     <motion.div
-      className="oracle-entry-sep"
       initial={{ opacity: 0, x: -14 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ type: "spring", damping: 28, stiffness: 280 }}
-      style={{
-        display: "flex",
-        gap: 12,
-        padding: "14px 20px 14px 28px",
-        position: "relative",
-      }}
+      className="relative flex gap-3 pt-[14px] pr-5 pb-[14px] pl-7 after:content-[''] after:absolute after:bottom-0 after:left-5 after:right-5 after:h-px after:bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.055)_30%,rgba(255,255,255,0.055)_70%,transparent)]"
     >
       {/* timeline accent bar */}
-      <div style={{
-        position: "absolute",
-        left: 16,
-        top: 18,
-        width: 3,
-        height: "calc(100% - 28px)",
-        borderRadius: 2,
-        background: "linear-gradient(to bottom, var(--secondary-border), transparent)",
-        flexShrink: 0,
-      }} />
+      <div className="absolute left-4 top-[18px] w-[3px] h-[calc(100%-28px)] rounded-sm bg-gradient-to-b from-secondary-border to-transparent shrink-0" />
 
-      <div style={{
-        flexShrink: 0,
-        width: 46,
-        height: 46,
-        borderRadius: 8,
-        overflow: "hidden",
-        background: "rgba(255,255,255,0.03)",
-        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06), 0 2px 8px rgba(0,0,0,0.3)",
-      }}>
+      <div className="shrink-0 w-[46px] h-[46px] rounded-lg overflow-hidden bg-white-ghost shadow-inset">
         {url && (
-          <img src={url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.88 }} />
+          <img src={url} alt="" className="w-full h-full object-cover opacity-[0.88]" />
         )}
       </div>
 
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{
-          fontSize: 10,
-          fontFamily: "var(--mono)",
-          color: "var(--secondary)",
-          opacity: 0.6,
-          marginBottom: 5,
-          letterSpacing: "0.08em",
-        }}>
+      <div className="flex-1 min-w-0">
+        <div className="text-[10px] font-mono text-secondary opacity-60 mb-[5px] tracking-loose">
           {formatTime(entry.timestamp)}
         </div>
-        <div style={{
-          fontSize: 12,
-          color: "rgba(232,224,245,0.68)",
-          lineHeight: 1.65,
-          overflow: "hidden",
-          display: "-webkit-box",
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: "vertical",
-          letterSpacing: "0.012em",
-        }}>
+        <div className="text-xs text-ink/75 leading-[1.65] line-clamp-3 tracking-fine">
           {entry.description}
         </div>
       </div>
@@ -117,79 +78,23 @@ export const OracleSidebar = () => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: "-100%", opacity: 0 }}
           transition={{ type: "spring", stiffness: 340, damping: 40, mass: 0.85 }}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            bottom: 0,
-            width: 300,
-            zIndex: 60,
-            display: "flex",
-            flexDirection: "column",
-            background: "rgba(7,5,14,0.78)",
-            backdropFilter: "blur(36px) saturate(170%)",
-            /* right edge fades into scene, no hard border */
-            boxShadow: "6px 0 48px rgba(0,0,0,0.7), inset -1px 0 0 rgba(255,255,255,0.04)",
-            overflow: "hidden",
-          }}
+          className="fixed inset-y-0 left-0 w-[300px] z-sidebar flex flex-col bg-overlay-mid backdrop-blur-[36px] backdrop-saturate-[170%] shadow-sidebar overflow-hidden"
         >
           {/* header */}
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "20px 20px 18px 24px",
-            flexShrink: 0,
-            position: "relative",
-          }}>
-            {/* header bottom separator — gradient, not hard line */}
-            <div style={{
-              position: "absolute",
-              bottom: 0,
-              left: 16,
-              right: 16,
-              height: 1,
-              background: "linear-gradient(to right, var(--secondary-border), rgba(170,59,255,0.15), transparent)",
-            }} />
+          <div className="relative flex items-center justify-between pt-5 pr-5 pb-[18px] pl-6 shrink-0">
+            {/* header bottom separator */}
+            <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-secondary-border via-primary/15 to-transparent" />
 
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span className="oracle-live-dot" style={{
-                display: "inline-block",
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "var(--secondary)",
-                flexShrink: 0,
-              }} />
-              <span style={{
-                fontSize: 10,
-                fontFamily: "var(--mono)",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "rgba(232,224,245,0.45)",
-              }}>
+            <div className="flex items-center gap-[10px]">
+              <span className="oracle-live-dot inline-block w-1.5 h-1.5 rounded-full bg-secondary shrink-0" />
+              <span className="text-[10px] font-mono tracking-ultra uppercase text-ink-muted">
                 Oracle Memory
               </span>
             </div>
 
             <button
-              className="oracle-close-btn"
               onClick={() => setOpen(false)}
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(255,255,255,0.03)",
-                color: "rgba(232,224,245,0.45)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "box-shadow 0.2s, background 0.2s, color 0.2s, border-color 0.2s",
-                outline: "none",
-                flexShrink: 0,
-              }}
+              className="relative w-7 h-7 rounded-full border border-white-subtle bg-white-ghost text-ink-muted flex items-center justify-center cursor-pointer outline-none shrink-0 transition-all duration-200 hover:bg-primary-muted/80 hover:text-ink hover:shadow-[0_0_0_1px_rgba(170,59,255,0.40),_0_0_10px_rgba(170,59,255,0.12)] hover:border-transparent"
             >
               <X size={12} strokeWidth={1.6} />
             </button>
@@ -197,37 +102,21 @@ export const OracleSidebar = () => {
 
           {/* count badge */}
           {reversed.length > 0 && (
-            <div style={{
-              padding: "7px 24px 7px",
-              flexShrink: 0,
-            }}>
-              <span style={{
-                fontSize: 10,
-                fontFamily: "var(--mono)",
-                color: "var(--secondary)",
-                opacity: 0.38,
-                letterSpacing: "0.06em",
-              }}>
+            <div className="px-6 py-[7px] shrink-0">
+              <span className="text-[10px] font-mono text-secondary opacity-[0.38] tracking-[0.06em]">
                 {reversed.length} {reversed.length === 1 ? "entry" : "entries"}
               </span>
             </div>
           )}
 
           {/* list */}
-          <div style={{ flex: 1, overflowY: "auto", paddingBottom: 20 }} className="oracle-scroll">
+          <div className="flex-1 overflow-y-auto pb-5 oracle-scroll">
             {reversed.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.25 }}
-                style={{
-                  padding: "36px 24px",
-                  fontSize: 12,
-                  color: "rgba(232,224,245,0.22)",
-                  fontStyle: "italic",
-                  lineHeight: 1.8,
-                  letterSpacing: "0.02em",
-                }}
+                className="px-6 py-9 text-xs text-ink-ghost italic leading-[1.8] tracking-[0.02em]"
               >
                 The cave has not yet spoken.
               </motion.div>
@@ -239,11 +128,7 @@ export const OracleSidebar = () => {
           </div>
 
           {/* bottom accent shimmer */}
-          <div style={{
-            height: 1,
-            background: "linear-gradient(to right, var(--secondary-border), rgba(170,59,255,0.2), transparent)",
-            flexShrink: 0,
-          }} />
+          <div className="h-px shrink-0 bg-gradient-to-r from-secondary-border via-primary/20 to-transparent" />
         </motion.div>
       )}
     </AnimatePresence>

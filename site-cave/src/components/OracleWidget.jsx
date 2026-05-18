@@ -20,34 +20,24 @@ export const OracleWidget = () => {
       <div
         ref={nodeRef}
         data-oracle-widget
-        style={{ position: "fixed", bottom: 28, left: 28, zIndex: 50, cursor: "grab" }}
+        className="fixed bottom-7 left-7 z-widget cursor-grab"
       >
         {/* spinning gradient border */}
-        <div
-          className="oracle-gradient-border"
-          style={{ borderRadius: "50%", padding: 1.5, display: "inline-flex" }}
-        >
+        <div className="oracle-gradient-border rounded-full p-[1.5px] inline-flex">
           <button
             onClick={() => { if (!draggedRef.current) setOpen((v) => !v); }}
-            className="oracle-widget-btn"
+            className={[
+              "relative w-12 h-12 rounded-full border-0 cursor-pointer",
+              "flex items-center justify-center outline-none",
+              "backdrop-blur-[16px] backdrop-saturate-[160%]",
+              "transition-all duration-[350ms]",
+              "hover:shadow-ring hover:border-primary-border hover:brightness-110",
+              open ? "bg-primary-muted text-primary" : "bg-overlay-mid text-secondary",
+            ].join(" ")}
             style={{
-              width: 48,
-              height: 48,
-              borderRadius: "50%",
-              border: "none",
-              background: open ? "var(--primary-muted)" : "rgba(7,5,14,0.75)",
-              color: open ? "var(--primary)" : "var(--secondary)",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backdropFilter: "blur(16px) saturate(160%)",
-              transition: "background 0.35s, color 0.35s, box-shadow 0.35s",
               animation: open
                 ? "glowPrimary 2.6s ease-in-out infinite"
                 : "glowAmber 2.6s ease-in-out infinite",
-              outline: "none",
-              WebkitTapHighlightColor: "transparent",
             }}
           >
             <Eye size={17} strokeWidth={1.4} />

@@ -32,10 +32,8 @@ export const ProjectPicker = () => {
       )
     : projects;
 
-  // Reset index when query changes
   useEffect(() => { setActiveIdx(0); }, [query]);
 
-  // Focus input when opening, clear state when closing
   useEffect(() => {
     if (open) {
       const id = setTimeout(() => inputRef.current?.focus(), 50);
@@ -46,7 +44,6 @@ export const ProjectPicker = () => {
     }
   }, [open]);
 
-  // Keyboard navigation
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
@@ -68,12 +65,10 @@ export const ProjectPicker = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, filtered, activeIdx, setSelected, setOpen]);
 
-  // Scroll active item into view
   useEffect(() => {
     listRef.current?.children[activeIdx]?.scrollIntoView({ block: "nearest" });
   }, [activeIdx]);
 
-  // Click outside to close
   const wrapRef = useRef(null);
   useEffect(() => {
     if (!open) return;
@@ -93,58 +88,23 @@ export const ProjectPicker = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.97 }}
           transition={{ type: "spring", stiffness: 440, damping: 36 }}
-          style={{
-            position:       "fixed",
-            bottom:         88,
-            left:           "50%",
-            transform:      "translateX(-50%)",
-            width:          "min(480px, 90vw)",
-            zIndex:         70,
-            background:     "rgba(8,6,13,0.93)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            borderRadius:   14,
-            boxShadow:
-              "0 8px 48px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.055)",
-            overflow:       "hidden",
-            fontFamily:     "system-ui, sans-serif",
-          }}
+          style={{ transform: "translateX(-50%)" }}
+          className="fixed bottom-[88px] left-1/2 w-[min(480px,90vw)] z-picker bg-overlay-high backdrop-blur-[20px] rounded-xl shadow-overlay overflow-hidden font-sans"
         >
           {/* Search row */}
-          <div style={{
-            display:      "flex",
-            alignItems:   "center",
-            gap:          10,
-            padding:      "13px 16px",
-            borderBottom: "1px solid rgba(255,255,255,0.06)",
-          }}>
-            <Search size={13} style={{ color: "rgba(255,255,255,0.28)", flexShrink: 0 }} />
+          <div className="flex items-center gap-2.5 py-[13px] px-4 border-b border-white/6">
+            <Search size={13} className="text-white-soft shrink-0" />
             <input
               ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search projects…"
-              style={{
-                flex:        1,
-                background:  "none",
-                border:      "none",
-                outline:     "none",
-                color:       "rgba(255,255,255,0.82)",
-                fontSize:    13,
-                letterSpacing: "0.01em",
-              }}
+              className="flex-1 bg-transparent border-0 outline-none text-white/80 text-ui tracking-[0.01em]"
             />
             {query && (
               <button
                 onClick={() => setQuery("")}
-                style={{
-                  background: "none",
-                  border:     "none",
-                  cursor:     "pointer",
-                  color:      "rgba(255,255,255,0.28)",
-                  padding:    0,
-                  display:    "flex",
-                }}
+                className="bg-transparent border-0 cursor-pointer text-white-soft p-0 flex"
               >
                 <X size={12} />
               </button>
@@ -154,16 +114,10 @@ export const ProjectPicker = () => {
           {/* Project list */}
           <div
             ref={listRef}
-            className="oracle-scroll"
-            style={{ maxHeight: 320, overflowY: "auto" }}
+            className="max-h-[320px] overflow-y-auto oracle-scroll"
           >
             {filtered.length === 0 ? (
-              <div style={{
-                padding:   "24px 16px",
-                textAlign: "center",
-                color:     "rgba(255,255,255,0.22)",
-                fontSize:  13,
-              }}>
+              <div className="px-4 py-6 text-center text-ink-ghost text-ui">
                 No matches
               </div>
             ) : (
@@ -184,20 +138,12 @@ export const ProjectPicker = () => {
           </div>
 
           {/* Keyboard hint footer */}
-          <div style={{
-            padding:    "8px 16px",
-            borderTop:  "1px solid rgba(255,255,255,0.04)",
-            display:    "flex",
-            gap:        18,
-            color:      "rgba(255,255,255,0.18)",
-            fontSize:   11,
-            fontFamily: "ui-monospace, monospace",
-          }}>
+          <div className="flex gap-[18px] px-4 py-2 border-t border-white-ghost text-white/[0.18] text-label font-mono">
             <span>↑↓ navigate</span>
             <span>↵ select</span>
             <span>esc close</span>
             {GITHUB_USER && (
-              <span style={{ marginLeft: "auto" }}>@{GITHUB_USER}</span>
+              <span className="ml-auto">@{GITHUB_USER}</span>
             )}
           </div>
         </motion.div>
@@ -210,78 +156,41 @@ const ProjectRow = ({ project, active, selected, onHover, onClick }) => (
   <button
     onMouseEnter={onHover}
     onClick={onClick}
-    style={{
-      display:    "flex",
-      alignItems: "flex-start",
-      gap:        12,
-      width:      "100%",
-      padding:    "11px 16px",
-      background: active ? "rgba(170,59,255,0.08)" : "transparent",
-      border:     "none",
-      cursor:     "pointer",
-      textAlign:  "left",
-      transition: "background 0.1s",
-      position:   "relative",
-    }}
+    className={[
+      "relative flex items-start gap-3 w-full px-4 py-[11px]",
+      "border-0 cursor-pointer text-left transition-colors duration-100",
+      active ? "bg-primary-muted/80" : "bg-transparent",
+    ].join(" ")}
   >
     {/* Active bar */}
     {active && (
-      <div style={{
-        position:     "absolute",
-        left:         0,
-        top:          6,
-        bottom:       6,
-        width:        2,
-        borderRadius: 1,
-        background:   "var(--primary)",
-      }} />
+      <div className="absolute left-0 top-[6px] bottom-[6px] w-0.5 rounded-[1px] bg-primary" />
     )}
 
     <FolderOpen
       size={13}
-      style={{
-        marginTop: 2,
-        flexShrink: 0,
-        color: selected
-          ? "var(--secondary)"
-          : active
-          ? "var(--primary)"
-          : "rgba(255,255,255,0.22)",
-      }}
+      className={[
+        "mt-0.5 shrink-0",
+        selected ? "text-secondary" : active ? "text-primary" : "text-white/[0.22]",
+      ].join(" ")}
     />
 
-    <div style={{ flex: 1, minWidth: 0 }}>
-      <div style={{
-        fontSize:    13,
-        fontWeight:  500,
-        color:       selected ? "var(--secondary)" : "rgba(255,255,255,0.8)",
-        fontFamily:  "ui-monospace, monospace",
-        marginBottom: 2,
-      }}>
+    <div className="flex-1 min-w-0">
+      <div className={[
+        "text-ui font-medium font-mono mb-0.5",
+        selected ? "text-secondary" : "text-white/80",
+      ].join(" ")}>
         {project.name}
       </div>
       {project.description && (
-        <div style={{
-          fontSize:     12,
-          color:        "rgba(255,255,255,0.32)",
-          lineHeight:   1.4,
-          whiteSpace:   "nowrap",
-          overflow:     "hidden",
-          textOverflow: "ellipsis",
-        }}>
+        <div className="text-xs text-white/[0.32] leading-[1.4] whitespace-nowrap overflow-hidden text-ellipsis">
           {project.description}
         </div>
       )}
     </div>
 
     {project.language && (
-      <span style={{
-        flexShrink:  0,
-        fontSize:    10,
-        color:       "rgba(255,255,255,0.18)",
-        fontFamily:  "ui-monospace, monospace",
-        paddingTop:  2,
-      }}>
+      <span className="shrink-0 text-[10px] text-white/[0.18] font-mono pt-0.5">
         {project.language}
       </span>
     )}
