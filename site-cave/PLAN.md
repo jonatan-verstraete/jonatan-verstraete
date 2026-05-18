@@ -194,7 +194,7 @@ Research, verify, improve, update configs...etc. Create a file UI.md, about styl
 
 Optional bonus: You could even put ThreeJS vars inside the tailwind config, so that this config (or css file) is the source of truth for a lot of styling.
 
-### Stage 8b — Sidebar consolidation
+### Stage 8b — Sidebar consolidation ✅
 
 **Goal:** consolidate all UI controls into the existing sidebar. Establish final layout for Stage 9 features. Non-functional slots (AI status, history controls) can render as disabled placeholders. A general rebrand would be a nice extra.
 
@@ -224,7 +224,7 @@ Render disabled buttons for: **Clear history**, **Disable shadow memory**, **Sha
 
 **Done when:** sidebar is the single control surface, project search is a shared component, placeholder slots are visible and correctly positioned.
 
-### Stage 8c — Resizable
+### Stage 8c — Resizable ✅
 
 **Goal:** Make certain objects resizable.
 

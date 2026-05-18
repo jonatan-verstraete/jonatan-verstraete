@@ -1,9 +1,10 @@
 import { useRef, useEffect, useMemo } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Trash2, EyeOff, Share2, Cpu, Folder, SlidersHorizontal, Clock } from "lucide-react";
+import { X, Trash2, EyeOff, Share2, Cpu, Folder, SlidersHorizontal, Clock, Minimize2 } from "lucide-react";
 import { historyAtom, sidebarOpenAtom, selectedProjectAtom } from "../store/cave";
 import { ProjectSearch } from "./ProjectSearch";
+import { useFloatResize, clearAllSizes } from "../hooks/useFloatResize";
 
 const formatTime = (ts) => {
   const d = new Date(ts);
@@ -75,6 +76,12 @@ export const OracleSidebar = () => {
   const selected = useAtomValue(selectedProjectAtom);
   const sidebarRef = useRef(null);
 
+  const { size, startResize } = useFloatResize(
+    "sidebar",
+    { width: 300 },
+    { minW: 220, maxW: 520 },
+  );
+
   useEffect(() => {
     if (!open) return;
     const onMousedown = (e) => {
@@ -101,8 +108,16 @@ export const OracleSidebar = () => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: "-100%", opacity: 0 }}
           transition={{ type: "spring", stiffness: 320, damping: 38, mass: 0.9 }}
-          className="z-sidebar bg-overlay-mid shadow-sidebar fixed inset-y-0 left-0 flex h-screen w-[300px] flex-col overflow-hidden backdrop-blur-high backdrop-saturate-[160%]"
+          style={{ width: size.width }}
+          className="z-sidebar bg-overlay-mid shadow-sidebar fixed inset-y-0 left-0 flex h-screen flex-col overflow-hidden backdrop-blur-high backdrop-saturate-[160%]"
         >
+          {/* Right-edge resize handle */}
+          <div
+            onMouseDown={(e) => startResize(e, { e: true })}
+            className="absolute inset-y-0 right-0 w-[5px] cursor-ew-resize z-10 group"
+          >
+            <div className="absolute inset-y-0 right-0 w-px bg-white-dim opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+          </div>
 
           {/* ── Header ── */}
           <div className="relative flex shrink-0 items-center justify-between px-5 pt-5 pb-4">
@@ -152,10 +167,18 @@ export const OracleSidebar = () => {
             Controls
           </SectionHeader>
 
-          <div className="shrink-0 flex gap-2 px-5 pb-4">
+          <div className="shrink-0 flex flex-wrap gap-2 px-5 pb-4">
             <ControlButton icon={<Trash2 size={10} />} label="Clear" />
             <ControlButton icon={<EyeOff size={10} />} label="Disable" />
             <ControlButton icon={<Share2 size={10} />} label="Share" />
+            <button
+              onClick={clearAllSizes}
+              title="Reset all panel sizes to defaults"
+              className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-white-dim bg-white-ghost px-3 py-2 font-mono text-micro tracking-fine text-ink-ghost/50 transition-colors hover:border-secondary/30 hover:text-secondary/70"
+            >
+              <Minimize2 size={10} />
+              Clear Sizes
+            </button>
           </div>
 
           <Divider />
