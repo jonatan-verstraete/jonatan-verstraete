@@ -302,6 +302,99 @@ load GLB normally with useGLTF()
 
 **Done when:** Lighthouse perf score improved, scene loads with fade, bundle is tree-shaken.
 
+### Stage 8f — Anamorphic Portal: Render-to-Texture Foundation
+
+**Goal:** establish hidden illusion scene + render target pipeline before any parallax logic is added.
+
+Tasks:
+
+- Create a hidden offscreen scene (`portalScene`) — separate from the main cave scene.
+  - Contents: floating particles, soft fog plane, exaggerated-perspective geometry. Monochrome palette. No lighting complexity — this is the "depth world" seen behind the wall.
+  - Scene never appears in main render; it only feeds the RTT.
+- Add a `WebGLRenderTarget` (`portalTarget`) — single target, no post stack, mobile-safe at reduced resolution (e.g. `512×512` default, configurable).
+- Apply `portalTarget.texture` as the `map` on the rocky wall material (replacing or layering over the existing wall texture). Use a `ShaderMaterial` so UV manipulation is possible in Stage 8g.
+- Render `portalScene` each frame before the main scene render (use `useFrame` priority or `gl.render` pre-pass).
+
+**Done when:** rocky wall displays the hidden portal scene via render texture. No parallax yet — just the pipe working.
+
+---
+
+### Stage 8g — Depth Echo Projection
+
+**Goal:** add the parallax lag that creates perceived depth — the core illusion.
+
+Depends on: Stage 8f (portal RTT pipeline active).
+
+Tasks:
+
+- Track camera yaw delta each frame (`useFrame`). Store `smoothedOffset` in a ref.
+  ```ts
+  targetOffset = cameraYaw * 0.15
+  smoothedOffset += (targetOffset - smoothedOffset) * 0.08
+  ```
+- Pass `smoothedOffset` as a uniform (`uParallax`) to the wall `ShaderMaterial`.
+- In the fragment shader, offset the portal UV before sampling:
+  ```glsl
+  vec2 uv = vUv;
+  uv.x += uParallax;
+  // bind fake depth to physical wall structure
+  uv += vNormal.xy * 0.03;
+  vec4 portalColor = texture2D(uPortalMap, uv);
+  ```
+  - `vNormal` must be passed from the vertex shader in world space.
+  - Projection direction: side-only (offset on X axis only — never Y).
+  - Grazing angle is what sells the effect. Never front-on.
+- Add optional bounce-overshoot mode (ref-stored `velocity`):
+  ```ts
+  velocity += (target - current) * tension
+  velocity *= damping
+  current += velocity
+  ```
+  Toggle between simple lerp and overshoot via `enableOvershoot` uniform/config.
+
+**Critical:** do NOT lock the projection 1:1 to camera. Perfect lock = screen. Slight lag = volume. If it looks like a projector, increase lag (`lagAmount`) and reduce `projectionSharpness`.
+
+**Done when:** slow horizontal camera rotation makes the wall feel spatial — projection detaches from surface, depth "breathes", illusion collapses naturally at extreme angles.
+
+---
+
+### Stage 8h — Depth Echo: Visual Polish & Settings
+
+**Goal:** wire the full settings system, refine visual style, and validate the illusion holds.
+
+Depends on: Stage 8g (parallax working).
+
+**Settings** — add to Leva (and extract defaults to scene config, consistent with Stage 8a pattern):
+
+Toggle:
+- `enableDepthEcho` — master on/off for the entire effect
+
+Theme params:
+- `lagAmount` — multiplier on `smoothedOffset` lerp rate (default `0.08`)
+- `projectionSharpness` — blur/sharpen the RTT before applying (can use a simple 3-tap kernel in shader)
+- `rockDistortion` — weight of `normal.xy * 0.03` term
+- `fogDensity` — fog plane opacity in the hidden scene
+- `depthExaggeration` — scales `cameraYaw * 0.15` factor
+- `ghostTrail` — blend factor between current and previous portal frame (creates smear/trail)
+- `monochrome` — toggle between monochrome depth and a palette tint on the portal scene
+
+**Visual style checklist:**
+- Monochrome depth (default on)
+- Soft fog layer in portal scene
+- Floating particles (slow drift, low count — reuse or reference `Dust.jsx`)
+- Exaggerated perspective on portal geometry
+- High-contrast cavities (boost contrast in shader)
+- Slow drifting motion in portal scene (offset portal camera or animate geometry)
+
+**Failure-mode checklist (manual QA):**
+- If wall looks like a video screen → increase `lagAmount`, increase `depthExaggeration`
+- If projection feels locked → lower `projectionSharpness`, raise `lagAmount`
+- If effect disappears at slight angles → reduce `rockDistortion`
+
+**Done when:** full settings panel live, visual style matches spec (ancient holographic stone feel), illusion passes manual rotation QA.
+
+---
+
 ## Stage 9 — Features
 
 ### Stage 9a — Communication Mode
