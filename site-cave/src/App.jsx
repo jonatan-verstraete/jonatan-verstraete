@@ -10,6 +10,7 @@ import { OracleSidebar } from "./components/OracleSidebar";
 import { LiveTextTile } from "./components/LiveTextTile";
 import { ProjectPicker } from "./components/ProjectPicker";
 import { pickerOpenAtom, selectedProjectAtom } from "./store/cave";
+import { Box } from "@react-three/drei";
 
 function ProjectPickerTrigger() {
   const [pickerOpen, setPickerOpen] = useAtom(pickerOpenAtom);
@@ -40,10 +41,10 @@ function ProjectPickerTrigger() {
 }
 
 export const App = () => {
-  const canvasRef = useRef(null);
+  const captureRef = useRef(null);
   const { videoRef, isActive, toggle } = useCamera();
 
-  useAnalyze(canvasRef.current?.captureFrame);
+  // useAnalyze(canvasRef.current?.captureFrame);
 
   return (
     <>
@@ -51,10 +52,19 @@ export const App = () => {
         gl={{ preserveDrawingBuffer: true }}
         shadows
         camera={{ position: [2, 0.2, 5], fov: 65 }}
-        className="!fixed !inset-0"
+        style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh" }}
       >
-        <Scene ref={canvasRef} videoRef={videoRef} isActive={isActive} />
+        <Scene captureRef={captureRef} videoRef={videoRef} isActive={isActive} />
       </Canvas>
+
+      {/* <Canvas
+        gl={{ preserveDrawingBuffer: true }}
+        shadows
+        camera={{ position: [2, 0.2, 5], fov: 65 }}
+        className="bg-red !absolute inset-0 size-full"
+      >
+        <Box args={[1, 1, 1, 1]} />
+      </Canvas> */}
 
       <button
         onClick={toggle}

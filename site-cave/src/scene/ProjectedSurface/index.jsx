@@ -1,8 +1,6 @@
 import { useMemo, useRef, useEffect, useCallback } from "react";
 import { createPortal, useFrame } from "@react-three/fiber";
-import { useAtomValue } from "jotai";
 import * as THREE from "three";
-import { selectedProjectAtom } from "../../store/cave";
 import { Video } from "./Video";
 import { ProjectText } from "./ProjectText";
 import { VideoCam } from "./VideoCam";
@@ -103,8 +101,6 @@ export function ProjectedSurface({
   accumDecay,
   onAccumRef,
 }) {
-  const project = useAtomValue(selectedProjectAtom);
-
   // ── Gobo portal scene ──
   const [gobScene, gobCam] = useMemo(() => {
     const s = new THREE.Scene();
@@ -236,7 +232,7 @@ export function ProjectedSurface({
   return createPortal(
     <>
       <Video />
-      <ProjectText title={project.name} description={project.description} />
+      <ProjectText />
       <VideoCam
         videoRef={videoRef}
         isActive={isActive}

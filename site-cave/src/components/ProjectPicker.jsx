@@ -4,7 +4,6 @@ import { Search, FolderOpen, X } from "lucide-react";
 import { useAtom, useAtomValue } from "jotai";
 import { useQuery } from "@tanstack/react-query";
 import { selectedProjectAtom, pickerOpenAtom } from "../store/cave";
-import { fetchProjects, FALLBACK_PROJECTS } from "../data/projects";
 
 const GITHUB_USER = import.meta.env.VITE_GITHUB_USER;
 
@@ -16,7 +15,7 @@ export const ProjectPicker = () => {
   const inputRef = useRef(null);
   const listRef = useRef(null);
 
-  const { data: projects = FALLBACK_PROJECTS } = useQuery({
+  const { data: projects = [] } = useQuery({
     queryKey: ["github-repos", GITHUB_USER ?? "__fallback__"],
     queryFn: fetchProjects,
     staleTime: 5 * 60 * 1000,
@@ -206,3 +205,23 @@ const ProjectRow = ({ project, active, selected, onHover, onClick }) => (
     )}
   </button>
 );
+
+async function fetchProjects() {
+  return [];
+  if (!GITHUB_USER) return [];
+  const res = await fetch(
+    `https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated&type=public`,
+  );
+  if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+  const repos = await res.json();
+  return repos
+    .filter((r) => !r.fork && r.description)
+    .map((r) => ({
+      id: r.id,
+      name: r.name,
+      description: r.description || "",
+      topics: r.topics || [],
+      language: r.language || "",
+      html_url: r.html_url,
+    }));
+}

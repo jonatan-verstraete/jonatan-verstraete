@@ -17,11 +17,12 @@ import { SCENE_CONFIG as C } from "./config";
 import { Wall } from "./Wall/Wall";
 import { Ground } from "./Ground/Ground";
 import { useFrame } from "@react-three/fiber";
+import { devLog } from "../utils";
 
-let gl = null;
-export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
+export const Scene = ({ videoRef, isActive, captureRef }) => {
   const spotRef = useRef();
   const targetRef = useRef();
+  const getCanvasBlobRef = useRef();
   // Receives the accumulation ref from ProjectedSurface to update spotlight.map
   const surfaceAccumRef = useRef(null);
   const onAccumRef = useCallback((ref) => {
@@ -29,38 +30,32 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
   }, []);
   const setHistory = useSetAtom(historyAtom);
 
-  useFrame((frame) => {
-    // todo: better way than this?
-    if (!gl) {
-      gl = frame.gl;
-    }
-  });
-
   // Priority-1: runs after ProjectedSurface pipeline (priority 0)
   // Updates spotlight.map to latest accumulated texture + animates color temperature
-  useFrame(({ clock }) => {
-    const spot = spotRef.current;
-    if (!spot) return;
+  // useFrame(({ clock, gl }) => {
+  //   getCanvasBlobRef.current = gl.domElement?.toBlob
+  //   const spot = spotRef.current;
+  //   if (!spot) return;
 
-    // Point spotlight at the latest accumulated gobo output
-    const latestAccum = surfaceAccumRef.current?.current;
-    if (latestAccum) spot.map = latestAccum.texture;
+  //   // Point spotlight at the latest accumulated gobo output
+  //   const latestAccum = surfaceAccumRef.current?.current;
+  //   if (latestAccum) spot.map = latestAccum.texture;
 
-    // Subtle fire-flicker color temperature animation (option G)
-    const t = clock.getElapsedTime();
-    const flicker =
-      Math.sin(t * 2.7) * 0.4 +
-      Math.sin(t * 4.1) * 0.3 +
-      Math.sin(t * 0.9) * 0.3;
-    const n = (flicker + 1) * 0.5; // 0..1
-    // Oscillates between warm amber (1.0, 0.95, 0.78) and slightly cooler (0.97, 0.91, 0.84)
-    spot.color.setRGB(0.97 + n * 0.03, 0.91 + n * 0.04, 0.78 + n * 0.06);
-  }, 1);
+  //   // Subtle fire-flicker color temperature animation (option G)
+  //   const t = clock.getElapsedTime();
+  //   const flicker =
+  //     Math.sin(t * 2.7) * 0.4 +
+  //     Math.sin(t * 4.1) * 0.3 +
+  //     Math.sin(t * 0.9) * 0.3;
+  //   const n = (flicker + 1) * 0.5; // 0..1
+  //   // Oscillates between warm amber (1.0, 0.95, 0.78) and slightly cooler (0.97, 0.91, 0.84)
+  //   spot.color.setRGB(0.97 + n * 0.03, 0.91 + n * 0.04, 0.78 + n * 0.06);
+  // }, 1);
 
-  useImperativeHandle(globalFunctionRef, () => ({
+  useImperativeHandle(captureRef, () => ({
     captureFrame: (quality) =>
       new Promise((resolve) => {
-        gl?.domElement.toBlob(
+        getCanvasBlobRef.current?.(
           (blob) => {
             if (!blob) return resolve(null);
             setHistory((prev) => {
@@ -74,6 +69,10 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
             });
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
+            reader.onerror = () => {
+              devLog("Failed to read canvas blob");
+              resolve(null);
+            };
             reader.readAsDataURL(blob);
           },
           "image/jpeg",
@@ -176,8 +175,8 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
 
   return (
     <>
-      <color attach="background" args={["#080604"]} />
-      <Environment files="/stars.hdr" background />
+      {/* <color attach="background" args={["#080604"]} /> */}
+      {/* <Environment files="/stars.hdr" background /> */}
       {/* <Environment files="/forrest.exr" background /> */}
 
       <fogExp2 attach="fog" args={[fogColor, fogDensity]} />
@@ -197,7 +196,6 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
       />
       <OrbitControls />
 
-      {/* Warm omnidirectional fill from fire origin */}
       <pointLight
         position={sunPos}
         intensity={fireIntensity}
@@ -207,7 +205,6 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
         castShadow
         shadow-mapSize={[512, 512]}
       />
-      {/* Flame-shaped spotlight — animated fire gobo projects organic light on the wall */}
       <FlameLight
         position={sunPos}
         intensity={flameIntensity}
@@ -220,8 +217,7 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
       <Ground />
 
       {/* <Dust opacity={dustOpacity} /> */}
-
-      {/* <ProjectedSurface
+      <ProjectedSurface
         target={projTarget}
         videoRef={videoRef}
         isActive={isActive}
@@ -230,7 +226,7 @@ export const Scene = ({ videoRef, isActive, ref: globalFunctionRef }) => {
         blurRadius={blurRadius}
         accumDecay={accumDecay}
         onAccumRef={onAccumRef}
-      /> */}
+      />
 
       <Preload all />
     </>

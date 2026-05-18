@@ -41,7 +41,7 @@ export function Ground({
         textureRepeat={textureRepeat}
       />
 
-      {enableGrass && (
+      {/* {enableGrass && (
         <GrassBlades
           strands={grassStrands}
           groundSize={groundSize}
@@ -54,9 +54,9 @@ export function Ground({
           colorMid={colorMid}
           colorTip={colorTip}
         />
-      )}
+      )} */}
 
-      {enableShrubs && (
+      {/* {enableShrubs && (
         <GrassShrubs
           count={shrubCount}
           groundSize={groundSize}
@@ -64,7 +64,7 @@ export function Ground({
           scaleMin={shrubScaleMin}
           scaleMax={shrubScaleMax}
         />
-      )}
+      )} */}
     </group>
   );
 }

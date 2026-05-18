@@ -1,6 +1,8 @@
 import { useMemo, useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { selectedProjectAtom } from "../../store/cave";
+import { useAtomValue } from "jotai";
 
 const TRANSITION_DURATION = 0.55;
 
@@ -68,7 +70,9 @@ void main() {
 }
 `;
 
-export const ProjectText = ({ title, description }) => {
+export const ProjectText = () => {
+  const { title, description } = useAtomValue(selectedProjectAtom) ?? {};
+
   const mat = useMemo(
     () =>
       new THREE.ShaderMaterial({
@@ -93,6 +97,7 @@ export const ProjectText = ({ title, description }) => {
   const transRef = useRef(NaN);
 
   useEffect(() => {
+    if (!title || !description) return;
     const canvas = buildGoboCanvas(title, description);
     const newTex = new THREE.CanvasTexture(canvas);
     const oldTex = mat.uniforms.uMap.value;
