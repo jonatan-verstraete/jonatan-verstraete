@@ -278,7 +278,7 @@ Task:
 
 **Done when:** Raycast like UX. 
 
-### Stage 8e — Three Optimization
+### Stage 8e — Three Optimization ✅
 
 GLB loading pipeline:
 
@@ -298,6 +298,7 @@ load GLB normally with useGLTF()
 - White fade while scene is loading.
 - Replace `import * as THREE from "three"` with individual imports for tree shaking.
 - Use `KTX2/WebP` or Draco loader for textures and assets.
+- Create reusable functions/components/hooks for loading so that future assets can reuse the same logic
 
 **Done when:** Lighthouse perf score improved, scene loads with fade, bundle is tree-shaken.
 

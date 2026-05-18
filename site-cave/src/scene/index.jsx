@@ -9,7 +9,7 @@ import { useSetAtom } from "jotai";
 import { historyAtom } from "../store/cave";
 import { Preload, OrbitControls, Cloud, Environment } from "@react-three/drei";
 import { useControls, folder } from "leva";
-import * as THREE from "three";
+import { WebGLRenderTarget, LinearFilter } from "three";
 import { Dust } from "./VFX/Dust";
 import { FlameLight } from "./Wall/FlameLight";
 import { ProjectedSurface } from "./ProjectedSurface";
@@ -155,9 +155,9 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
 
   const projTarget = useMemo(
     () =>
-      new THREE.WebGLRenderTarget(2048, 1024, {
-        minFilter: THREE.LinearFilter,
-        magFilter: THREE.LinearFilter,
+      new WebGLRenderTarget(2048, 1024, {
+        minFilter: LinearFilter,
+        magFilter: LinearFilter,
       }),
     [],
   );

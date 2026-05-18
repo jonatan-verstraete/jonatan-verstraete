@@ -1,6 +1,18 @@
 import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import {
+  DataTexture,
+  RGBAFormat,
+  RepeatWrapping,
+  WebGLRenderTarget,
+  LinearFilter,
+  Scene,
+  Color,
+  OrthographicCamera,
+  ShaderMaterial,
+  PlaneGeometry,
+  Mesh,
+} from "three";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -75,8 +87,8 @@ void main() {
 function makeNoiseTex(size = 256) {
   const data = new Uint8Array(size * size * 4);
   for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 255) | 0;
-  const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  const tex = new DataTexture(data, size, size, RGBAFormat);
+  tex.wrapS = tex.wrapT = RepeatWrapping;
   tex.needsUpdate = true;
   return tex;
 }
@@ -89,24 +101,24 @@ export function FlameLight({ position, intensity, angle, penumbra = 0.65 }) {
 
   const flameTarget = useMemo(
     () =>
-      new THREE.WebGLRenderTarget(512, 512, {
-        minFilter: THREE.LinearFilter,
-        magFilter: THREE.LinearFilter,
+      new WebGLRenderTarget(512, 512, {
+        minFilter: LinearFilter,
+        magFilter: LinearFilter,
       }),
     [],
   );
 
   const [flameScene, flameCamera] = useMemo(() => {
-    const s = new THREE.Scene();
-    s.background = new THREE.Color(0x000000);
-    const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    const s = new Scene();
+    s.background = new Color(0x000000);
+    const cam = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
     cam.position.set(0, 0, 5);
     return [s, cam];
   }, []);
 
   const flameMat = useMemo(
     () =>
-      new THREE.ShaderMaterial({
+      new ShaderMaterial({
         uniforms: {
           uTime: { value: 0 },
           uNoise: { value: noiseTex },
@@ -118,8 +130,8 @@ export function FlameLight({ position, intensity, angle, penumbra = 0.65 }) {
   );
 
   useEffect(() => {
-    const geo = new THREE.PlaneGeometry(2, 2);
-    const mesh = new THREE.Mesh(geo, flameMat);
+    const geo = new PlaneGeometry(2, 2);
+    const mesh = new Mesh(geo, flameMat);
     flameScene.add(mesh);
     return () => {
       flameScene.remove(mesh);

@@ -1,6 +1,15 @@
 import { useMemo, useRef, useEffect, useCallback } from "react";
 import { createPortal, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import {
+  WebGLRenderTarget,
+  LinearFilter,
+  Scene,
+  Color,
+  OrthographicCamera,
+  PlaneGeometry,
+  Mesh,
+  ShaderMaterial,
+} from "three";
 import { Video } from "./Video";
 import { ProjectText } from "./ProjectText";
 import { VideoCam } from "./VideoCam";
@@ -66,18 +75,18 @@ void main() {
 }`;
 
 function makeRT(w, h) {
-  return new THREE.WebGLRenderTarget(w, h, {
-    minFilter: THREE.LinearFilter,
-    magFilter: THREE.LinearFilter,
+  return new WebGLRenderTarget(w, h, {
+    minFilter: LinearFilter,
+    magFilter: LinearFilter,
   });
 }
 
 // Minimal scene + ortho cam + fullscreen quad for offscreen passes
 function makePassScene() {
-  const scene = new THREE.Scene();
-  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-  const geo = new THREE.PlaneGeometry(2, 2);
-  const mesh = new THREE.Mesh(geo);
+  const scene = new Scene();
+  const cam = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const geo = new PlaneGeometry(2, 2);
+  const mesh = new Mesh(geo);
   scene.add(mesh);
   return { scene, cam, mesh, dispose: () => geo.dispose() };
 }
@@ -108,11 +117,11 @@ export function ProjectedSurface({
 }) {
   // ── Gobo portal scene ──
   const [gobScene, gobCam] = useMemo(() => {
-    const s = new THREE.Scene();
+    const s = new Scene();
     // Bright background so spotlight gobo passes light through base areas.
     // Without this, dark background blocks all light even when VideoCam has no shadow layer.
-    s.background = new THREE.Color(0xc8c8c8);
-    const cam = new THREE.OrthographicCamera(-1, 1, 0.5, -0.5, 0.1, 10);
+    s.background = new Color(0xc8c8c8);
+    const cam = new OrthographicCamera(-1, 1, 0.5, -0.5, 0.1, 10);
     cam.position.set(0, 0, 5);
     return [s, cam];
   }, []);
@@ -131,7 +140,7 @@ export function ProjectedSurface({
   // ── Pass materials ──
   const hBlurMat = useMemo(
     () =>
-      new THREE.ShaderMaterial({
+      new ShaderMaterial({
         uniforms: {
           uTex: { value: null },
           uRadius: { value: 2.5 },
@@ -145,7 +154,7 @@ export function ProjectedSurface({
 
   const vBlurMat = useMemo(
     () =>
-      new THREE.ShaderMaterial({
+      new ShaderMaterial({
         uniforms: {
           uTex: { value: null },
           uRadius: { value: 2.5 },
@@ -159,7 +168,7 @@ export function ProjectedSurface({
 
   const accumMat = useMemo(
     () =>
-      new THREE.ShaderMaterial({
+      new ShaderMaterial({
         uniforms: {
           uCurrent: { value: null },
           uPrev: { value: null },

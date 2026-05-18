@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useAtom, useAtomValue } from "jotai";
 import { Layers, Video, VideoOff } from "lucide-react";
@@ -8,7 +8,10 @@ import { OracleWidget } from "./components/OracleWidget";
 import { OracleSidebar } from "./components/OracleSidebar";
 import { LiveTextTile } from "./components/LiveTextTile";
 import { ProjectPicker } from "./components/ProjectPicker";
+import { SceneLoader } from "./components/SceneLoader";
 import { pickerOpenAtom, selectedProjectAtom } from "./store/cave";
+// Configure Draco decoder path (local, no CDN)
+import "./scene/utils/assets.js";
 
 function ProjectPickerTrigger() {
   const [pickerOpen, setPickerOpen] = useAtom(pickerOpenAtom);
@@ -76,9 +79,12 @@ export const App = () => {
         camera={{ position: [2, 0.2, 5], fov: 65 }}
         style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh" }}
       >
-        <Scene captureRef={captureRef} videoRef={videoRef} isActive={isActive} />
+        <Suspense fallback={null}>
+          <Scene captureRef={captureRef} videoRef={videoRef} isActive={isActive} />
+        </Suspense>
       </Canvas>
 
+      <SceneLoader />
       <CameraToggle isActive={isActive} onToggle={toggle} />
       <LiveTextTile />
       <OracleWidget />

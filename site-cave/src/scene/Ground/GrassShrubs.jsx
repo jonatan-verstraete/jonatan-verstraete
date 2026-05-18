@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import * as THREE from "three";
+import { Object3D, InstancedMesh, MathUtils } from "three";
 import { useGLTF } from "@react-three/drei";
 import { cpuVnoise } from "./noiseUtils";
 
@@ -17,13 +17,13 @@ export function GrassShrubs({
     const group = groupRef.current;
     if (!group || !gltfScene) return;
 
-    const dummy = new THREE.Object3D();
+    const dummy = new Object3D();
     const created = [];
 
     gltfScene.traverse((obj) => {
       if (!obj.isMesh) return;
 
-      const instanced = new THREE.InstancedMesh(
+      const instanced = new InstancedMesh(
         obj.geometry,
         obj.material,
         count,
@@ -40,7 +40,7 @@ export function GrassShrubs({
         const density = cpuVnoise(x * 1.0 + 50, z * 1.0 + 50);
         const detail = cpuVnoise(x * 2.8 + 12, z * 2.8 + 12);
         const noiseVal = density * 0.6 + detail * 0.4;
-        const scale = THREE.MathUtils.lerp(scaleMin, scaleMax, noiseVal);
+        const scale = MathUtils.lerp(scaleMin, scaleMax, noiseVal);
 
         dummy.position.set(x, 0.01 + groundY, z);
         dummy.rotation.y = Math.random() * Math.PI * 2;

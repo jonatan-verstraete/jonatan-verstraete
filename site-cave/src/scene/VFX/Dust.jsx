@@ -1,6 +1,6 @@
 import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import { Object3D, Color } from "three";
 
 const COUNT = 250;
 
@@ -29,8 +29,8 @@ export function Dust({ opacity = 0.35 }) {
     const vel = new Float32Array(COUNT * 3);
     const ages = new Float32Array(COUNT);
     const maxAges = new Float32Array(COUNT);
-    const dummy = new THREE.Object3D();
-    const color = new THREE.Color();
+    const dummy = new Object3D();
+    const color = new Color();
 
     for (let i = 0; i < COUNT; i++) {
       spawnParticle(i, pos, vel, ages, maxAges);

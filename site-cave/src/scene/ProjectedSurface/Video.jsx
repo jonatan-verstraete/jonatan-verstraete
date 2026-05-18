@@ -1,5 +1,5 @@
 import { useEffect, useRef, useMemo } from "react";
-import * as THREE from "three";
+import { ShaderMaterial, VideoTexture, LinearFilter } from "three";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -36,7 +36,7 @@ export const Video = () => {
 
   const mat = useMemo(
     () =>
-      new THREE.ShaderMaterial({
+      new ShaderMaterial({
         uniforms: {
           uMap: { value: null },
         },
@@ -57,8 +57,8 @@ export const Video = () => {
     vid.playsInline = true;
     vid.crossOrigin = "anonymous";
 
-    const tex = new THREE.VideoTexture(vid);
-    tex.minFilter = THREE.LinearFilter;
+    const tex = new VideoTexture(vid);
+    tex.minFilter = LinearFilter;
     mat.uniforms.uMap.value = tex;
 
     const onPlaying = () => {

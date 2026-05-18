@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import { ShaderMaterial, AdditiveBlending, CanvasTexture } from "three";
 import { selectedProjectAtom } from "../../store/cave";
 import { useAtomValue } from "jotai";
 
@@ -75,7 +75,7 @@ export const ProjectText = () => {
 
   const mat = useMemo(
     () =>
-      new THREE.ShaderMaterial({
+      new ShaderMaterial({
         uniforms: {
           uMap: { value: null },
           uPrev: { value: null },
@@ -85,7 +85,7 @@ export const ProjectText = () => {
         vertexShader,
         fragmentShader,
         transparent: true,
-        blending: THREE.AdditiveBlending,
+        blending: AdditiveBlending,
         depthTest: false,
         depthWrite: false,
       }),
@@ -99,7 +99,7 @@ export const ProjectText = () => {
   useEffect(() => {
     if (!title || !description) return;
     const canvas = buildGoboCanvas(title, description);
-    const newTex = new THREE.CanvasTexture(canvas);
+    const newTex = new CanvasTexture(canvas);
     const oldTex = mat.uniforms.uMap.value;
 
     if (oldTex) {

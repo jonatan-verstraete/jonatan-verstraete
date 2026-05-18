@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import * as THREE from "three";
+import { ShaderMaterial, VideoTexture, LinearFilter, RepeatWrapping } from "three";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -46,7 +46,7 @@ void main() {
 export const VideoCam = ({ videoRef, isActive, threshold, softness }) => {
   const mat = useMemo(
     () =>
-      new THREE.ShaderMaterial({
+      new ShaderMaterial({
         uniforms: {
           uVideo: { value: null },
           uThreshold: { value: 0.5 },
@@ -73,9 +73,9 @@ export const VideoCam = ({ videoRef, isActive, threshold, softness }) => {
 
   useEffect(() => {
     if (isActive && videoRef?.current) {
-      const tex = new THREE.VideoTexture(videoRef.current);
-      tex.minFilter = THREE.LinearFilter;
-      tex.wrapS = THREE.RepeatWrapping;
+      const tex = new VideoTexture(videoRef.current);
+      tex.minFilter = LinearFilter;
+      tex.wrapS = RepeatWrapping;
       tex.repeat.set(-1, 1);
       tex.offset.set(1, 0);
       mat.uniforms.uVideo.value = tex;
@@ -91,8 +91,8 @@ export const VideoCam = ({ videoRef, isActive, threshold, softness }) => {
     vid.muted = true;
     vid.playsInline = true;
     vid.crossOrigin = "anonymous";
-    const tex = new THREE.VideoTexture(vid);
-    tex.minFilter = THREE.LinearFilter;
+    const tex = new VideoTexture(vid);
+    tex.minFilter = LinearFilter;
     mat.uniforms.uVideo.value = tex;
     vid.play().catch(console.error);
 

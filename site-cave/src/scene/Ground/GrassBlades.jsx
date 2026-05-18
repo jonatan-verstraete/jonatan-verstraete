@@ -1,5 +1,5 @@
 import { useRef, useMemo, useEffect } from "react";
-import * as THREE from "three";
+import { BufferGeometry, Float32BufferAttribute, MeshStandardMaterial, DoubleSide, Vector2, Color } from "three";
 import { useFrame } from "@react-three/fiber";
 import { cpuVnoise } from "./noiseUtils";
 
@@ -27,10 +27,10 @@ function buildBladeGeometry(segments = 8) {
     }
   }
 
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geo.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
-  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  const geo = new BufferGeometry();
+  geo.setAttribute("position", new Float32BufferAttribute(positions, 3));
+  geo.setAttribute("normal", new Float32BufferAttribute(normals, 3));
+  geo.setAttribute("uv", new Float32BufferAttribute(uvs, 2));
   geo.setIndex(indices);
   geo.computeVertexNormals();
   return geo;
@@ -54,10 +54,10 @@ export function GrassBlades({
 
   const bladeMat = useMemo(() => {
     // Standard PBR Material allows automatic interaction with Fog, PointLights, and HDRIs
-    const mat = new THREE.MeshStandardMaterial({
+    const mat = new MeshStandardMaterial({
       roughness: 0.35, // Low roughness to catch sharp light reflections
       metalness: 0.1,
-      side: THREE.DoubleSide,
+      side: DoubleSide,
       transparent: false, // Disabling alpha blending prevents sorting glitches at night
     });
 
@@ -66,11 +66,11 @@ export function GrassBlades({
       shader.uniforms.uTime = { value: 0 };
       shader.uniforms.uWindStrength = { value: windStrength };
       shader.uniforms.uWindDir = {
-        value: new THREE.Vector2(...windDir).normalize(),
+        value: new Vector2(...windDir).normalize(),
       };
-      shader.uniforms.uColorRoot = { value: new THREE.Color(colorRoot) };
-      shader.uniforms.uColorMid = { value: new THREE.Color(colorMid) };
-      shader.uniforms.uColorTip = { value: new THREE.Color(colorTip) };
+      shader.uniforms.uColorRoot = { value: new Color(colorRoot) };
+      shader.uniforms.uColorMid = { value: new Color(colorMid) };
+      shader.uniforms.uColorTip = { value: new Color(colorTip) };
 
       mat.userData.shader = shader;
 

@@ -5,7 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>cave</title>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script> -->
+    <!-- Preload critical 3D assets to reduce first-render stall -->
+    <link rel="preload" href="/models/wall.glb" as="fetch" crossorigin />
+    <link rel="preload" href="/stars.hdr" as="fetch" crossorigin />
+    <link rel="preload" href="/draco/draco_decoder.wasm" as="fetch" crossorigin />
+    <link rel="preload" href="/textures/Ground068_Color.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/textures/Ground068_NormalGL.webp" as="image" type="image/webp" />
   </head>
   <body>
     <div id="root"></div>
