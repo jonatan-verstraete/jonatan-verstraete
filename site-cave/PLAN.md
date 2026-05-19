@@ -29,11 +29,25 @@ GLB loading pipeline: PNG/JPG → KTX2 → embed in GLB → `useGLTF()`.
 
 ---
 
-## Stage 2 — Depth Echo (Anamorphic Portal Illusion)
+## Stage 2 — URL Params & State
+
+**Goal:** make app config shareable via URL, foundation for future "Share" button.
+
+- File `./src/components/ProjectSearch.jsx` should read `?user=` from `window.location.search` and use this as value. If no user is in the url, we fallback to the DEFAULT_USER.
+- Sync to jotai atom so state is updated
+- No router — just `URLSearchParams` on load
+- Pattern is reusable: future params (project, mode, etc.) plug into same mechanism
+- A future "Share" button = `location.href` + param `?user=${stored_user}`
+
+**Done when:** `?user=wackojacko` sets GitHub user on load; env var removed.
+
+---
+
+## Stage 3 — Depth Echo (Anamorphic Portal Illusion)
 
 A hidden scene rendered to texture, applied to the cave wall, with parallax lag that creates perceived depth behind the stone. Three sequential sub-stages.
 
-### Stage 2a — RTT Foundation
+### Stage 3a — RTT Foundation
 
 **Goal:** establish hidden illusion scene + render-to-texture pipeline.
 
@@ -44,7 +58,7 @@ A hidden scene rendered to texture, applied to the cave wall, with parallax lag 
 
 **Done when:** wall displays hidden portal scene via render texture. No parallax yet.
 
-### Stage 2b — Parallax
+### Stage 3b — Parallax
 
 **Goal:** parallax lag that creates perceived depth — the core illusion.
 
@@ -60,13 +74,14 @@ Depends on: Stage 2a.
 
 **Done when:** slow horizontal rotation makes wall feel spatial — projection detaches, depth "breathes".
 
-### Stage 2c — Polish & Settings
+### Stage 3c — Polish & Settings
 
 **Goal:** full settings panel, refine visual style, QA the illusion.
 
 Depends on: Stage 2b.
 
 Leva settings (defaults extracted to scene config):
+
 - `enableDepthEcho` — master toggle
 - `lagAmount`, `projectionSharpness`, `rockDistortion`, `fogDensity`
 - `depthExaggeration`, `ghostTrail`, `monochrome`
@@ -76,20 +91,6 @@ Visual style: monochrome depth, soft fog, floating particles (reuse `Dust.jsx`),
 QA failures: wall looks like screen → increase `lagAmount`; projection feels locked → lower `projectionSharpness`; disappears at slight angles → reduce `rockDistortion`.
 
 **Done when:** settings live, illusion passes manual rotation QA, ancient holographic stone feel.
-
----
-
-## Stage 3 — URL Params & State
-
-**Goal:** make app config shareable via URL, foundation for future "Share" button.
-
-- Remove `VITE_GITHUB_USER` env var; read `?user=` from `window.location.search` instead
-- Sync to jotai atom so state updates on change
-- No router — just `URLSearchParams` on load
-- Pattern is reusable: future params (project, mode, etc.) plug into same mechanism
-- A future "Share" button = copy of `location.href`
-
-**Done when:** `?user=jonatan-verstraete` sets GitHub user on load; env var removed.
 
 ---
 
@@ -125,6 +126,7 @@ Backend-first features that give the oracle memory, presence, and persona. These
 **Cave Bible (`api/bible.md`):** hand-authored ~10–30k token mythology document. Injected verbatim at top of every system prompt. Never compressed. Authoring is a creative task outside code — write it dense, specific, ancient.
 
 **Backend:**
+
 - SQLite `api/memory.db` — `memories` table with `id, text, session_id, timestamp`
 - Inject order per `/analyze` call: `[bible] [responsive passage?] [compressed memories] [session history] [prompt]`
 - Compression: when >80 rows, summarize to ~8 compressed entries via ollama; delete originals
@@ -142,6 +144,7 @@ Backend-first features that give the oracle memory, presence, and persona. These
 Depends on: Stage 4c backend.
 
 Controls (in sidebar history slot from Stage 8b):
+
 - **Clear history** — wipes `historyAtom` + `DELETE /memory` for current `session_id`
 - **Disable shadow memory** — `freshModeAtom` toggle → `fresh: true` on all calls
 - **Share memory** — opt-in checkbox; `POST /memory/share` re-tags session as `__shared__`

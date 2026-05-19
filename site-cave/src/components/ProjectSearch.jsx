@@ -3,10 +3,12 @@ import { Search, FolderOpen, X } from "lucide-react";
 import { useAtom, useAtomValue } from "jotai";
 import { useQuery } from "@tanstack/react-query";
 import { selectedProjectAtom, githubUserAtom } from "../store/cave";
-import { FALLBACK_PROJECTS } from "../data/projects";
+
+const DEFAULT_USER = "jayf0x"
+
 
 async function fetchProjects(user) {
-  if (!user) return FALLBACK_PROJECTS;
+  if (!user) return [];
   const res = await fetch(
     `https://api.github.com/users/${user}/repos?per_page=100&sort=updated&type=public`,
   );
@@ -50,7 +52,7 @@ export function ProjectSearch({
   const containerRef = useRef(null);
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["github-repos", githubUser ?? "__fallback__"],
+    queryKey: ["github-repos", githubUser ?? ""],
     queryFn: () => fetchProjects(githubUser),
     staleTime: 5 * 60 * 1000,
   });

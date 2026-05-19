@@ -10,11 +10,10 @@ import {
   githubUserAtom,
 } from "../store/cave";
 import { ACTIVE_COMMANDS } from "../data/commands";
-import { FALLBACK_PROJECTS } from "../data/projects";
 import { useDebounce } from "../hooks/useDebounce";
 
 async function fetchProjects(user) {
-  if (!user) return FALLBACK_PROJECTS;
+  if (!user) return [];
   const res = await fetch(
     `https://api.github.com/users/${user}/repos?per_page=100&sort=updated&type=public`,
   );
@@ -55,7 +54,7 @@ export const ProjectPicker = () => {
 
   const onSearchInput = useCallback(
     (event) => {
-      const value = event.target.value
+      const value = event.target.value;
       if (query === "" && value === " ") {
         setOpen(false);
         return;
