@@ -29,7 +29,7 @@ GLB loading pipeline: PNG/JPG → KTX2 → embed in GLB → `useGLTF()`.
 
 ---
 
-## Stage 2 — URL Params & State
+## Stage 2 — URL Params & State ✅
 
 **Goal:** make app config shareable via URL, foundation for future "Share" button.
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, FolderOpen, X } from "lucide-react";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useQuery } from "@tanstack/react-query";
 import { selectedProjectAtom, githubUserAtom } from "../store/cave";
 
@@ -46,7 +46,7 @@ export function ProjectSearch({
   const [activeIdx, setActiveIdx] = useState(0);
   const [hasFocus, setHasFocus] = useState(false);
   const [selected, setSelected] = useAtom(selectedProjectAtom);
-  const githubUser = useAtomValue(githubUserAtom);
+  const [githubUser, setGithubUser] = useAtom(githubUserAtom);
   const inputRef = useRef(null);
   const listRef = useRef(null);
   const containerRef = useRef(null);
@@ -69,6 +69,11 @@ export function ProjectSearch({
   useEffect(() => {
     setActiveIdx(0);
   }, [query]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setGithubUser(params.get("user") || DEFAULT_USER);
+  }, [setGithubUser]);
 
   useEffect(() => {
     if (autoFocus) {
