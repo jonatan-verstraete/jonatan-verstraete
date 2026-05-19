@@ -43,254 +43,171 @@ GLB loading pipeline: PNG/JPG → KTX2 → embed in GLB → `useGLTF()`.
 
 ---
 
-## Stage 3 — Depth Echo (Anamorphic Portal Illusion)
+## Stage 3 — Depth Echo (Parallax Shadow Reprojection)
 
-A hidden scene rendered to texture, co-planar overlay on the wall, parallax lag → perceived depth behind stone. Three sequential sub-stages. All logic lives in a new component `src/scene/Wall/DepthEchoOverlay.jsx`. **Wall.jsx must not be modified.**
+The wall shows a faint echo of the same gobo/shadow projection, sampled from a virtually offset projector angle. As the viewer pans the camera, the echo drifts relative to the real projection — creating perceived depth behind the stone surface.
+
+**Core concept:** sample the existing accumulated gobo texture (`accumRef` from `ProjectedSurface`) a second time using a virtual projector matrix that is slightly laterally offset from the real spotlight. The UV divergence between the two projectors at each wall fragment is the depth cue. No second RTT. No separate Three.js scene.
+
+All logic lives in a new component `src/scene/Wall/DepthEchoOverlay.jsx`. **Wall.jsx must not be modified.**
 
 ---
 
 ### Architecture constraints derived from codebase
 
-**Wall world transform (from `config.js` + `Wall.jsx` position/scale formula):**
+**Wall world transform (from `config.js` + `Wall.jsx`):**
 - World position: `[-1.22, -0.53, -3.47]`
-  - x = wallX = -1.22
-  - y = -1 + wallY = -1 + 0.47 = -0.53
-  - z = -2 + wallZ = -2 + (-1.47) = -3.47
-- Scale: `0.25 + wallScale = 0.25 + 0.05 = 0.30`
-- Rotation: `[0.29, Math.PI, 0]` (wallRotX=0.29, always rotated π around Y)
-- Wall face normal: points in **world +Z** (toward camera) because rotation.y = π flips the GLB
+- Scale: `0.30`; Rotation: `[0.29, Math.PI, 0]`
+- Wall face normal points **world +Z** (toward camera)
 
-**Wall face dimensions — ⚠ ASSUMPTION:** `Wall.jsx` renders `/models/wall.glb` as a `<primitive>` — no PlaneGeometry, no hard-coded width/height in code. Face size must be measured at runtime:
+**Overlay plane size:** best estimate ~4.0 × 3.0 world units at scale 0.30. Expose as Leva params `overlayW` / `overlayH` in Stage 3a and lock once visually confirmed.
+
+**Camera yaw:** `camera.rotation.y` via `useThree().camera`, readable every frame.
+
+**Gobo texture source:** `ProjectedSurface` exposes `accumRef` (a `React.MutableRefObject<WebGLRenderTarget>`) via the `onAccumRef` callback to `Scene`. `Scene` stores it in `surfaceAccumRef`. Pass both `surfaceAccumRef` and `spotRef` as props to `DepthEchoOverlay`.
+
+**Spotlight projector matrix:** built from the spotlight's shadow camera each frame:
 ```js
-const box = new THREE.Box3().setFromObject(wallGLBScene);
-const size = box.getSize(new THREE.Vector3()); // at world scale 0.30
+const shadowCam = spotRef.current.shadow.camera
+shadowCam.updateMatrixWorld()
+projMatrix.multiplyMatrices(shadowCam.projectionMatrix, shadowCam.matrixWorldInverse)
 ```
-Best estimate pending measurement: **~4.0 × 3.0 world units** at scale 0.30. The overlay plane width/height must be tuned to fill the wall face — expose as Leva params `overlayW` / `overlayH` during 3a and lock them once the fit looks right.
-
-**Camera yaw source:** `<OrbitControls />` (drei) drives the main R3F camera. Camera yaw is `camera.rotation.y` via `useThree().camera` — available every frame from any `useFrame` callback. No custom camera ref needed.
-
-**Existing RTT pipeline:** `ProjectedSurface` (`src/scene/ProjectedSurface/index.jsx`) already runs its own offscreen render (gobo scene → blur → accumulation). The depth echo system is **fully separate** — different scene, different target, different useFrame priority (-1). Do not merge with or depend on the gobo pipeline.
+This is the same coordinate system Three.js uses internally to project the gobo map, so the echo aligns with the real projection.
 
 ---
 
-### Stage 3a — RTT Foundation
+### Stage 3a — Static echo (no parallax)
 
-**Goal:** three isolated parts wired end-to-end. Wall displays portal texture. No parallax yet.
+**Goal:** overlay mesh on wall shows faint echo of the live gobo/shadow at zero offset. No camera movement needed yet.
 
-Depends on: nothing (standalone).
+Depends on: nothing (standalone, `ProjectedSurface` already runs).
 
 New file: `src/scene/Wall/DepthEchoOverlay.jsx`
 
----
+Props: `spotRef`, `accumRef`
 
-#### Part 1 — portalScene (offscreen, never in main scene graph)
+**Overlay mesh:**
+- Position: `[-1.22, -0.53, -3.42]` (0.05 in front of wall)
+- Rotation: `[0.29, Math.PI, 0]`
+- Geometry: `<planeGeometry args={[overlayW, overlayH]} />` (Leva defaults: 4.0 × 3.0)
 
-Created once with `useMemo`. **Never passed to `<Canvas>` or added to the main scene.** Only used as the source for `gl.render`.
-
-```
-portalScene  = new THREE.Scene()
-portalScene.background = new THREE.Color(0x000000)  // black void
-
-portalCamera = new THREE.PerspectiveCamera(
-  90,          // wide FOV — exaggerated perspective is the illusion
-  1.0,         // square aspect (512×512 target)
-  0.01,        // close near — particles can get very close
-  20           // far
-)
-portalCamera.position.set(0, 0, 2.0)  // looking toward origin
-portalCamera.lookAt(0, 0, 0)
-```
-
-⚠ ASSUMPTION on camera position: geometry scale of ~2 world units assumed based on scene scale (wall at z=-3.47, particles/rings at 1-2 unit radius). Adjust if particles are clipped or too distant.
-
-Geometry added to portalScene (all use MeshBasicMaterial, monochrome white/grey, no lights):
-
-- **Particles** — reuse pattern from `src/scene/VFX/Dust.jsx`. ~200 Points instances scattered in a 2×2×2 box centered at origin. White, size 0.04.
-- **Fog plane** — a `PlaneGeometry(3, 3)` at z=-1.0, MeshBasicMaterial white, opacity 0.06, transparent, depthWrite false. Simulates volumetric haze.
-- **Depth rings** — 3–5 `RingGeometry` meshes at z = [-0.5, -1.0, -1.5, -2.0, -2.5], radii stepping from 0.3 to 1.2, MeshBasicMaterial white opacity 0.12. These give the depth stratification that sells the illusion.
-
-No lights added to portalScene — all emissive-only via MeshBasicMaterial.
-
----
-
-#### Part 2 — WebGLRenderTarget pre-pass
-
+**ShaderMaterial uniforms:**
 ```js
-const portalTarget = useMemo(() => new WebGLRenderTarget(512, 512, {
-  minFilter: THREE.LinearFilter,
-  magFilter: THREE.LinearFilter,
-}), [])
-
-useFrame(({ gl }) => {
-  gl.setRenderTarget(portalTarget)
-  gl.render(portalScene, portalCamera)
-  gl.setRenderTarget(null)
-}, -1)  // priority -1 → runs before main scene render
+{
+  uAccumTex:   { value: null },                    // live gobo texture, set each frame
+  uProjMatrix: { value: new THREE.Matrix4() },     // spotlight projector matrix, updated each frame
+  uEchoOffset: { value: new THREE.Vector2(0, 0) }, // zero until Stage 3b
+  uOpacity:    { value: 0.35 },
+}
 ```
 
-Output: `portalTarget.texture` — live, updated every frame, fed to Part 3.
-
-Dispose in `useEffect` cleanup: `portalTarget.dispose()`.
-
----
-
-#### Part 3 — Co-planar overlay plane
-
-A `<mesh>` inside `DepthEchoOverlay.jsx` rendered into the **main scene** (no portal, no createPortal).
-
-**Position:** wall world position + 0.05 offset along world +Z (toward camera):
-```
-position={[-1.22, -0.53, -3.47 + 0.05]}  →  [-1.22, -0.53, -3.42]
+**Vertex shader:**
+```glsl
+uniform mat4 uProjMatrix;
+varying vec4 vProjCoord;
+void main() {
+  vec4 worldPos = modelMatrix * vec4(position, 1.0);
+  vProjCoord = uProjMatrix * worldPos;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
 ```
 
-**Rotation:** identical to wall: `[0.29, Math.PI, 0]`
+**Fragment shader:**
+```glsl
+uniform sampler2D uAccumTex;
+uniform vec2 uEchoOffset;
+uniform float uOpacity;
+varying vec4 vProjCoord;
+void main() {
+  vec2 uv = (vProjCoord.xy / vProjCoord.w) * 0.5 + 0.5 + uEchoOffset;
+  if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) discard;
+  vec4 echo = texture2D(uAccumTex, uv);
+  gl_FragColor = vec4(echo.rgb * uOpacity, 1.0);
+}
+```
 
-**Geometry:** `<planeGeometry args={[overlayW, overlayH]} />` where `overlayW` and `overlayH` start at the best estimate (~4.0, ~3.0) and are exposed as Leva controls during development, then locked to config once the fit is confirmed visually.
+Blending: `THREE.AdditiveBlending`, `depthWrite: false`, `transparent: true`.
 
-**Material — ShaderMaterial:**
+**`useFrame` at priority 0:**
 ```js
-new THREE.ShaderMaterial({
-  uniforms: {
-    map:            { value: portalTarget.texture },
-    uParallax:      { value: 0.0 },
-    uOpacity:       { value: 0.35 },
-    uRockDistortion:{ value: 0.03 },
-  },
-  blending:    THREE.AdditiveBlending,
-  depthWrite:  false,
-  transparent: true,
-  vertexShader: `
-    varying vec2 vUv;
-    varying vec3 vNormal;
-    void main() {
-      vUv = uv;
-      vNormal = normalize(normalMatrix * normal);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `,
-  fragmentShader: `
-    uniform sampler2D map;
-    uniform float uParallax;
-    uniform float uOpacity;
-    uniform float uRockDistortion;
-    varying vec2 vUv;
-    varying vec3 vNormal;
-    void main() {
-      vec2 uv = vUv;
-      uv.x += uParallax;
-      uv += vNormal.xy * uRockDistortion;
-      vec4 echo = texture2D(map, uv);
-      gl_FragColor = vec4(echo.rgb * uOpacity, 1.0);
-    }
-  `,
-})
+useFrame(() => {
+  const spot = spotRef.current
+  const accum = accumRef.current?.current
+  if (!spot || !accum) return
+  const shadowCam = spot.shadow.camera
+  shadowCam.updateMatrixWorld()
+  mat.uniforms.uProjMatrix.value.multiplyMatrices(
+    shadowCam.projectionMatrix,
+    shadowCam.matrixWorldInverse
+  )
+  mat.uniforms.uAccumTex.value = accum.texture
+}, 0)
 ```
 
-Wire `onBeforeRender` or `useFrame` to update `material.uniforms.map.value = portalTarget.texture` each frame (texture ref is stable so this is a no-op after first frame, but keep it for safety).
+**Wiring in `scene/index.jsx`:**
+```jsx
+<DepthEchoOverlay spotRef={spotRef} accumRef={surfaceAccumRef} />
+```
+Mount after `<Wall />`. No other changes to `scene/index.jsx`.
 
-**Done when:** wall shows a faint monochrome depth texture (particles + rings visible through stone). No movement yet. `uParallax` is hardcoded 0.0.
+**Done when:** wall shows a faint additive echo of the shadow/video projection layered on top. With no video active, echo is dark. With video/webcam shadow, echo is a dim copy.
 
 ---
 
 ### Stage 3b — Parallax
 
-**Goal:** UV-space parallax lag = perceived depth.
+**Goal:** shift `uEchoOffset.x` based on smoothed camera yaw delta → echo drifts relative to real projection as viewer pans.
 
 Depends on: Stage 3a complete.
 
-**Camera yaw extraction:**
-```js
-const { camera } = useThree()
-const prevYawRef    = useRef(camera.rotation.y)
-const targetOffRef  = useRef(0)
-const smoothedRef   = useRef(0)
-const velocityRef   = useRef(0)  // only used in overshoot mode
-```
-
-Inside `useFrame` at priority 0 (after the -1 pre-pass):
+Add to the same `useFrame`:
 ```js
 const currentYaw = camera.rotation.y
-const deltaYaw   = currentYaw - prevYawRef.current
+const deltaYaw = currentYaw - prevYawRef.current
 prevYawRef.current = currentYaw
 
-targetOffRef.current += deltaYaw * lagAmount   // lagAmount default 0.15
+targetOffRef.current += deltaYaw * lagAmount    // default lagAmount: 0.08
+smoothedRef.current += (targetOffRef.current - smoothedRef.current) * 0.06
 
-// Standard lerp mode:
-smoothedRef.current += (targetOffRef.current - smoothedRef.current) * 0.08
-
-// Overshoot mode (when ghostTrail / overshoot enabled):
-// velocityRef.current += (targetOffRef.current - smoothedRef.current) * 0.12  // tension
-// velocityRef.current *= 0.85                                                   // damping
-// smoothedRef.current += velocityRef.current
-
-overlayMat.uniforms.uParallax.value = smoothedRef.current
+mat.uniforms.uEchoOffset.value.x = smoothedRef.current
 ```
 
-**Critical constraint — document in code comments:** `uParallax` drives UV shift only. **Nothing in the scene moves. No geometry translates. No camera is modified.** The illusion is entirely UV-space. If any mesh position changes with camera rotation, the effect becomes a parallax video wall — wrong.
+`lagAmount` controls how much the echo shifts per radian of camera rotation. Start at 0.08; tune up if the effect is too subtle.
 
-**Failure modes:**
-| Symptom | Cause | Fix |
-|---|---|---|
-| Looks like video on a wall | lagAmount too low | Increase lagAmount toward 0.3 |
-| Feels locked to camera | smoothing factor too high | 0.08 is correct — do not raise |
-| Disappears at slight angles | rockDistortion too high | Reduce uRockDistortion toward 0.01 |
+**Critical constraint:** only `uEchoOffset` changes. No mesh moves, no camera changes, no geometry rebuilds.
 
-**Done when:** slow horizontal camera rotation makes wall feel like it has spatial depth — the texture "detaches" and drifts back.
+**Done when:** slow horizontal pan causes echo to drift fractionally, creating depth-behind-stone sensation.
 
 ---
 
 ### Stage 3c — Settings
 
-**Goal:** Leva panel wired to depth echo, all defaults in `config.js`.
+**Goal:** Leva controls + `config.js` defaults.
 
 Depends on: Stage 3b complete.
 
-Add to `src/scene/config.js` (`SCENE_CONFIG` object):
+Add to `src/scene/config.js`:
 ```js
 // Depth Echo
-enableDepthEcho:       true,
-echoOpacity:           0.35,
-lagAmount:             0.15,
-projectionSharpness:   1.0,
-rockDistortion:        0.03,
-echoFogDensity:        0.4,   // fog density inside portalScene fog plane opacity
-depthExaggeration:     1.2,   // multiplier on particle/ring z spread
-ghostTrail:            false, // enables overshoot mode in parallax
-monochrome:            true,  // if false: allow slight warm tint on portal geo
+enableDepthEcho: true,
+echoOpacity:     0.35,
+echoLagAmount:   0.08,
+echoGhostTrail:  false,   // true → spring/overshoot mode instead of lerp
 ```
 
-Add a `DepthEcho` Leva folder in `src/scene/index.jsx` (same pattern as existing `Shadow` folder):
-```js
-DepthEcho: folder({
-  enableDepthEcho:     { value: C.enableDepthEcho },
-  echoOpacity:         { value: C.echoOpacity,       min: 0, max: 1,   step: 0.01 },
-  lagAmount:           { value: C.lagAmount,          min: 0, max: 0.5, step: 0.01 },
-  projectionSharpness: { value: C.projectionSharpness,min: 0.1, max: 3, step: 0.05 },
-  rockDistortion:      { value: C.rockDistortion,    min: 0, max: 0.1, step: 0.005 },
-  echoFogDensity:      { value: C.echoFogDensity,    min: 0, max: 1,   step: 0.01 },
-  depthExaggeration:   { value: C.depthExaggeration, min: 0.5, max: 3, step: 0.05 },
-  ghostTrail:          { value: C.ghostTrail },
-  monochrome:          { value: C.monochrome },
-})
-```
+Add `DepthEcho` Leva folder in `scene/index.jsx`, pass as props to `DepthEchoOverlay`.
 
-Pass all values as props from `<Scene>` to `<DepthEchoOverlay>`. Props drive uniforms; config is source of truth for defaults.
+`enableDepthEcho` false → `overlayMesh.visible = false`, skip uniform updates.
 
-`enableDepthEcho` false → set `overlayMesh.visible = false` and skip the portalScene pre-pass render.
+`echoGhostTrail` true → replace lerp with spring: `velocity += (target - smoothed) * 0.12; velocity *= 0.85; smoothed += velocity`.
 
-`depthExaggeration` → multiply ring/particle z positions each frame (or rebuild geometry). Simple approach: store ring meshes in refs and set `ring.position.z = baseZ * depthExaggeration` in useFrame.
+QA checklist:
+- [ ] Slow left-right pan: echo drifts back, wall feels 3D
+- [ ] Fast snap: brief overshoot and settle (ghost trail on)
+- [ ] `enableDepthEcho` false: no visible change to wall, no perf cost
+- [ ] No video active: echo invisible (black × additive = nothing)
 
-`monochrome` false → allow a faint warm tint: multiply `echo.rgb` by `vec3(1.0, 0.9, 0.7)` in the fragment shader via a uniform.
-
-`ghostTrail` true → switch useFrame to overshoot mode (velocity accumulation instead of direct lerp).
-
-QA checklist (manual):
-- [ ] Slow left-right camera rotation: texture drifts back, feels like depth behind stone
-- [ ] Fast snap: brief overshoot, settles (overshoot mode)
-- [ ] `enableDepthEcho` false: wall returns to plain rocky material, no performance cost
-- [ ] Edge: `rockDistortion` at 0.03 — texture visible at 45° camera angle without disappearing
-
-**Done when:** all Leva controls live, illusion passes rotation QA, monochrome depth-cave aesthetic holds.
+**Done when:** all controls live, illusion passes pan QA.
 
 ---
 
