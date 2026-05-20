@@ -5,7 +5,8 @@ import { useRef, useEffect } from "react";
 import { folder, useControls } from "leva";
 import { useFrame } from "@react-three/fiber";
 
-export const Lighting = ({ spotRef, surfaceRef }) => {
+export const Lighting = ({ surfaceRef }) => {
+  const spotRef = useRef();
   const targetRef = useRef();
 
   const { ambientIntensity } = useControls({
@@ -22,7 +23,7 @@ export const Lighting = ({ spotRef, surfaceRef }) => {
   useFrame(({ clock }) => {
     const spot = spotRef.current;
     if (!spot) return;
-    
+
     const latestAccum = surfaceRef.current;
     if (latestAccum) spot.map = latestAccum.texture;
 

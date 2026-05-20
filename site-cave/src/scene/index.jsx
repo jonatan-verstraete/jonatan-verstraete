@@ -8,12 +8,10 @@ import { devLog } from "../utils";
 import { Lighting } from "./Lighting";
 import { ProjectedSurface } from "./ProjectedSurface";
 import { Wall } from "./Wall/Wall";
-import { DepthEchoOverlay } from "./Wall/DepthEchoOverlay";
 import { Ground } from "./Ground/Ground";
 import { SCENE_CONFIG as C } from "./config";
 
 export const Scene = ({ videoRef, isActive, captureRef }) => {
-  const spotRef = useRef();
   const getCanvasBlobRef = useRef();
   const surfaceRef = useRef(null);
   const setHistory = useSetAtom(historyAtom);
@@ -63,10 +61,9 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
 
       <OrbitControls />
 
-      <Lighting spotRef={spotRef} surfaceRef={surfaceRef} />
+      <Lighting surfaceRef={surfaceRef} />
 
       <Wall />
-      <DepthEchoOverlay spotRef={spotRef} surfaceRef={surfaceRef} />
       <Ground />
 
       {/* <Dust opacity={dustOpacity} /> */}
