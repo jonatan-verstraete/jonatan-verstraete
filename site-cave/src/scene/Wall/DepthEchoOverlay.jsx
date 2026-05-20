@@ -26,7 +26,7 @@ void main() {
 }
 `;
 
-export const DepthEchoOverlay = ({ spotRef, accumRef }) => {
+export const DepthEchoOverlay = ({ spotRef, surfaceRef }) => {
   const mat = useRef(
     new ShaderMaterial({
       vertexShader,
@@ -52,7 +52,7 @@ export const DepthEchoOverlay = ({ spotRef, accumRef }) => {
 
   useFrame(() => {
     const spot = spotRef.current;
-    const accum = accumRef.current?.current;
+    const accum = surfaceRef.current;
     if (!spot || !accum) return;
     const shadowCam = spot.shadow.camera;
     shadowCam.updateMatrixWorld();

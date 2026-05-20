@@ -1,9 +1,6 @@
 import { useGLTF, useTexture } from "@react-three/drei";
 import { LinearFilter, RepeatWrapping } from "three";
 
-// Configure local Draco decoder (avoids CDN dependency)
-useGLTF.setDecoderPath("/draco/");
-
 /**
  * Load a GLB model with Draco support.
  * Draco decoder is served from /draco/ (local, no CDN).

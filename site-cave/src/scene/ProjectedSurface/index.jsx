@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { createPortal, useFrame } from "@react-three/fiber";
 import {
   WebGLRenderTarget,
@@ -10,11 +10,14 @@ import {
   Mesh,
   ShaderMaterial,
 } from "three";
+import { useControls, folder } from "leva";
 import { Video } from "./Video";
 import { ProjectText } from "./ProjectText";
 import { VideoCam } from "./VideoCam";
+import { useDisposableItems } from "@/hooks/useDisposableItems";
+import { SCENE_CONFIG as C } from "@/scene/config";
+import { devLog } from "@/utils";
 
-// ── Fullscreen-quad vertex shader (no projectionMatrix needed — already clip-space) ──
 const VERT = `
 varying vec2 vUv;
 void main() {
@@ -22,7 +25,6 @@ void main() {
   gl_Position = vec4(position.xy, 0.0, 1.0);
 }`;
 
-// ── Separable Gaussian blur (5-tap, ~σ=1.4) ──
 const H_BLUR_FRAG = `
 uniform sampler2D uTex;
 uniform float uRadius;
@@ -57,9 +59,8 @@ void main() {
   gl_FragColor = col;
 }`;
 
-// ── Temporal accumulation — mix(current, previous, decay) + contrast boost ──
-// decay=0 → no trail (pure current frame), decay=0.95 → long ghost trails
-// uContrast > 1 pushes lights brighter and darks darker for more visible projection
+// decay=0 → no trail, decay=0.95 → long ghost trails
+// uContrast > 1 pushes lights brighter / darks darker for more visible projection
 const ACCUM_FRAG = `
 uniform sampler2D uCurrent;
 uniform sampler2D uPrev;
@@ -81,170 +82,157 @@ function makeRT(w, h) {
   });
 }
 
-// Minimal scene + ortho cam + fullscreen quad for offscreen passes
-function makePassScene() {
-  const scene = new Scene();
-  const cam = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
-  const geo = new PlaneGeometry(2, 2);
-  const mesh = new Mesh(geo);
-  scene.add(mesh);
-  return { scene, cam, mesh, dispose: () => geo.dispose() };
-}
-
 const BLUR_W = 1024,
-  BLUR_H = 512; // blur at half-res (fine for soft kernel)
+  BLUR_H = 512;
 const GOBO_W = 2048,
-  GOBO_H = 1024; // full gobo + accumulation res
+  GOBO_H = 1024;
 
 /**
- * ProjectedSurface — renders the gobo scene, then:
- *   1. H+V Gaussian blur → soft cave-stone diffusion (option B)
- *   2. Temporal accumulation → ghost trails / lingering shadows (option E)
- *
- * The final output render target is exposed to the parent via `onAccumRef(ref)`.
- * Parent updates spotlight.map = ref.current.texture each frame.
+ * ProjectedSurface — gobo scene → H+V Gaussian blur → temporal accumulation.
+ * Exposes the final accumulation RT via surfaceRef(ref) so the parent can
+ * point spotlight.map at it each frame.
  */
-export function ProjectedSurface({
-  target,
-  videoRef,
-  isActive,
-  threshold,
-  softness,
-  blurRadius,
-  accumDecay,
-  goboContrast,
-  onAccumRef,
-}) {
+export function ProjectedSurface({ videoRef, isActive, surfaceRef }) {
+  const {
+    shadowThreshold,
+    shadowSoftness,
+    blurRadius,
+    accumDecay,
+    goboContrast,
+  } = useControls({
+    Shadow: folder({
+      shadowThreshold: { value: C.shadowThreshold, min: 0, max: 1, step: 0.01 },
+      shadowSoftness: { value: C.shadowSoftness, min: 0, max: 0.5, step: 0.01 },
+      blurRadius: { value: C.blurRadius, min: 0, max: 8, step: 0.1 },
+      accumDecay: { value: C.accumDecay, min: 0, max: 0.97, step: 0.01 },
+      goboContrast: { value: C.goboContrast, min: 1.0, max: 3.0, step: 0.05 },
+    }),
+  });
+
   // ── Gobo portal scene ──
-  const [gobScene, gobCam] = useMemo(() => {
+  const gobRef = useRef(null);
+  if (!gobRef.current) {
     const s = new Scene();
-    // Bright background so spotlight gobo passes light through base areas.
-    // Without this, dark background blocks all light even when VideoCam has no shadow layer.
     s.background = new Color(0xc8c8c8);
     const cam = new OrthographicCamera(-1, 1, 0.5, -0.5, 0.1, 10);
     cam.position.set(0, 0, 5);
-    return [s, cam];
-  }, []);
+    gobRef.current = { scene: s, cam };
+  }
 
   // ── Render targets ──
-  const blurA = useMemo(() => makeRT(BLUR_W, BLUR_H), []);
-  const blurB = useMemo(() => makeRT(BLUR_W, BLUR_H), []);
-  const accumA = useMemo(() => makeRT(GOBO_W, GOBO_H), []);
-  const accumB = useMemo(() => makeRT(GOBO_W, GOBO_H), []);
-  // Tracks which accumulation buffer is the latest output
-  const accumRef = useRef(accumA);
+  const rts = useDisposableItems(() => {
+    const accumA = makeRT(GOBO_W, GOBO_H);
+    surfaceRef.current = accumA ?? null;
 
-  // ── Shared fullscreen-quad pass scene ──
-  const pass = useMemo(() => makePassScene(), []);
+    return {
+      gobo: makeRT(GOBO_W, GOBO_H),
+      blurA: makeRT(BLUR_W, BLUR_H),
+      blurB: makeRT(BLUR_W, BLUR_H),
+      accumA,
+      accumB: makeRT(GOBO_W, GOBO_H),
+    };
+  });
 
-  // ── Pass materials ──
-  const hBlurMat = useMemo(
-    () =>
-      new ShaderMaterial({
+  // ── Pass materials + fullscreen-quad scene ──
+  const pass = useDisposableItems(() => {
+    const scene = new Scene();
+    const cam = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const geo = new PlaneGeometry(2, 2);
+    const mesh = new Mesh(geo);
+    scene.add(mesh);
+
+    return {
+      scene,
+      cam,
+      mesh,
+      geo,
+      hBlur: new ShaderMaterial({
         uniforms: {
           uTex: { value: null },
-          uRadius: { value: 2.5 },
+          uRadius: { value: C.blurRadius },
           uTexelW: { value: 1 / BLUR_W },
         },
         vertexShader: VERT,
         fragmentShader: H_BLUR_FRAG,
       }),
-    [],
-  );
-
-  const vBlurMat = useMemo(
-    () =>
-      new ShaderMaterial({
+      vBlur: new ShaderMaterial({
         uniforms: {
           uTex: { value: null },
-          uRadius: { value: 2.5 },
+          uRadius: { value: C.blurRadius },
           uTexelH: { value: 1 / BLUR_H },
         },
         vertexShader: VERT,
         fragmentShader: V_BLUR_FRAG,
       }),
-    [],
-  );
-
-  const accumMat = useMemo(
-    () =>
-      new ShaderMaterial({
+      accum: new ShaderMaterial({
         uniforms: {
           uCurrent: { value: null },
           uPrev: { value: null },
-          uDecay: { value: 0.88 },
-          uContrast: { value: 1.35 },
+          uDecay: { value: C.accumDecay },
+          uContrast: { value: C.goboContrast },
         },
         vertexShader: VERT,
         fragmentShader: ACCUM_FRAG,
       }),
-    [],
-  );
-
-  // ── Cleanup ──
-  useEffect(
-    () => () => {
-      blurA.dispose();
-      blurB.dispose();
-      accumA.dispose();
-      accumB.dispose();
-      hBlurMat.dispose();
-      vBlurMat.dispose();
-      accumMat.dispose();
-      pass.dispose();
-    },
-    [blurA, blurB, accumA, accumB, hBlurMat, vBlurMat, accumMat, pass],
-  );
-
-  // ── Expose accumRef so parent can point spotlight.map at it ──
+    };
+  });
+  
+  // ── Sync leva uniforms ──
   useEffect(() => {
-    onAccumRef?.(accumRef);
-  }, [onAccumRef]);
-
-  // ── Sync leva / prop uniforms ──
-  useEffect(() => {
-    hBlurMat.uniforms.uRadius.value = blurRadius ?? 2.5;
-    vBlurMat.uniforms.uRadius.value = blurRadius ?? 2.5;
-  }, [blurRadius, hBlurMat, vBlurMat]);
+    const p = pass.current;
+    if (!p) return;
+    p.hBlur.uniforms.uRadius.value = blurRadius ?? C.blurRadius;
+    p.vBlur.uniforms.uRadius.value = blurRadius ?? C.blurRadius;
+  }, [blurRadius]);
 
   useEffect(() => {
-    accumMat.uniforms.uDecay.value = accumDecay ?? 0.88;
-  }, [accumDecay, accumMat]);
+    const p = pass.current;
+    if (!p) return;
+    p.accum.uniforms.uDecay.value = accumDecay ?? C.accumDecay;
+  }, [accumDecay]);
 
   useEffect(() => {
-    accumMat.uniforms.uContrast.value = goboContrast ?? 1.35;
-  }, [goboContrast, accumMat]);
+    const p = pass.current;
+    if (!p) return;
+    p.accum.uniforms.uContrast.value = goboContrast ?? C.goboContrast;
+  }, [goboContrast]);
 
-  // ── Pipeline — runs before parent's spotlight map update (priority 0) ──
+  // ── Render pipeline (priority 0 — before spotlight map update) ──
   useFrame(({ gl }) => {
+    const r = rts.current;
+    const p = pass.current;
+    const gobScene = gobRef.current.scene;
+    const gobCam = gobRef.current.cam;
+    if (!r || !p) return;
+
     const prevAutoClear = gl.autoClear;
     gl.autoClear = true;
 
-    // 1. Render gobo portal scene → target (2048×1024)
-    gl.setRenderTarget(target);
+    // 1. Render gobo portal scene → gobo (2048×1024)
+    gl.setRenderTarget(r.gobo);
     gl.render(gobScene, gobCam);
 
-    // 2. H-blur: target → blurA (1024×512)
-    pass.mesh.material = hBlurMat;
-    hBlurMat.uniforms.uTex.value = target.texture;
-    gl.setRenderTarget(blurA);
-    gl.render(pass.scene, pass.cam);
+    // 2. H-blur: gobo → blurA (1024×512)
+    p.mesh.material = p.hBlur;
+    p.hBlur.uniforms.uTex.value = r.gobo.texture;
+    gl.setRenderTarget(r.blurA);
+    gl.render(p.scene, p.cam);
 
     // 3. V-blur: blurA → blurB (1024×512)
-    pass.mesh.material = vBlurMat;
-    vBlurMat.uniforms.uTex.value = blurA.texture;
-    gl.setRenderTarget(blurB);
-    gl.render(pass.scene, pass.cam);
+    p.mesh.material = p.vBlur;
+    p.vBlur.uniforms.uTex.value = r.blurA.texture;
+    gl.setRenderTarget(r.blurB);
+    gl.render(p.scene, p.cam);
 
     // 4. Accumulate: mix(blurB, prevAccum, decay) → nextAccum (ping-pong)
-    const prevAccum = accumRef.current;
-    const nextAccum = prevAccum === accumA ? accumB : accumA;
-    pass.mesh.material = accumMat;
-    accumMat.uniforms.uCurrent.value = blurB.texture;
-    accumMat.uniforms.uPrev.value = prevAccum.texture;
+    const prevAccum = surfaceRef.current ?? r.accumA;
+    const nextAccum = prevAccum === r.accumA ? r.accumB : r.accumA;
+    p.mesh.material = p.accum;
+    p.accum.uniforms.uCurrent.value = r.blurB.texture;
+    p.accum.uniforms.uPrev.value = prevAccum.texture;
     gl.setRenderTarget(nextAccum);
-    gl.render(pass.scene, pass.cam);
-    accumRef.current = nextAccum;
+    gl.render(p.scene, p.cam);
+    surfaceRef.current = nextAccum;
 
     gl.setRenderTarget(null);
     gl.autoClear = prevAutoClear;
@@ -253,16 +241,14 @@ export function ProjectedSurface({
   return createPortal(
     <>
       <ProjectText />
-      {/* {!isActive && <Video />} */}
       <Video />
-
       <VideoCam
         videoRef={videoRef}
         isActive={isActive}
-        threshold={threshold}
-        softness={softness}
+        threshold={shadowThreshold}
+        softness={shadowSoftness}
       />
     </>,
-    gobScene,
+    gobRef.current.scene,
   );
 }

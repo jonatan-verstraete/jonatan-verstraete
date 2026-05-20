@@ -1,4 +1,4 @@
-import { usePBRTextures } from "../utils/assets.js";
+import { usePBRTextures } from "@/hooks/useModel.js";
 
 export function SoilFloor({
   groundSize = 6,

@@ -10,9 +10,46 @@ import { LiveTextTile } from "./components/LiveTextTile";
 import { ProjectPicker } from "./components/ProjectPicker";
 import { SceneLoader } from "./components/SceneLoader";
 import { pickerOpenAtom, selectedProjectAtom } from "./store/cave";
-// Configure Draco decoder path (local, no CDN)
-import "./scene/utils/assets.js";
-import { PerformanceMonitor, StatsGl } from "@react-three/drei";
+
+import { PerformanceMonitor, StatsGl, useGLTF } from "@react-three/drei";
+
+// Configure local Draco decoder (avoids CDN dependency)
+useGLTF.setDecoderPath("/draco/");
+
+export const App = () => {
+  const captureRef = useRef(null);
+  const { videoRef, isActive, toggle } = useCamera();
+
+  return (
+    <>
+      <Canvas
+        gl={{ preserveDrawingBuffer: true }}
+        shadows
+        camera={{ position: [2, 0.2, 5], fov: 65 }}
+        style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh" }}
+      >
+        <Suspense fallback={null}>
+          <StatsGl />
+          <PerformanceMonitor>
+            <Scene
+              captureRef={captureRef}
+              videoRef={videoRef}
+              isActive={isActive}
+            />
+          </PerformanceMonitor>
+        </Suspense>
+      </Canvas>
+
+      <SceneLoader />
+      <CameraToggle isActive={isActive} onToggle={toggle} />
+      <LiveTextTile />
+      <OracleWidget />
+      <OracleSidebar />
+      <ProjectPickerTrigger />
+      <ProjectPicker />
+    </>
+  );
+};
 
 function ProjectPickerTrigger() {
   const [pickerOpen, setPickerOpen] = useAtom(pickerOpenAtom);
@@ -67,39 +104,3 @@ function CameraToggle({ isActive, onToggle }) {
     </button>
   );
 }
-
-export const App = () => {
-  const captureRef = useRef(null);
-  const { videoRef, isActive, toggle } = useCamera();
-
-  return (
-    <>
-      <Canvas
-        gl={{ preserveDrawingBuffer: true }}
-        shadows
-        camera={{ position: [2, 0.2, 5], fov: 65 }}
-        style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh" }}
-      >
-        <Suspense fallback={null}>
-          {/* <StatsGl />
-
-          <PerformanceMonitor> */}
-            <Scene
-              captureRef={captureRef}
-              videoRef={videoRef}
-              isActive={isActive}
-            />
-          {/* </PerformanceMonitor> */}
-        </Suspense>
-      </Canvas>
-
-      <SceneLoader />
-      <CameraToggle isActive={isActive} onToggle={toggle} />
-      <LiveTextTile />
-      <OracleWidget />
-      <OracleSidebar />
-      <ProjectPickerTrigger />
-      <ProjectPicker />
-    </>
-  );
-};
