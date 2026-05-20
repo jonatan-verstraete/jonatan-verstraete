@@ -18,13 +18,6 @@ Stack: Vite + React + R3F + @tanstack/react-query + jotai + framer-motion + tail
 
 ---
 
-## Completed
-
-- **Stage 1 — Three.js Optimization** ✅ — KTX2/Draco pipeline, WebGPU, tree-shaking, white fade on load
-- **Stage 2 — URL Params & State** ✅ — `?user=` synced to jotai, no router
-
----
-
 ## Stage 3 — Oracle Intelligence
 
 Backend-first features that give the oracle memory, presence, and persona. These share backend infrastructure and should land together.
