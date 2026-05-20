@@ -15,6 +15,7 @@ import { FlameLight } from "./Wall/FlameLight";
 import { ProjectedSurface } from "./ProjectedSurface";
 import { SCENE_CONFIG as C } from "./config";
 import { Wall } from "./Wall/Wall";
+import { DepthEchoOverlay } from "./Wall/DepthEchoOverlay";
 import { Ground } from "./Ground/Ground";
 import { useFrame } from "@react-three/fiber";
 import { devLog } from "../utils";
@@ -160,6 +161,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
       }),
     [],
   );
+
   useEffect(() => () => projTarget.dispose(), [projTarget]);
 
   useEffect(() => {
@@ -169,9 +171,6 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
     spot.target = tgt;
     tgt.updateMatrixWorld();
   }, []);
-
-  const lightPos = [lightX, lightY, lightZ];
-  const sunPos = [sunX, sunY, sunZ];
 
   return (
     <>
@@ -185,7 +184,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
 
       <spotLight
         ref={spotRef}
-        position={lightPos}
+        position={[lightX, lightY, lightZ]}
         intensity={lightIntensity}
         angle={lightAngle}
         penumbra={lightPenumbra}
@@ -196,23 +195,16 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
       />
       <OrbitControls />
 
-      <pointLight
-        position={sunPos}
-        intensity={fireIntensity}
-        color="#ff6a00"
-        distance={8}
-        decay={2}
-        castShadow
-        shadow-mapSize={[512, 512]}
-      />
       <FlameLight
-        position={sunPos}
+        position={[sunX, sunY, sunZ]}
         intensity={flameIntensity}
         angle={flameAngle}
         penumbra={flamePenumbra}
+        fireIntensity={fireIntensity}
       />
 
       <Wall {...{ wallX, wallY, wallZ, wallScale, wallRotX }} />
+      <DepthEchoOverlay spotRef={spotRef} accumRef={surfaceAccumRef} />
 
       <Ground />
 

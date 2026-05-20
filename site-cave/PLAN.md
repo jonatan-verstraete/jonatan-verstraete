@@ -76,7 +76,7 @@ This is the same coordinate system Three.js uses internally to project the gobo 
 
 ---
 
-### Stage 3a — Static echo (no parallax)
+### Stage 3a — Static echo (no parallax) ✅
 
 **Goal:** overlay mesh on wall shows faint echo of the live gobo/shadow at zero offset. No camera movement needed yet.
 

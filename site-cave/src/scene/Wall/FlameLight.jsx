@@ -93,7 +93,13 @@ function makeNoiseTex(size = 256) {
   return tex;
 }
 
-export function FlameLight({ position, intensity, angle, penumbra = 0.65 }) {
+export function FlameLight({
+  position,
+  intensity,
+  angle,
+  penumbra = 0.65,
+  fireIntensity,
+}) {
   const spotRef = useRef();
   const targetRef = useRef();
 
@@ -179,6 +185,16 @@ export function FlameLight({ position, intensity, angle, penumbra = 0.65 }) {
         color="#ff7c1a"
         distance={16}
         decay={2}
+      />
+
+      <pointLight
+        position={position}
+        intensity={fireIntensity}
+        color="#ff6a00"
+        distance={8}
+        decay={2}
+        castShadow
+        shadow-mapSize={[512, 512]}
       />
     </>
   );
