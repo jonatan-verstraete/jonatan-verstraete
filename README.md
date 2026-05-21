@@ -12,11 +12,11 @@
 - Conversion of Vue 2 to React as part of a migration using Module Federation (team effort).
 - Built real time (NRL) projection of 3D annotations into 2D space for the browser based BIM viewer using React and CSS transforms across both 2D and 3D repos with shared functionality.
 - Strategic support cross teams, eg. implementing form-validation, popover to Bricsys internal component library
-- Daily tasks included: feature design, releasing (Azure), cross team feature/bug ideation, writing documentation, component performance measuring, i18n
+- Daily tasks included: feature design, releasing (Azure), cross team feature/bug ideation, writing documentation, component performance measuring, i18n... etc
 
 <br/>
 
-**Podcast Tooling & Production** @BLANC.zone (Jan 2022 - present)
+**Podcast Tooling & Production** @BLANC.zone (Jan 2022)
 - Maintained website, social media and handled editing workflows.
 - Explored AI-assisted automation (transcription, summarization) to reduce manual editing effort.
 
@@ -32,20 +32,15 @@
 ### Projects
 <table width="100%"><tr>
 <td width="50%" valign="top">
-  <a href="https://blanc.zone/pod/"><b>Podcast Tooling & Production</b></a>
-
-<p style="font-size: 0.85em; margin-top: 4px;">Maintained website, social media and handled editing workflows. Explored AI-assisted automation (transcription, summarization) to reduce manual editing effort.</p>
-</td>
-<td width="50%" valign="top">
   <a href="https://github.com/jayf0x/PIIPAYA/"><b>PIIPAYA</b></a>
 
 <p style="font-size: 0.85em; margin-top: 4px;">Offline Tauri/Python/Svelt PII reduction desktop app to anonymizes sensitive documents while keeping the narrative intact. So instead of NAME and DATE you get a narrative coherent James and 2nd August.</p>
-</td></tr><tr>
+</td>
 <td width="50%" valign="top">
   <a href="https://github.com/jayf0x/Pure-Paste"><b>Pure-Paste</b></a>
 
 <p style="font-size: 0.85em; margin-top: 4px;">macOS menu-bar tool that strips tracking parameters (utm_*, fbclid, etc.) from any copied URL by updating the clipboard periodically. Prevents being tracked while sharing shopping.</p>
-</td>
+</td></tr><tr>
 <td width="50%" valign="top">
   <b>Timesheet Automation</b>
 
@@ -57,7 +52,7 @@
 ### Tech Stack  <img src="./assets/clippy.gif" width="20px" />
 **Core:** React • TypeScript • JavaScript (ESNext) • HTML • CSS/SCSS/Tailwind
 
-**Libraries & Tools:** NodeJS • TanStack (Query, Form, Router, Table...) • Zustand • Canvas API • Claude Code • Python • Vite • Playwright/Cypress • Ollama • WhisperX/FastWhisper • Bash • Vue 2 • PHP • Adobe Suite • Three.js • p5.js • Keycloakify • vMLX • Blender • Svelte • Tauri • Logic Pro x
+**Libraries & Tools:** NodeJS • TanStack (Query, Form, Router, Table...) • Zustand • Canvas API • Claude Code • Python • Vite • Playwright/Cypress • Storybook • Ollama • Bash • Vue 2 • PHP • Adobe Suite • Three.js • p5.js • Keycloakify • vMLX • Blender • Svelte • Tauri • Logic Pro x • WhisperX/FastWhisper
 
 ---
 <p align="center">

@@ -7,7 +7,7 @@ export PYTHONPATH="$SCRIPT_DIR/gen:$PYTHONPATH"
 if [[ ./assets/resume.html -nt ./README.md ]]; then
     if ! ollama list > /dev/null; then
         ollama serve &
-        sleep 1
+        # sleep 2s
     fi
     python3 -m gen --no-cache
 else
