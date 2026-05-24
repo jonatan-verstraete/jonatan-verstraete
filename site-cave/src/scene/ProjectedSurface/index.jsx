@@ -1,22 +1,22 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { createPortal, useFrame } from "@react-three/fiber";
+import { folder, useControls } from "leva";
 import {
-  WebGLRenderTarget,
-  LinearFilter,
-  Scene,
   Color,
+  LinearFilter,
+  Mesh,
   OrthographicCamera,
   PlaneGeometry,
-  Mesh,
+  Scene,
   ShaderMaterial,
+  WebGLRenderTarget,
 } from "three";
-import { useControls, folder } from "leva";
-import { Video } from "./Video";
-import { ProjectText } from "./ProjectText";
-import { VideoCam } from "./VideoCam";
 import { useDisposableItems } from "@/hooks/useDisposableItems";
 import { SCENE_CONFIG as C } from "@/scene/config";
 import { devLog } from "@/utils";
+import { ProjectText } from "./ProjectText";
+import { Video } from "./Video";
+import { VideoCam } from "./VideoCam";
 
 const VERT = `
 varying vec2 vUv;
@@ -176,7 +176,7 @@ export function ProjectedSurface({ videoRef, isActive, surfaceRef }) {
       }),
     };
   });
-  
+
   // ── Sync leva uniforms ──
   useEffect(() => {
     const p = pass.current;

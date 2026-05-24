@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useAtom } from "jotai";
-import Draggable from "react-draggable";
 import { Eye } from "lucide-react";
+import Draggable from "react-draggable";
 import { sidebarOpenAtom } from "../store/cave";
 
 export const OracleWidget = () => {
@@ -12,8 +12,12 @@ export const OracleWidget = () => {
   return (
     <Draggable
       nodeRef={nodeRef}
-      onStart={() => { draggedRef.current = false; }}
-      onDrag={() => { draggedRef.current = true; }}
+      onStart={() => {
+        draggedRef.current = false;
+      }}
+      onDrag={() => {
+        draggedRef.current = true;
+      }}
     >
       <div
         ref={nodeRef}
@@ -23,14 +27,18 @@ export const OracleWidget = () => {
         {/* Barely-there rotating halo ring */}
         <div className="oracle-halo inline-flex rounded-full p-[1px]">
           <button
-            onClick={() => { if (!draggedRef.current) setOpen((v) => !v); }}
+            onClick={() => {
+              if (!draggedRef.current) setOpen((v) => !v);
+            }}
             title={open ? "Close oracle" : "Open oracle"}
             className={[
-              "relative h-10 w-10 rounded-full cursor-pointer",
-              "flex items-center justify-center outline-none border-0",
+              "relative h-10 w-10 cursor-pointer rounded-full",
+              "flex items-center justify-center border-0 outline-none",
               "backdrop-blur-low",
               "transition-colors duration-500",
-              open ? "bg-primary-muted text-primary" : "bg-overlay-high text-ink-muted",
+              open
+                ? "bg-primary-muted text-primary"
+                : "bg-overlay-high text-ink-muted",
             ].join(" ")}
             style={{
               animation: open

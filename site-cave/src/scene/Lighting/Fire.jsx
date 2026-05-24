@@ -1,18 +1,18 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useControls, folder } from "leva";
+import { folder, useControls } from "leva";
 import {
+  Color,
   DataTexture,
+  LinearFilter,
+  Mesh,
+  OrthographicCamera,
+  PlaneGeometry,
   RGBAFormat,
   RepeatWrapping,
-  WebGLRenderTarget,
-  LinearFilter,
   Scene,
-  Color,
-  OrthographicCamera,
   ShaderMaterial,
-  PlaneGeometry,
-  Mesh,
+  WebGLRenderTarget,
 } from "three";
 import { SCENE_CONFIG as C } from "../config";
 
@@ -95,18 +95,25 @@ function makeNoiseTex(size = 256) {
 }
 
 export function Fire() {
-  const { sunX, sunY, sunZ, fireIntensity, flameIntensity, flameAngle, flamePenumbra } =
-    useControls({
-      Fire: folder({
-        sunX: { value: C.sunX, min: -5, max: 5, step: 0.01 },
-        sunY: { value: C.sunY, min: -5, max: 5, step: 0.01 },
-        sunZ: { value: C.sunZ, min: -5, max: 5, step: 0.01 },
-        fireIntensity: { value: C.fireIntensity, min: 0, max: 40, step: 0.5 },
-        flameIntensity: { value: C.flameIntensity, min: 0, max: 60, step: 0.5 },
-        flameAngle: { value: C.flameAngle, min: 0.05, max: 1.4, step: 0.01 },
-        flamePenumbra: { value: C.flamePenumbra, min: 0, max: 1, step: 0.01 },
-      }),
-    });
+  const {
+    sunX,
+    sunY,
+    sunZ,
+    fireIntensity,
+    flameIntensity,
+    flameAngle,
+    flamePenumbra,
+  } = useControls({
+    Fire: folder({
+      sunX: { value: C.sunX, min: -5, max: 5, step: 0.01 },
+      sunY: { value: C.sunY, min: -5, max: 5, step: 0.01 },
+      sunZ: { value: C.sunZ, min: -5, max: 5, step: 0.01 },
+      fireIntensity: { value: C.fireIntensity, min: 0, max: 40, step: 0.5 },
+      flameIntensity: { value: C.flameIntensity, min: 0, max: 60, step: 0.5 },
+      flameAngle: { value: C.flameAngle, min: 0.05, max: 1.4, step: 0.01 },
+      flamePenumbra: { value: C.flamePenumbra, min: 0, max: 1, step: 0.01 },
+    }),
+  });
 
   const spotRef = useRef();
   const targetRef = useRef();

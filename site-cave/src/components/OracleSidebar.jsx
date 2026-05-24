@@ -1,10 +1,24 @@
-import { useRef, useEffect, useMemo } from "react";
-import { useAtom, useAtomValue } from "jotai";
+import { useEffect, useMemo, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Trash2, EyeOff, Share2, Cpu, Folder, SlidersHorizontal, Clock, Minimize2 } from "lucide-react";
-import { historyAtom, sidebarOpenAtom, selectedProjectAtom } from "../store/cave";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  Clock,
+  Cpu,
+  EyeOff,
+  Folder,
+  Minimize2,
+  Share2,
+  SlidersHorizontal,
+  Trash2,
+  X,
+} from "lucide-react";
+import { clearAllSizes, useFloatResize } from "../hooks/useFloatResize";
+import {
+  historyAtom,
+  selectedProjectAtom,
+  sidebarOpenAtom,
+} from "../store/cave";
 import { ProjectSearch } from "./ProjectSearch";
-import { useFloatResize, clearAllSizes } from "../hooks/useFloatResize";
 
 const formatTime = (ts) => {
   const d = new Date(ts);
@@ -18,18 +32,20 @@ const formatTime = (ts) => {
 
 /** Hairline divider */
 const Divider = ({ className = "" }) => (
-  <div className={`mx-5 h-px bg-white-dim ${className}`} />
+  <div className={`bg-white-dim mx-5 h-px ${className}`} />
 );
 
 /** Icon + label section header with generous spacing */
 const SectionHeader = ({ icon, children, aside }) => (
   <div className="flex items-center gap-2 px-5 pt-5 pb-2">
     <span className="text-ink-ghost/40 shrink-0">{icon}</span>
-    <span className="text-micro tracking-ultra text-ink-ghost/60 font-mono uppercase flex-1">
+    <span className="text-micro tracking-ultra text-ink-ghost/60 flex-1 font-mono uppercase">
       {children}
     </span>
     {aside && (
-      <span className="text-micro font-mono text-secondary/50 tracking-fine">{aside}</span>
+      <span className="text-micro text-secondary/50 tracking-fine font-mono">
+        {aside}
+      </span>
     )}
   </div>
 );
@@ -41,7 +57,9 @@ const HistoryRow = ({ entry }) => {
   );
 
   useEffect(() => {
-    return () => { if (url) URL.revokeObjectURL(url); };
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
   }, [url]);
 
   return (
@@ -52,14 +70,18 @@ const HistoryRow = ({ entry }) => {
       className="flex gap-3 px-5 py-3"
     >
       {/* Thumbnail */}
-      <div className="h-[38px] w-[38px] shrink-0 overflow-hidden rounded-lg bg-white-ghost border border-white-dim">
+      <div className="bg-white-ghost border-white-dim h-[38px] w-[38px] shrink-0 overflow-hidden rounded-lg border">
         {url && (
-          <img src={url} alt="" className="h-full w-full object-cover opacity-80" />
+          <img
+            src={url}
+            alt=""
+            className="h-full w-full object-cover opacity-80"
+          />
         )}
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="text-ink-ghost/50 tracking-loose mb-[3px] font-mono text-micro">
+        <div className="text-ink-ghost/50 tracking-loose text-micro mb-[3px] font-mono">
           {formatTime(entry.timestamp)}
         </div>
         <div className="text-ink/55 tracking-fine line-clamp-3 text-xs leading-[1.65]">
@@ -107,29 +129,34 @@ export const OracleSidebar = () => {
           initial={{ x: "-100%", opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: "-100%", opacity: 0 }}
-          transition={{ type: "spring", stiffness: 320, damping: 38, mass: 0.9 }}
+          transition={{
+            type: "spring",
+            stiffness: 320,
+            damping: 38,
+            mass: 0.9,
+          }}
           style={{ width: size.width }}
-          className="z-sidebar bg-overlay-mid shadow-sidebar fixed inset-y-0 left-0 flex h-screen flex-col overflow-hidden backdrop-blur-high backdrop-saturate-[160%]"
+          className="z-sidebar bg-overlay-mid shadow-sidebar backdrop-blur-high fixed inset-y-0 left-0 flex h-screen flex-col overflow-hidden backdrop-saturate-[160%]"
         >
           {/* Right-edge resize handle */}
           <div
             onMouseDown={(e) => startResize(e, { e: true })}
-            className="absolute inset-y-0 right-0 w-[5px] cursor-ew-resize z-10 group"
+            className="group absolute inset-y-0 right-0 z-10 w-[5px] cursor-ew-resize"
           >
-            <div className="absolute inset-y-0 right-0 w-px bg-white-dim opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+            <div className="bg-white-dim absolute inset-y-0 right-0 w-px opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
           </div>
 
           {/* ── Header ── */}
           <div className="relative flex shrink-0 items-center justify-between px-5 pt-5 pb-4">
             <div className="flex items-center gap-2.5">
-              <span className="oracle-live-dot inline-block h-[4px] w-[4px] shrink-0 rounded-full bg-secondary" />
-              <span className="tracking-ultra text-ink-ghost/70 font-mono text-micro uppercase">
+              <span className="oracle-live-dot bg-secondary inline-block h-[4px] w-[4px] shrink-0 rounded-full" />
+              <span className="tracking-ultra text-ink-ghost/70 text-micro font-mono uppercase">
                 Oracle
               </span>
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="text-ink-ghost/50 hover:text-ink-muted flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent transition-colors duration-150 outline-none hover:bg-white-dim"
+              className="text-ink-ghost/50 hover:text-ink-muted hover:bg-white-dim flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent transition-colors duration-150 outline-none"
             >
               <X size={13} strokeWidth={1.5} />
             </button>
@@ -138,10 +165,15 @@ export const OracleSidebar = () => {
           <Divider />
 
           {/* ── AI Status ── */}
-          <div className="shrink-0 flex items-center gap-3 px-5 py-4">
+          <div className="flex shrink-0 items-center gap-3 px-5 py-4">
             <Cpu size={12} className="text-ink-ghost/35 shrink-0" />
-            <span className="text-label font-mono text-ink-ghost/55 tracking-loose">idle</span>
-            <span className="text-micro font-mono text-ink-ghost/20 ml-auto tracking-fine" title="Live polling in Stage 9b">
+            <span className="text-label text-ink-ghost/55 tracking-loose font-mono">
+              idle
+            </span>
+            <span
+              className="text-micro text-ink-ghost/20 tracking-fine ml-auto font-mono"
+              title="Live polling in Stage 9b"
+            >
               stage 9b
             </span>
           </div>
@@ -149,10 +181,7 @@ export const OracleSidebar = () => {
           <Divider />
 
           {/* ── Project ── */}
-          <SectionHeader
-            icon={<Folder size={11} />}
-            aside={selected?.name}
-          >
+          <SectionHeader icon={<Folder size={11} />} aside={selected?.name}>
             Project
           </SectionHeader>
 
@@ -167,14 +196,14 @@ export const OracleSidebar = () => {
             Controls
           </SectionHeader>
 
-          <div className="shrink-0 flex flex-wrap gap-2 px-5 pb-4">
+          <div className="flex shrink-0 flex-wrap gap-2 px-5 pb-4">
             <ControlButton icon={<Trash2 size={10} />} label="Clear" />
             <ControlButton icon={<EyeOff size={10} />} label="Disable" />
             <ControlButton icon={<Share2 size={10} />} label="Share" />
             <button
               onClick={clearAllSizes}
               title="Reset all panel sizes to defaults"
-              className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-white-dim bg-white-ghost px-3 py-2 font-mono text-micro tracking-fine text-ink-ghost/50 transition-colors hover:border-secondary/30 hover:text-secondary/70"
+              className="border-white-dim bg-white-ghost text-micro tracking-fine text-ink-ghost/50 hover:border-secondary/30 hover:text-secondary/70 flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-2 font-mono transition-colors"
             >
               <Minimize2 size={10} />
               Clear Sizes
@@ -191,13 +220,13 @@ export const OracleSidebar = () => {
             Memory
           </SectionHeader>
 
-          <div className="oracle-scroll flex-1 min-h-0 overflow-y-auto">
+          <div className="oracle-scroll min-h-0 flex-1 overflow-y-auto">
             {reversed.length === 0 ? (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="text-ink-ghost/40 px-5 py-6 text-xs leading-[1.8] italic tracking-fine"
+                className="text-ink-ghost/40 tracking-fine px-5 py-6 text-xs leading-[1.8] italic"
               >
                 The cave has not yet spoken.
               </motion.p>
@@ -209,7 +238,7 @@ export const OracleSidebar = () => {
           </div>
 
           {/* Bottom edge line */}
-          <div className="h-px shrink-0 bg-white-ghost" />
+          <div className="bg-white-ghost h-px shrink-0" />
         </motion.div>
       )}
     </AnimatePresence>
@@ -221,7 +250,7 @@ function ControlButton({ icon, label }) {
     <button
       disabled
       title="Coming in Stage 9d"
-      className="flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-white-dim bg-white-ghost px-3 py-2 font-mono text-micro tracking-fine text-ink-ghost/30 transition-opacity"
+      className="border-white-dim bg-white-ghost text-micro tracking-fine text-ink-ghost/30 flex cursor-not-allowed items-center gap-1.5 rounded-lg border px-3 py-2 font-mono transition-opacity"
     >
       {icon}
       {label}

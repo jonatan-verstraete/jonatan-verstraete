@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const LS_KEYS = {
   sidebar: "cave-resize-sidebar",
@@ -56,8 +56,12 @@ export function useFloatResize(key, defaults, constraints) {
     (e, edges) => {
       e.preventDefault();
       e.stopPropagation();
-      const { minW = 100, maxW = 1000, minH = 60, maxH = 800 } =
-        constraintsRef.current ?? {};
+      const {
+        minW = 100,
+        maxW = 1000,
+        minH = 60,
+        maxH = 800,
+      } = constraintsRef.current ?? {};
       const sx = e.clientX,
         sy = e.clientY;
       const snap = { ...sizeRef.current };
@@ -99,12 +103,52 @@ export function useFloatResize(key, defaults, constraints) {
 
 /** Standard handle descriptors for all-4-sides resize */
 export const RESIZE_HANDLES = [
-  { id: "n",  cursor: "ns-resize",   pos: { top: 0, left: 8, right: 8, height: 6 },          edges: { n: true } },
-  { id: "s",  cursor: "ns-resize",   pos: { bottom: 0, left: 8, right: 8, height: 6 },        edges: { s: true } },
-  { id: "e",  cursor: "ew-resize",   pos: { right: 0, top: 8, bottom: 8, width: 6 },          edges: { e: true } },
-  { id: "w",  cursor: "ew-resize",   pos: { left: 0, top: 8, bottom: 8, width: 6 },           edges: { w: true } },
-  { id: "nw", cursor: "nwse-resize", pos: { top: 0, left: 0, width: 10, height: 10 },         edges: { n: true, w: true } },
-  { id: "ne", cursor: "nesw-resize", pos: { top: 0, right: 0, width: 10, height: 10 },        edges: { n: true, e: true } },
-  { id: "sw", cursor: "nesw-resize", pos: { bottom: 0, left: 0, width: 10, height: 10 },      edges: { s: true, w: true } },
-  { id: "se", cursor: "nwse-resize", pos: { bottom: 0, right: 0, width: 10, height: 10 },     edges: { s: true, e: true } },
+  {
+    id: "n",
+    cursor: "ns-resize",
+    pos: { top: 0, left: 8, right: 8, height: 6 },
+    edges: { n: true },
+  },
+  {
+    id: "s",
+    cursor: "ns-resize",
+    pos: { bottom: 0, left: 8, right: 8, height: 6 },
+    edges: { s: true },
+  },
+  {
+    id: "e",
+    cursor: "ew-resize",
+    pos: { right: 0, top: 8, bottom: 8, width: 6 },
+    edges: { e: true },
+  },
+  {
+    id: "w",
+    cursor: "ew-resize",
+    pos: { left: 0, top: 8, bottom: 8, width: 6 },
+    edges: { w: true },
+  },
+  {
+    id: "nw",
+    cursor: "nwse-resize",
+    pos: { top: 0, left: 0, width: 10, height: 10 },
+    edges: { n: true, w: true },
+  },
+  {
+    id: "ne",
+    cursor: "nesw-resize",
+    pos: { top: 0, right: 0, width: 10, height: 10 },
+    edges: { n: true, e: true },
+  },
+  {
+    id: "sw",
+    cursor: "nesw-resize",
+    pos: { bottom: 0, left: 0, width: 10, height: 10 },
+    edges: { s: true, w: true },
+  },
+  {
+    id: "se",
+    cursor: "nwse-resize",
+    pos: { bottom: 0, right: 0, width: 10, height: 10 },
+    edges: { s: true, e: true },
+  },
 ];

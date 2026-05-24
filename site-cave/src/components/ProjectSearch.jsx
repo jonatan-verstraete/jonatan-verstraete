@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from "react";
-import { Search, FolderOpen, X } from "lucide-react";
-import { useAtom } from "jotai";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { selectedProjectAtom, githubUserAtom } from "../store/cave";
+import { useAtom } from "jotai";
+import { FolderOpen, Search, X } from "lucide-react";
+import { githubUserAtom, selectedProjectAtom } from "../store/cave";
 
-const DEFAULT_USER = "jayf0x"
-
+const DEFAULT_USER = "jayf0x";
 
 async function fetchProjects(user) {
   if (!user) return [];
@@ -104,7 +103,15 @@ export function ProjectSearch({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [hasFocus, autoFocus, filtered, activeIdx, setSelected, onSelect, onClose]);
+  }, [
+    hasFocus,
+    autoFocus,
+    filtered,
+    activeIdx,
+    setSelected,
+    onSelect,
+    onClose,
+  ]);
 
   useEffect(() => {
     listRef.current?.children[activeIdx]?.scrollIntoView({ block: "nearest" });
@@ -128,12 +135,12 @@ export function ProjectSearch({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search projects…"
-          className="text-label flex-1 border-0 bg-transparent font-mono tracking-fine text-ink/65 placeholder:text-ink-ghost/40 outline-none"
+          className="text-label tracking-fine text-ink/65 placeholder:text-ink-ghost/40 flex-1 border-0 bg-transparent font-mono outline-none"
         />
         {query && (
           <button
             onClick={() => setQuery("")}
-            className="text-ink-ghost/40 flex cursor-pointer border-0 bg-transparent p-0 transition-colors hover:text-ink-ghost"
+            className="text-ink-ghost/40 hover:text-ink-ghost flex cursor-pointer border-0 bg-transparent p-0 transition-colors"
           >
             <X size={11} />
           </button>
@@ -141,7 +148,7 @@ export function ProjectSearch({
       </div>
 
       {/* Hairline between input and results */}
-      <div className="mx-4 h-px bg-white-dim" />
+      <div className="bg-white-dim mx-4 h-px" />
 
       {/* Results list */}
       <div
@@ -186,31 +193,43 @@ function ProjectRow({ project, active, selected, onHover, onClick }) {
     >
       {/* Active indicator */}
       {active && (
-        <div className={[
-          "absolute top-2 bottom-2 left-0 w-[2px] rounded-[1px]",
-          selected ? "bg-secondary" : "bg-primary/60",
-        ].join(" ")} />
+        <div
+          className={[
+            "absolute top-2 bottom-2 left-0 w-[2px] rounded-[1px]",
+            selected ? "bg-secondary" : "bg-primary/60",
+          ].join(" ")}
+        />
       )}
 
       <FolderOpen
         size={11}
         className={[
           "shrink-0",
-          selected ? "text-secondary/70" : active ? "text-ink-muted" : "text-ink-ghost/35",
+          selected
+            ? "text-secondary/70"
+            : active
+              ? "text-ink-muted"
+              : "text-ink-ghost/35",
         ].join(" ")}
       />
 
       <div className="min-w-0 flex-1">
-        <div className={[
-          "text-label font-mono truncate",
-          selected ? "text-secondary/80" : active ? "text-ink/80" : "text-ink/55",
-        ].join(" ")}>
+        <div
+          className={[
+            "text-label truncate font-mono",
+            selected
+              ? "text-secondary/80"
+              : active
+                ? "text-ink/80"
+                : "text-ink/55",
+          ].join(" ")}
+        >
           {project.name}
         </div>
       </div>
 
       {project.language && (
-        <span className="shrink-0 font-mono text-micro text-ink-ghost/30">
+        <span className="text-micro text-ink-ghost/30 shrink-0 font-mono">
           {project.language}
         </span>
       )}

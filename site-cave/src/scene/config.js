@@ -1,11 +1,11 @@
 export const SCENE_CONFIG = {
   // Projector spotlight
-  lightX: 1.15,
-  lightY: -4.00,
-  lightZ: 5.00,
-  lightIntensity: 500,
-  lightAngle: 0.22,
-  lightPenumbra: 0.23,
+  lightX: 0.4,
+  lightY: -0.7,
+  lightZ: 1.21,
+  lightIntensity: 50,
+  lightAngle: 0.42,
+  lightPenumbra: 0.24,
 
   // Wall GLB
   wallX: -1.22,
@@ -15,8 +15,8 @@ export const SCENE_CONFIG = {
   wallRotX: 0.29,
 
   // Atmosphere
-  ambientIntensity: 0.00,
-  dustOpacity: 0.00,
+  ambientIntensity: 0.0,
+  dustOpacity: 0.0,
   fogColor: "#000000",
   fogDensity: 0.15,
 
@@ -28,8 +28,8 @@ export const SCENE_CONFIG = {
 
   // Flame spotlight (flame-shader gobo)
   flameIntensity: 60.0,
-  flameAngle: 1.40,
-  flamePenumbra: 0.00,
+  flameAngle: 1.4,
+  flamePenumbra: 0.0,
 
   // Shadow quality
   shadowThreshold: 0.36,
@@ -43,4 +43,12 @@ export const SCENE_CONFIG = {
 
   // Gobo contrast boost (> 1 punches lights/darks for more visible projection)
   goboContrast: 1.05,
+
+  cameraX: 0.5,
+  cameraY: -0.4,
+  cameraZ: 1.0,
+
+  cameraRotX: 0.5,
+  cameraRotY: -0.4,
+  cameraRotZ: 1.0,
 };

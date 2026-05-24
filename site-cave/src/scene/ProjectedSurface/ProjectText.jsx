@@ -1,8 +1,8 @@
-import { useMemo, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { ShaderMaterial, AdditiveBlending, CanvasTexture } from "three";
-import { selectedProjectAtom } from "../../store/cave";
 import { useAtomValue } from "jotai";
+import { AdditiveBlending, CanvasTexture, ShaderMaterial } from "three";
+import { selectedProjectAtom } from "../../store/cave";
 
 const TRANSITION_DURATION = 0.55;
 

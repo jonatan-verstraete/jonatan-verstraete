@@ -1,5 +1,5 @@
-import { useEffect, useRef, useMemo } from "react";
-import { ShaderMaterial, VideoTexture, LinearFilter } from "three";
+import { useEffect, useMemo, useRef } from "react";
+import { LinearFilter, ShaderMaterial, VideoTexture } from "three";
 
 const vertexShader = `
 varying vec2 vUv;

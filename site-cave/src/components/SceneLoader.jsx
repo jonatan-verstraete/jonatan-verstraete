@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useProgress } from "@react-three/drei";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function SceneLoader() {
   const { active, progress } = useProgress();

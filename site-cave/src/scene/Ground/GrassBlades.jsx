@@ -1,6 +1,13 @@
-import { useRef, useMemo, useEffect } from "react";
-import { BufferGeometry, Float32BufferAttribute, MeshStandardMaterial, DoubleSide, Vector2, Color } from "three";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import {
+  BufferGeometry,
+  Color,
+  DoubleSide,
+  Float32BufferAttribute,
+  MeshStandardMaterial,
+  Vector2,
+} from "three";
 import { cpuVnoise } from "./noiseUtils";
 
 function buildBladeGeometry(segments = 8) {

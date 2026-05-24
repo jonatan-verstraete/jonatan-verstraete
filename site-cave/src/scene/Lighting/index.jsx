@@ -1,9 +1,9 @@
-import { Fire } from "./Fire";
-import { SCENE_CONFIG as C } from "@/scene/config.js";
-import { Sun } from "./Sun";
-import { useRef, useEffect } from "react";
-import { folder, useControls } from "leva";
+import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { folder, useControls } from "leva";
+import { SCENE_CONFIG as C } from "@/scene/config.js";
+import { Fire } from "./Fire";
+import { Sun } from "./Sun";
 
 export const Lighting = ({ surfaceRef }) => {
   const spotRef = useRef();

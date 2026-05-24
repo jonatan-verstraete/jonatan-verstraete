@@ -1,20 +1,25 @@
-import { useRef, Suspense } from "react";
+import { Suspense, useRef } from "react";
+import { PerformanceMonitor, StatsGl, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useAtom, useAtomValue } from "jotai";
 import { Layers, Video, VideoOff } from "lucide-react";
-import { useCamera } from "./hooks/useCamera";
-import { Scene } from "./scene";
-import { OracleWidget } from "./components/OracleWidget";
-import { OracleSidebar } from "./components/OracleSidebar";
-import { LiveTextTile } from "./components/LiveTextTile";
-import { ProjectPicker } from "./components/ProjectPicker";
-import { SceneLoader } from "./components/SceneLoader";
+import { LiveTextTile } from "@/components/LiveTextTile";
+import { OracleSidebar } from "@/components/OracleSidebar";
+import { OracleWidget } from "@/components/OracleWidget";
+import { ProjectPicker } from "@/components/ProjectPicker";
+import { SceneLoader } from "@/components/SceneLoader";
+import { useCamera } from "@/hooks/useCamera";
+import { Scene } from "@/scene";
 import { pickerOpenAtom, selectedProjectAtom } from "./store/cave";
-
-import { PerformanceMonitor, StatsGl, useGLTF } from "@react-three/drei";
 
 // Configure local Draco decoder (avoids CDN dependency)
 useGLTF.setDecoderPath("/draco/");
+
+const cameraArgs = {
+  position: [0.4656758094947514, -0.3863831343078484, 1.0565297821385193],
+  rotation: [0.35060093165446576, 0.3924713568462487, -0.13897243777020846],
+  fov: 65,
+};
 
 export const App = () => {
   const captureRef = useRef(null);
@@ -25,7 +30,7 @@ export const App = () => {
       <Canvas
         gl={{ preserveDrawingBuffer: true }}
         shadows
-        camera={{ position: [2, 0.2, 5], fov: 65 }}
+        camera={cameraArgs}
         style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh" }}
       >
         <Suspense fallback={null}>

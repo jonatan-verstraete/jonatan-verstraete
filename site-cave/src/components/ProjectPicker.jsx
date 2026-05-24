@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAtom, useSetAtom } from "jotai";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Search, Terminal, FolderOpen, X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useAtom, useSetAtom } from "jotai";
+import { FolderOpen, Search, Terminal, X } from "lucide-react";
+import { ACTIVE_COMMANDS } from "../data/commands";
+import { useDebounce } from "../hooks/useDebounce";
 import {
+  githubUserAtom,
   pickerOpenAtom,
   selectedProjectAtom,
   sidebarOpenAtom,
-  githubUserAtom,
 } from "../store/cave";
-import { ACTIVE_COMMANDS } from "../data/commands";
-import { useDebounce } from "../hooks/useDebounce";
 
 async function fetchProjects(user) {
   if (!user) return [];

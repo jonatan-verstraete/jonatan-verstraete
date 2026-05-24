@@ -1,6 +1,6 @@
-import { useRef, useMemo, useEffect } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Object3D, Color } from "three";
+import { Color, Object3D } from "three";
 
 const COUNT = 250;
 

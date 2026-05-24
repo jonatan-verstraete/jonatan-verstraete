@@ -1,6 +1,6 @@
-import { SoilFloor } from "./SoilFloor";
 import { GrassBlades } from "./GrassBlades";
 import { GrassShrubs } from "./GrassShrubs";
+import { SoilFloor } from "./SoilFloor";
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Ground — composes floor surfaces. Each surface is plug-and-play:

@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
-import { Object3D, InstancedMesh, MathUtils } from "three";
+import { useEffect, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
+import { InstancedMesh, MathUtils, Object3D } from "three";
 import { cpuVnoise } from "./noiseUtils";
 
 export function GrassShrubs({
@@ -23,11 +23,7 @@ export function GrassShrubs({
     gltfScene.traverse((obj) => {
       if (!obj.isMesh) return;
 
-      const instanced = new InstancedMesh(
-        obj.geometry,
-        obj.material,
-        count,
-      );
+      const instanced = new InstancedMesh(obj.geometry, obj.material, count);
       instanced.castShadow = true;
       instanced.receiveShadow = true;
       instanced.frustumCulled = false;
