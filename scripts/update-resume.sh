@@ -6,7 +6,9 @@ export PYTHONPATH="$SCRIPT_DIR/gen:$PYTHONPATH"
 # means the HTML was updated more recent than the README, so no cache.
 if [[ ./assets/resume.html -nt ./README.md ]]; then
     if ! ollama list > /dev/null; then
-        ollama serve &
+        echo "boot Ollama in separate terminal to be sure this works".
+        exit 1
+        # ollama serve &
         # sleep 2s
     fi
     python3 -m gen --no-cache

@@ -1,5 +1,5 @@
 from gen.config import HTML_PATH, CACHE_DIR, MODEL, GITHUB_USER
-from gen.html2readme import main as update_readme
+from gen.html2md import main as update_readme
 from gen.html2pdf import main as update_pdf
 from gen.projects import has_uncommented_projects, fetch_public_repos, pick_top_projects, build_working_html
 
