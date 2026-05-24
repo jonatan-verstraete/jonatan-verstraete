@@ -3,7 +3,13 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Comment
 from ollama import chat
 
-PICK_PROMPT = """You are a resume assistant. Given a list of GitHub repositories, pick the top 3 most impressive ones to highlight on a frontend/fullstack engineer resume.
+PICK_PROMPT = """You are a resume assistant. Given a list of GitHub repositories, pick the top 3 to highlight on a frontend/fullstack engineer resume.
+
+Prefer repositories that:
+- Show technical depth (complex rendering, algorithms, system design)
+- Are original tools/apps (not forks, boilerplate, or exercises)
+- Have a clear, non-trivial problem they solve
+- Are relevant to frontend, UI, or fullstack engineering
 
 Repositories:
 {repos_json}
