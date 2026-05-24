@@ -1,6 +1,6 @@
-import { GrassBlades } from "./GrassBlades";
-import { GrassShrubs } from "./GrassShrubs";
-import { SoilFloor } from "./SoilFloor";
+import { GrassBlades } from './GrassBlades';
+import { GrassShrubs } from './GrassShrubs';
+import { SoilFloor } from './SoilFloor';
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Ground — composes floor surfaces. Each surface is plug-and-play:
@@ -24,9 +24,9 @@ export function Ground({
   heightMax = 0.08,
   windStrength = 0.01,
   windDir = [1, 0.3],
-  colorRoot = "#0d1807",
-  colorMid = "#2e5917",
-  colorTip = "#76b833",
+  colorRoot = '#0d1807',
+  colorMid = '#2e5917',
+  colorTip = '#76b833',
 
   // shrub options (forwarded to GrassShrubs)
   shrubCount = 350,
@@ -35,11 +35,7 @@ export function Ground({
 }) {
   return (
     <group>
-      <SoilFloor
-        groundSize={groundSize}
-        groundY={groundY}
-        textureRepeat={textureRepeat}
-      />
+      <SoilFloor groundSize={groundSize} groundY={groundY} textureRepeat={textureRepeat} />
 
       {/* {enableGrass && (
         <GrassBlades

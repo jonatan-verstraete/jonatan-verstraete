@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef } from "react";
-import { LinearFilter, ShaderMaterial, VideoTexture } from "three";
+import { useEffect, useMemo, useRef } from 'react';
+import { LinearFilter, ShaderMaterial, VideoTexture } from 'three';
 
 const vertexShader = `
 varying vec2 vUv;
@@ -50,12 +50,12 @@ export const Video = () => {
   );
 
   useEffect(() => {
-    const vid = document.createElement("video");
-    vid.src = "/video.mp4";
+    const vid = document.createElement('video');
+    vid.src = '/video.mp4';
     vid.loop = true;
     vid.muted = true;
     vid.playsInline = true;
-    vid.crossOrigin = "anonymous";
+    vid.crossOrigin = 'anonymous';
 
     const tex = new VideoTexture(vid);
     tex.minFilter = LinearFilter;
@@ -64,13 +64,13 @@ export const Video = () => {
     const onPlaying = () => {
       if (meshRef.current) meshRef.current.visible = true;
     };
-    vid.addEventListener("playing", onPlaying);
+    vid.addEventListener('playing', onPlaying);
     vid.play().catch(console.error);
 
     return () => {
-      vid.removeEventListener("playing", onPlaying);
+      vid.removeEventListener('playing', onPlaying);
       vid.pause();
-      vid.src = "";
+      vid.src = '';
       tex.dispose();
       mat.uniforms.uMap.value = null;
     };

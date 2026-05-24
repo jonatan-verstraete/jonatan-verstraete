@@ -1,9 +1,9 @@
-import { memo, useEffect } from "react";
-import { useGLTF } from "@react-three/drei";
-import { folder, useControls } from "leva";
-import { SCENE_CONFIG as C } from "../config";
+import { memo, useEffect } from 'react';
+import { useGLTF } from '@react-three/drei';
+import { folder, useControls } from 'leva';
+import { SCENE_CONFIG as C } from '../config';
 
-const MODEL = "/models/wall.glb";
+const MODEL = '/models/wall.glb';
 
 useGLTF.preload(MODEL);
 
@@ -28,8 +28,7 @@ export const Wall = memo(() => {
         if (child.material) {
           child.material.depthTest = true;
           child.material.depthWrite = true;
-          if (child.material.normalScale)
-            child.material.normalScale.set(0.12, 0.12);
+          if (child.material.normalScale) child.material.normalScale.set(0.12, 0.12);
           if (child.material.roughness != null) child.material.roughness = 0.42;
         }
       }

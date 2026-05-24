@@ -10,19 +10,9 @@
   "arrowParens": "always",
   "endOfLine": "lf",
 
-  "importOrder": [
-    "^react$",
-    "^react/",
-    "^@?\\w",
-    "^@react-three/(.*)$",
-    "^@/(.*)$",
-    "^[./]"
-  ],
-  "importOrderSeparation": true,
+  "importOrder": ["^react$", "^react/", "^@?\\w", "^@react-three/(.*)$", "^@/(.*)$", "^[./]"],
+  "importOrderSeparation": false,
   "importOrderSortSpecifiers": true,
 
-  "plugins": [
-    "prettier-plugin-tailwindcss",
-    "@trivago/prettier-plugin-sort-imports"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"]
 }

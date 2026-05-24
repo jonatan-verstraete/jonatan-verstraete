@@ -1,5 +1,5 @@
-import { useGLTF, useTexture } from "@react-three/drei";
-import { LinearFilter, RepeatWrapping } from "three";
+import { useGLTF, useTexture } from '@react-three/drei';
+import { LinearFilter, RepeatWrapping } from 'three';
 
 /**
  * Load a GLB model with Draco support.

@@ -1,10 +1,5 @@
-import { useEffect, useMemo } from "react";
-import {
-  LinearFilter,
-  RepeatWrapping,
-  ShaderMaterial,
-  VideoTexture,
-} from "three";
+import { useEffect, useMemo } from 'react';
+import { LinearFilter, RepeatWrapping, ShaderMaterial, VideoTexture } from 'three';
 
 const vertexShader = `
 varying vec2 vUv;
@@ -90,12 +85,12 @@ export const VideoCam = ({ videoRef, isActive, threshold, softness }) => {
       };
     }
 
-    const vid = document.createElement("video");
-    vid.src = "/video.mp4";
+    const vid = document.createElement('video');
+    vid.src = '/video.mp4';
     vid.loop = true;
     vid.muted = true;
     vid.playsInline = true;
-    vid.crossOrigin = "anonymous";
+    vid.crossOrigin = 'anonymous';
     const tex = new VideoTexture(vid);
     tex.minFilter = LinearFilter;
     mat.uniforms.uVideo.value = tex;
@@ -104,7 +99,7 @@ export const VideoCam = ({ videoRef, isActive, threshold, softness }) => {
     return () => {
       tex.dispose();
       vid.pause();
-      vid.src = "";
+      vid.src = '';
       mat.uniforms.uVideo.value = null;
     };
   }, [isActive, videoRef, mat]);

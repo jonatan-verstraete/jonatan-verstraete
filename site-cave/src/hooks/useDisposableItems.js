@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export const useDisposableItems = (factory) => {
   const ref = useRef(factory());
@@ -7,7 +7,7 @@ export const useDisposableItems = (factory) => {
   useEffect(
     () => () => {
       const items = ref.current;
-      if (!items) return devLog("Nothing to cleanup..");
+      if (!items) return devLog('Nothing to cleanup..');
       for (const k in items) items[k]?.dispose?.();
       ref.current = null;
     },

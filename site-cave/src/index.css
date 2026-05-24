@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* ── Brand ── */
@@ -37,7 +37,7 @@
   --color-cave-social: rgba(244, 243, 236, 0.5);
 
   /* ── Typography ── */
-  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-mono: ui-monospace, Consolas, monospace;
 
   --text-micro: 0.625rem; /* 10px */
@@ -54,14 +54,10 @@
   --radius-xl: 0.875rem;
 
   /* ── Shadows — quieter than before ── */
-  --shadow-overlay:
-    0 12px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04);
-  --shadow-sidebar:
-    8px 0 40px rgba(0, 0, 0, 0.6), inset -1px 0 0 rgba(255, 255, 255, 0.03);
-  --shadow-inset:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-ring:
-    0 0 0 1px rgba(170, 59, 255, 0.35), 0 0 16px rgba(170, 59, 255, 0.18);
+  --shadow-overlay: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-sidebar: 8px 0 40px rgba(0, 0, 0, 0.6), inset -1px 0 0 rgba(255, 255, 255, 0.03);
+  --shadow-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-ring: 0 0 0 1px rgba(170, 59, 255, 0.35), 0 0 16px rgba(170, 59, 255, 0.18);
 
   /* ── Blur scale ── */
   --blur-low: 18px;
@@ -98,7 +94,7 @@ body {
 
 /* ── Subtle rotating halo — used only on the widget ── */
 @property --angle {
-  syntax: "<angle>";
+  syntax: '<angle>';
   inherits: false;
   initial-value: 0deg;
 }

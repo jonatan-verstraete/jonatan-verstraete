@@ -1,16 +1,15 @@
 from weasyprint import HTML
 from pathlib import Path
 
-html_file = Path("./assets/resume.html")
-pdf_file = Path("./assets/Jonatan-Verstraete-resume-2026.pdf")
+from gen.config import HTML_PATH, OUTPUT_PDF
 
 
-def main():
-    if html_file.exists():
-        HTML(filename=str(html_file)).write_pdf(str(pdf_file))
-        print('Created PDF.')
-    else:
-        raise SystemExit('No Readme to convert to PDF.')
+def main(html_path: Path = HTML_PATH):
+    if not html_path.exists():
+        raise SystemExit(f"No HTML file found at {html_path}")
+    HTML(filename=str(html_path)).write_pdf(str(OUTPUT_PDF))
+    print("Created PDF.")
+
 
 if __name__ == "__main__":
     main()

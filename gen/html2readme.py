@@ -4,19 +4,12 @@ from jinja2 import Template
 from pathlib import Path
 from bs4 import BeautifulSoup
 
+from gen.config import HTML_PATH, OUTPUT_MD, CACHE_DIR, TEMPLATE_PATH, MODEL
 
-MODEL = "qwen3.5:9b"
-
-root = Path(__file__).resolve().parent.parent
-HTML_PATH = root / "assets/resume.html"
-OUTPUT_MD = root / "README.md"
-CACHE_DIR = root / ".cache"
-TEMP_JSON = CACHE_DIR /  "resume-data.json"
-TEMPLATE_PATH = root / "gen/template.readme.j2"
-
+TEMP_JSON = CACHE_DIR / "resume-data.json"
 
 PROMPT = """
-Extract resume data from HTML into the following JSON format. 
+Extract resume data from HTML into the following JSON format.
 Be concise and accurate and keep original content.
 
 JSON Structure:
@@ -46,70 +39,62 @@ HTML:
 {html_content}
 """
 
-def get_clean_html():
-    if not HTML_PATH.exists():
-        raise FileNotFoundError(f"Oops. Missing {HTML_PATH}")
-    soup = BeautifulSoup(HTML_PATH.read_text(encoding="utf-8"), "html.parser")
-    
-    # make sure links are includes in text
+
+def get_clean_html(html_path: Path) -> str:
+    if not html_path.exists():
+        raise FileNotFoundError(f"Oops. Missing {html_path}")
+    soup = BeautifulSoup(html_path.read_text(encoding="utf-8"), "html.parser")
     for a in soup.find_all("a"):
         text = a.get_text(strip=True)
         href = a.get("href", "")
         a.replace_with(f"{text} ({href})")
-        
     return soup.find("body").get_text(strip=False)
 
-def main():
-    parser = argparse.ArgumentParser(description="Generate a fancy GitHub README from an HTML resume.")
 
-    parser.add_argument('--no-cache', action='store_false', dest='use_cache', help="Skip the cache and force LLM generation")
-    parser.add_argument('--model', type=str, default=MODEL, help=f"Ollama model to use (default: {MODEL})")
-    args = parser.parse_args()
-
-    data = {}
-    
+def main(html_path: Path = HTML_PATH, use_cache: bool = True, model: str = MODEL):
     if not TEMPLATE_PATH.exists():
         print(f"Oi.. template file is not there: {TEMPLATE_PATH}")
         return
 
-    if args.use_cache and TEMP_JSON.exists():
+    data = {}
+
+    if use_cache and TEMP_JSON.exists():
         try:
             data = json.loads(TEMP_JSON.read_text(encoding="utf-8"))
-        except Exception as e:
-            print(f"Uups failed to load cache")
-            args.use_cache = False
+        except Exception:
+            print("Uups failed to load cache")
+            use_cache = False
 
     if not data:
-        html_text = get_clean_html()
+        html_text = get_clean_html(html_path)
         response = chat(
-            model=args.model,
-            messages=[{'role': 'user', 'content': PROMPT.format(html_content=html_text)}],
+            model=model,
+            messages=[{"role": "user", "content": PROMPT.format(html_content=html_text)}],
             format="json",
             think=False,
             options={"temperature": 0.1, "seed": 42}
         )
         content = response.message.content
 
-        try:            
+        try:
             data = json.loads(content) if isinstance(content, str) else content
-  
             CACHE_DIR.mkdir(exist_ok=True)
             TEMP_JSON.write_text(json.dumps(data, indent=2), encoding="utf-8")
-                    
         except Exception as e:
             print("Error parsing LLM output:")
             print(content)
             print(e)
             return
-    template_str = TEMPLATE_PATH.read_text(encoding="utf-8")
-    template = Template(template_str)
-    
-    # data['fullname'] = f"{data.get('firstname', '')} {data.get('lastname', '')}".strip()
-    
-    rendered_md = template.render(**data)
 
+    template_str = TEMPLATE_PATH.read_text(encoding="utf-8")
+    rendered_md = Template(template_str).render(**data)
     OUTPUT_MD.write_text(rendered_md, encoding="utf-8")
-    print('Updated readme.')
+    print("Updated readme.")
+
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Generate a fancy GitHub README from an HTML resume.")
+    parser.add_argument("--no-cache", action="store_false", dest="use_cache", help="Skip cache and force LLM generation")
+    parser.add_argument("--model", type=str, default=MODEL, help=f"Ollama model to use (default: {MODEL})")
+    args = parser.parse_args()
+    main(use_cache=args.use_cache, model=args.model)

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Color, Object3D } from "three";
+import { useEffect, useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Color, Object3D } from 'three';
 
 const COUNT = 250;
 
@@ -87,12 +87,7 @@ export function Dust({ opacity = 0.35 }) {
   return (
     <instancedMesh ref={meshRef} args={[null, null, COUNT]}>
       <sphereGeometry args={[1, 4, 4]} />
-      <meshBasicMaterial
-        transparent
-        opacity={opacity}
-        depthWrite={false}
-        vertexColors
-      />
+      <meshBasicMaterial transparent opacity={opacity} depthWrite={false} vertexColors />
     </instancedMesh>
   );
 }

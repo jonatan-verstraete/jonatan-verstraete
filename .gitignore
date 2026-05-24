@@ -1,5 +1,5 @@
 .cache
 .claude
+.keep
 node_modules
-backup
 scripts/.repo-cache.json

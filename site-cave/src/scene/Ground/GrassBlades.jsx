@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useEffect, useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import {
   BufferGeometry,
   Color,
@@ -7,8 +7,8 @@ import {
   Float32BufferAttribute,
   MeshStandardMaterial,
   Vector2,
-} from "three";
-import { cpuVnoise } from "./noiseUtils";
+} from 'three';
+import { cpuVnoise } from './noiseUtils';
 
 function buildBladeGeometry(segments = 8) {
   const positions = [],
@@ -35,9 +35,9 @@ function buildBladeGeometry(segments = 8) {
   }
 
   const geo = new BufferGeometry();
-  geo.setAttribute("position", new Float32BufferAttribute(positions, 3));
-  geo.setAttribute("normal", new Float32BufferAttribute(normals, 3));
-  geo.setAttribute("uv", new Float32BufferAttribute(uvs, 2));
+  geo.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geo.setAttribute('normal', new Float32BufferAttribute(normals, 3));
+  geo.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
   geo.setIndex(indices);
   geo.computeVertexNormals();
   return geo;
@@ -52,9 +52,9 @@ export function GrassBlades({
   windStrength = 0.1,
   windDir = [1, 0.3],
   // Muted, dark night palette. Let the moonlight and firelight do the heavy lifting!
-  colorRoot = "#020501",
-  colorMid = "#12200a",
-  colorTip = "#2c4220",
+  colorRoot = '#020501',
+  colorMid = '#12200a',
+  colorTip = '#2c4220',
 }) {
   const meshRef = useRef();
   const bladeGeo = useMemo(() => buildBladeGeometry(8), []);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCamera() {
   const videoRef = useRef(null);
@@ -23,17 +23,17 @@ export function useCamera() {
         }
         setIsActive(true);
       } catch (err) {
-        console.error("Camera error:", err);
+        console.error('Camera error:', err);
       }
     }
   }, [isActive]);
 
   useEffect(() => {
-    const video = document.createElement("video");
-    video.id = "VID_STREAM";
+    const video = document.createElement('video');
+    video.id = 'VID_STREAM';
     video.playsInline = true;
     video.muted = true;
-    video.style.display = "none";
+    video.style.display = 'none';
 
     videoRef.current = video;
 

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useProgress } from "@react-three/drei";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from 'react';
+import { useProgress } from '@react-three/drei';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export function SceneLoader() {
   const { active, progress } = useProgress();
@@ -20,16 +20,16 @@ export function SceneLoader() {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
           style={{
-            position: "fixed",
+            position: 'fixed',
             inset: 0,
-            background: "#ffffff",
+            background: '#ffffff',
             zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
           }}
         >
           <motion.div
@@ -37,14 +37,14 @@ export function SceneLoader() {
             animate={{ opacity: 0.4, y: 0 }}
             transition={{ delay: 0.1, duration: 0.5 }}
             style={{
-              fontFamily: "monospace",
-              fontSize: "11px",
-              letterSpacing: "0.15em",
-              color: "#000",
-              textTransform: "uppercase",
+              fontFamily: 'monospace',
+              fontSize: '11px',
+              letterSpacing: '0.15em',
+              color: '#000',
+              textTransform: 'uppercase',
             }}
           >
-            {progress < 100 ? `${Math.round(progress)}%` : ""}
+            {progress < 100 ? `${Math.round(progress)}%` : ''}
           </motion.div>
         </motion.div>
       )}

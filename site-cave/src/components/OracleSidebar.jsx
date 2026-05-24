@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useAtom, useAtomValue } from "jotai";
+import { useEffect, useMemo, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   Clock,
   Cpu,
@@ -11,29 +11,23 @@ import {
   SlidersHorizontal,
   Trash2,
   X,
-} from "lucide-react";
-import { clearAllSizes, useFloatResize } from "../hooks/useFloatResize";
-import {
-  historyAtom,
-  selectedProjectAtom,
-  sidebarOpenAtom,
-} from "../store/cave";
-import { ProjectSearch } from "./ProjectSearch";
+} from 'lucide-react';
+import { clearAllSizes, useFloatResize } from '../hooks/useFloatResize';
+import { historyAtom, selectedProjectAtom, sidebarOpenAtom } from '../store/cave';
+import { ProjectSearch } from './ProjectSearch';
 
 const formatTime = (ts) => {
   const d = new Date(ts);
   return d.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
     hour12: false,
   });
 };
 
 /** Hairline divider */
-const Divider = ({ className = "" }) => (
-  <div className={`bg-white-dim mx-5 h-px ${className}`} />
-);
+const Divider = ({ className = '' }) => <div className={`bg-white-dim mx-5 h-px ${className}`} />;
 
 /** Icon + label section header with generous spacing */
 const SectionHeader = ({ icon, children, aside }) => (
@@ -42,11 +36,7 @@ const SectionHeader = ({ icon, children, aside }) => (
     <span className="text-micro tracking-ultra text-ink-ghost/60 flex-1 font-mono uppercase">
       {children}
     </span>
-    {aside && (
-      <span className="text-micro text-secondary/50 tracking-fine font-mono">
-        {aside}
-      </span>
-    )}
+    {aside && <span className="text-micro text-secondary/50 tracking-fine font-mono">{aside}</span>}
   </div>
 );
 
@@ -66,18 +56,12 @@ const HistoryRow = ({ entry }) => {
     <motion.div
       initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ type: "spring", damping: 30, stiffness: 300 }}
+      transition={{ type: 'spring', damping: 30, stiffness: 300 }}
       className="flex gap-3 px-5 py-3"
     >
       {/* Thumbnail */}
       <div className="bg-white-ghost border-white-dim h-[38px] w-[38px] shrink-0 overflow-hidden rounded-lg border">
-        {url && (
-          <img
-            src={url}
-            alt=""
-            className="h-full w-full object-cover opacity-80"
-          />
-        )}
+        {url && <img src={url} alt="" className="h-full w-full object-cover opacity-80" />}
       </div>
 
       <div className="min-w-0 flex-1">
@@ -98,11 +82,7 @@ export const OracleSidebar = () => {
   const selected = useAtomValue(selectedProjectAtom);
   const sidebarRef = useRef(null);
 
-  const { size, startResize } = useFloatResize(
-    "sidebar",
-    { width: 300 },
-    { minW: 220, maxW: 520 },
-  );
+  const { size, startResize } = useFloatResize('sidebar', { width: 300 }, { minW: 220, maxW: 520 });
 
   useEffect(() => {
     if (!open) return;
@@ -110,13 +90,13 @@ export const OracleSidebar = () => {
       if (
         sidebarRef.current &&
         !sidebarRef.current.contains(e.target) &&
-        !e.target.closest("[data-oracle-widget]")
+        !e.target.closest('[data-oracle-widget]')
       ) {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", onMousedown);
-    return () => document.removeEventListener("mousedown", onMousedown);
+    document.addEventListener('mousedown', onMousedown);
+    return () => document.removeEventListener('mousedown', onMousedown);
   }, [open, setOpen]);
 
   const reversed = [...history].reverse();
@@ -126,11 +106,11 @@ export const OracleSidebar = () => {
       {open && (
         <motion.div
           ref={sidebarRef}
-          initial={{ x: "-100%", opacity: 0 }}
+          initial={{ x: '-100%', opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: "-100%", opacity: 0 }}
+          exit={{ x: '-100%', opacity: 0 }}
           transition={{
-            type: "spring",
+            type: 'spring',
             stiffness: 320,
             damping: 38,
             mass: 0.9,
@@ -167,9 +147,7 @@ export const OracleSidebar = () => {
           {/* ── AI Status ── */}
           <div className="flex shrink-0 items-center gap-3 px-5 py-4">
             <Cpu size={12} className="text-ink-ghost/35 shrink-0" />
-            <span className="text-label text-ink-ghost/55 tracking-loose font-mono">
-              idle
-            </span>
+            <span className="text-label text-ink-ghost/55 tracking-loose font-mono">idle</span>
             <span
               className="text-micro text-ink-ghost/20 tracking-fine ml-auto font-mono"
               title="Live polling in Stage 9b"
@@ -192,9 +170,7 @@ export const OracleSidebar = () => {
           <Divider className="mt-1" />
 
           {/* ── Memory controls ── */}
-          <SectionHeader icon={<SlidersHorizontal size={11} />}>
-            Controls
-          </SectionHeader>
+          <SectionHeader icon={<SlidersHorizontal size={11} />}>Controls</SectionHeader>
 
           <div className="flex shrink-0 flex-wrap gap-2 px-5 pb-4">
             <ControlButton icon={<Trash2 size={10} />} label="Clear" />
@@ -231,9 +207,7 @@ export const OracleSidebar = () => {
                 The cave has not yet spoken.
               </motion.p>
             ) : (
-              reversed.map((entry) => (
-                <HistoryRow key={entry.id} entry={entry} />
-              ))
+              reversed.map((entry) => <HistoryRow key={entry.id} entry={entry} />)
             )}
           </div>
 

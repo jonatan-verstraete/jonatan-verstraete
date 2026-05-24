@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useAtom } from "jotai";
-import { FolderOpen, Search, X } from "lucide-react";
-import { githubUserAtom, selectedProjectAtom } from "../store/cave";
+import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
+import { FolderOpen, Search, X } from 'lucide-react';
+import { githubUserAtom, selectedProjectAtom } from '../store/cave';
 
-const DEFAULT_USER = "jayf0x";
+const DEFAULT_USER = 'jayf0x';
 
 async function fetchProjects(user) {
   if (!user) return [];
@@ -18,9 +18,9 @@ async function fetchProjects(user) {
     .map((r) => ({
       id: r.id,
       name: r.name,
-      description: r.description || "",
+      description: r.description || '',
       topics: r.topics || [],
-      language: r.language || "",
+      language: r.language || '',
       html_url: r.html_url,
     }));
 }
@@ -35,13 +35,8 @@ async function fetchProjects(user) {
  *   autoFocus         — focus input on mount (default false)
  *   listMaxHeight     — max-height of results list (default "180px")
  */
-export function ProjectSearch({
-  onSelect,
-  onClose,
-  autoFocus = false,
-  listMaxHeight = "180px",
-}) {
-  const [query, setQuery] = useState("");
+export function ProjectSearch({ onSelect, onClose, autoFocus = false, listMaxHeight = '180px' }) {
+  const [query, setQuery] = useState('');
   const [activeIdx, setActiveIdx] = useState(0);
   const [hasFocus, setHasFocus] = useState(false);
   const [selected, setSelected] = useAtom(selectedProjectAtom);
@@ -51,7 +46,7 @@ export function ProjectSearch({
   const containerRef = useRef(null);
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["github-repos", githubUser ?? ""],
+    queryKey: ['github-repos', githubUser ?? ''],
     queryFn: () => fetchProjects(githubUser),
     staleTime: 5 * 60 * 1000,
   });
@@ -71,7 +66,7 @@ export function ProjectSearch({
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setGithubUser(params.get("user") || DEFAULT_USER);
+    setGithubUser(params.get('user') || DEFAULT_USER);
   }, [setGithubUser]);
 
   useEffect(() => {
@@ -84,37 +79,29 @@ export function ProjectSearch({
   useEffect(() => {
     if (!hasFocus && !autoFocus) return;
     const onKey = (e) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose?.();
         return;
       }
-      if (e.key === "ArrowDown") {
+      if (e.key === 'ArrowDown') {
         e.preventDefault();
         setActiveIdx((i) => Math.min(i + 1, filtered.length - 1));
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setActiveIdx((i) => Math.max(i - 1, 0));
-      } else if (e.key === "Enter") {
+      } else if (e.key === 'Enter') {
         if (filtered[activeIdx]) {
           setSelected(filtered[activeIdx]);
           onSelect?.(filtered[activeIdx]);
         }
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [
-    hasFocus,
-    autoFocus,
-    filtered,
-    activeIdx,
-    setSelected,
-    onSelect,
-    onClose,
-  ]);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [hasFocus, autoFocus, filtered, activeIdx, setSelected, onSelect, onClose]);
 
   useEffect(() => {
-    listRef.current?.children[activeIdx]?.scrollIntoView({ block: "nearest" });
+    listRef.current?.children[activeIdx]?.scrollIntoView({ block: 'nearest' });
   }, [activeIdx]);
 
   return (
@@ -139,7 +126,7 @@ export function ProjectSearch({
         />
         {query && (
           <button
-            onClick={() => setQuery("")}
+            onClick={() => setQuery('')}
             className="text-ink-ghost/40 hover:text-ink-ghost flex cursor-pointer border-0 bg-transparent p-0 transition-colors"
           >
             <X size={11} />
@@ -158,7 +145,7 @@ export function ProjectSearch({
       >
         {filtered.length === 0 ? (
           <div className="text-ink-ghost/40 text-label px-4 py-5 text-center font-mono">
-            {projects.length === 0 ? "no projects" : "no matches"}
+            {projects.length === 0 ? 'no projects' : 'no matches'}
           </div>
         ) : (
           filtered.map((project, i) => (
@@ -186,52 +173,42 @@ function ProjectRow({ project, active, selected, onHover, onClick }) {
       onMouseEnter={onHover}
       onClick={onClick}
       className={[
-        "relative flex w-full items-center gap-2.5 px-4 py-[9px]",
-        "cursor-pointer border-0 text-left transition-colors duration-100",
-        active ? "bg-white-dim" : "bg-transparent",
-      ].join(" ")}
+        'relative flex w-full items-center gap-2.5 px-4 py-[9px]',
+        'cursor-pointer border-0 text-left transition-colors duration-100',
+        active ? 'bg-white-dim' : 'bg-transparent',
+      ].join(' ')}
     >
       {/* Active indicator */}
       {active && (
         <div
           className={[
-            "absolute top-2 bottom-2 left-0 w-[2px] rounded-[1px]",
-            selected ? "bg-secondary" : "bg-primary/60",
-          ].join(" ")}
+            'absolute top-2 bottom-2 left-0 w-[2px] rounded-[1px]',
+            selected ? 'bg-secondary' : 'bg-primary/60',
+          ].join(' ')}
         />
       )}
 
       <FolderOpen
         size={11}
         className={[
-          "shrink-0",
-          selected
-            ? "text-secondary/70"
-            : active
-              ? "text-ink-muted"
-              : "text-ink-ghost/35",
-        ].join(" ")}
+          'shrink-0',
+          selected ? 'text-secondary/70' : active ? 'text-ink-muted' : 'text-ink-ghost/35',
+        ].join(' ')}
       />
 
       <div className="min-w-0 flex-1">
         <div
           className={[
-            "text-label truncate font-mono",
-            selected
-              ? "text-secondary/80"
-              : active
-                ? "text-ink/80"
-                : "text-ink/55",
-          ].join(" ")}
+            'text-label truncate font-mono',
+            selected ? 'text-secondary/80' : active ? 'text-ink/80' : 'text-ink/55',
+          ].join(' ')}
         >
           {project.name}
         </div>
       </div>
 
       {project.language && (
-        <span className="text-micro text-ink-ghost/30 shrink-0 font-mono">
-          {project.language}
-        </span>
+        <span className="text-micro text-ink-ghost/30 shrink-0 font-mono">{project.language}</span>
       )}
     </button>
   );

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef } from "react";
-import { createPortal, useFrame } from "@react-three/fiber";
-import { folder, useControls } from "leva";
+import { useCallback, useEffect, useRef } from 'react';
+import { createPortal, useFrame } from '@react-three/fiber';
+import { folder, useControls } from 'leva';
 import {
   Color,
   LinearFilter,
@@ -10,13 +10,13 @@ import {
   Scene,
   ShaderMaterial,
   WebGLRenderTarget,
-} from "three";
-import { useDisposableItems } from "@/hooks/useDisposableItems";
-import { SCENE_CONFIG as C } from "@/scene/config";
-import { devLog } from "@/utils";
-import { ProjectText } from "./ProjectText";
-import { Video } from "./Video";
-import { VideoCam } from "./VideoCam";
+} from 'three';
+import { useDisposableItems } from '@/hooks/useDisposableItems';
+import { SCENE_CONFIG as C } from '@/scene/config';
+import { devLog } from '@/utils';
+import { ProjectText } from './ProjectText';
+import { Video } from './Video';
+import { VideoCam } from './VideoCam';
 
 const VERT = `
 varying vec2 vUv;
@@ -93,13 +93,7 @@ const GOBO_W = 2048,
  * point spotlight.map at it each frame.
  */
 export function ProjectedSurface({ videoRef, isActive, surfaceRef }) {
-  const {
-    shadowThreshold,
-    shadowSoftness,
-    blurRadius,
-    accumDecay,
-    goboContrast,
-  } = useControls({
+  const { shadowThreshold, shadowSoftness, blurRadius, accumDecay, goboContrast } = useControls({
     Shadow: folder({
       shadowThreshold: { value: C.shadowThreshold, min: 0, max: 1, step: 0.01 },
       shadowSoftness: { value: C.shadowSoftness, min: 0, max: 0.5, step: 0.01 },

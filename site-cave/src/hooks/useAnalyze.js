@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef } from "react";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useAtomValue, useSetAtom } from "jotai";
-import { historyAtom, selectedProjectAtom } from "../store/cave";
-import { devLog } from "../utils";
+import { useCallback, useEffect, useRef } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { historyAtom, selectedProjectAtom } from '../store/cave';
+import { devLog } from '../utils';
 
 const MAX_HIS = 5;
 
@@ -22,9 +22,9 @@ export const useAnalyze = (captureFrame) => {
   const scheduleNext = () => {
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      captureRef.current?.()?.then((base64 = "") => {
-        if (!base64 || !base64.startsWith("data:image/jpeg;base64")) {
-          devLog("Invalid canvas image", base64);
+      captureRef.current?.()?.then((base64 = '') => {
+        if (!base64 || !base64.startsWith('data:image/jpeg;base64')) {
+          devLog('Invalid canvas image', base64);
           return;
         }
         mutate(base64);
@@ -34,7 +34,7 @@ export const useAnalyze = (captureFrame) => {
 
   const mutationFn = useCallback(async (imageBase64) => {
     const p = projectRef.current;
-    const response = await axios.post("http://127.0.0.1:8042/analyze", {
+    const response = await axios.post('http://127.0.0.1:8042/analyze', {
       image: imageBase64,
       history: history.current,
       ...(p && { project: `${p.name}: ${p.description}` }),
@@ -58,7 +58,7 @@ export const useAnalyze = (captureFrame) => {
         return next;
       });
     } else {
-      devLog("No data in response");
+      devLog('No data in response');
     }
     if (history.current.length > MAX_HIS) {
       history.current.shift();
@@ -83,7 +83,7 @@ export const useAnalyze = (captureFrame) => {
 
   return {
     isLoading: isPending,
-    result: data ?? "",
+    result: data ?? '',
     error,
   };
 };

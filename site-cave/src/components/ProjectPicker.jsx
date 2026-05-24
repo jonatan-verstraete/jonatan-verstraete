@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
-import { useAtom, useSetAtom } from "jotai";
-import { FolderOpen, Search, Terminal, X } from "lucide-react";
-import { ACTIVE_COMMANDS } from "../data/commands";
-import { useDebounce } from "../hooks/useDebounce";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useAtom, useSetAtom } from 'jotai';
+import { FolderOpen, Search, Terminal, X } from 'lucide-react';
+import { ACTIVE_COMMANDS } from '../data/commands';
+import { useDebounce } from '../hooks/useDebounce';
 import {
   githubUserAtom,
   pickerOpenAtom,
   selectedProjectAtom,
   sidebarOpenAtom,
-} from "../store/cave";
+} from '../store/cave';
 
 async function fetchProjects(user) {
   if (!user) return [];
@@ -24,9 +24,9 @@ async function fetchProjects(user) {
     .map((r) => ({
       id: r.id,
       name: r.name,
-      description: r.description || "",
+      description: r.description || '',
       topics: r.topics || [],
-      language: r.language || "",
+      language: r.language || '',
       html_url: r.html_url,
     }));
 }
@@ -37,7 +37,7 @@ export const ProjectPicker = () => {
   const setSidebarOpen = useSetAtom(sidebarOpenAtom);
   const [githubUser, setGithubUser] = useAtom(githubUserAtom);
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [activeIdx, setActiveIdx] = useState(0);
   const debouncedQuery = useDebounce(query, 150);
 
@@ -47,7 +47,7 @@ export const ProjectPicker = () => {
   const queryClient = useQueryClient();
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["github-repos", githubUser ?? "__fallback__"],
+    queryKey: ['github-repos', githubUser ?? '__fallback__'],
     queryFn: () => fetchProjects(githubUser),
     staleTime: 5 * 60 * 1000,
   });
@@ -55,7 +55,7 @@ export const ProjectPicker = () => {
   const onSearchInput = useCallback(
     (event) => {
       const value = event.target.value;
-      if (query === "" && value === " ") {
+      if (query === '' && value === ' ') {
         setOpen(false);
         return;
       }
@@ -69,43 +69,40 @@ export const ProjectPicker = () => {
     const onKey = (e) => {
       const tag = document.activeElement?.tagName?.toLowerCase();
       const editable = document.activeElement?.isContentEditable;
-      if (tag === "input" || tag === "textarea" || editable) return;
-      if (e.key !== " ") return;
+      if (tag === 'input' || tag === 'textarea' || editable) return;
+      if (e.key !== ' ') return;
       setOpen((prev) => !prev);
 
       e.preventDefault();
     };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
   // Reset + focus on open; record open timestamp
   useEffect(() => {
     if (open) {
-      setQuery("");
+      setQuery('');
       setActiveIdx(0);
 
       const onClickOutside = (e) => {
-        if (wrapRef.current && !wrapRef.current.contains(e.target))
-          setOpen(false);
+        if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
       };
-      document.addEventListener("mousedown", onClickOutside);
+      document.addEventListener('mousedown', onClickOutside);
       const id = setTimeout(() => inputRef.current?.focus(), 50);
       return () => {
         clearTimeout(id);
-        document.removeEventListener("mousedown", onClickOutside);
+        document.removeEventListener('mousedown', onClickOutside);
       };
     }
   }, [open]);
 
   // Derived search state
   const trimmed = debouncedQuery.trim().toLowerCase();
-  const queryWord = trimmed.split(" ")[0];
+  const queryWord = trimmed.split(' ')[0];
 
   const filteredCommands = trimmed
-    ? ACTIVE_COMMANDS.filter(
-        (c) => c.label.startsWith(queryWord) || c.label.includes(queryWord),
-      )
+    ? ACTIVE_COMMANDS.filter((c) => c.label.startsWith(queryWord) || c.label.includes(queryWord))
     : ACTIVE_COMMANDS;
 
   const filteredProjects = trimmed
@@ -119,44 +116,39 @@ export const ProjectPicker = () => {
 
   // First command whose label starts with query but isn't an exact match — autocomplete target
   const autoCmd = trimmed
-    ? ACTIVE_COMMANDS.find(
-        (c) => c.label.startsWith(queryWord) && c.label !== queryWord,
-      )
+    ? ACTIVE_COMMANDS.find((c) => c.label.startsWith(queryWord) && c.label !== queryWord)
     : null;
 
   const allItems = [
-    ...filteredCommands.map((c) => ({ kind: "command", data: c })),
-    ...filteredProjects.map((p) => ({ kind: "project", data: p })),
+    ...filteredCommands.map((c) => ({ kind: 'command', data: c })),
+    ...filteredProjects.map((p) => ({ kind: 'project', data: p })),
   ];
 
-  const activeIdxClamped = Math.max(
-    0,
-    Math.min(activeIdx, allItems.length - 1),
-  );
+  const activeIdxClamped = Math.max(0, Math.min(activeIdx, allItems.length - 1));
 
   const executeItem = useCallback(
     (item) => {
-      if (item.kind === "project") {
+      if (item.kind === 'project') {
         setSelected(item.data);
         setOpen(false);
         return;
       }
-      const arg = debouncedQuery.trim().split(" ").slice(1).join(" ").trim();
+      const arg = debouncedQuery.trim().split(' ').slice(1).join(' ').trim();
       switch (item.data.action) {
-        case "list":
-          setQuery("");
+        case 'list':
+          setQuery('');
           break;
-        case "recent":
-          setQuery("");
+        case 'recent':
+          setQuery('');
           break;
-        case "open-sidebar":
+        case 'open-sidebar':
           setSidebarOpen(true);
           setOpen(false);
           break;
-        case "set-user":
+        case 'set-user':
           if (arg) {
             setGithubUser(arg);
-            queryClient.invalidateQueries({ queryKey: ["github-repos"] });
+            queryClient.invalidateQueries({ queryKey: ['github-repos'] });
           }
           setOpen(false);
           break;
@@ -164,41 +156,34 @@ export const ProjectPicker = () => {
           break;
       }
     },
-    [
-      debouncedQuery,
-      setSelected,
-      setOpen,
-      setSidebarOpen,
-      setGithubUser,
-      queryClient,
-    ],
+    [debouncedQuery, setSelected, setOpen, setSidebarOpen, setGithubUser, queryClient],
   );
 
   // Keyboard navigation
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         setOpen(false);
         return;
       }
-      if (e.key === "ArrowDown") {
+      if (e.key === 'ArrowDown') {
         e.preventDefault();
         setActiveIdx((i) => Math.min(i + 1, allItems.length - 1));
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         setActiveIdx((i) => Math.max(i - 1, 0));
-      } else if (e.key === "Enter") {
+      } else if (e.key === 'Enter') {
         const item = allItems[activeIdxClamped];
         if (item) executeItem(item);
-      } else if (e.key === "Tab" && autoCmd) {
+      } else if (e.key === 'Tab' && autoCmd) {
         e.preventDefault();
-        setQuery(autoCmd.label + (autoCmd.param ? " " : ""));
+        setQuery(autoCmd.label + (autoCmd.param ? ' ' : ''));
         inputRef.current?.focus();
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [open, allItems, activeIdxClamped, autoCmd, executeItem, setOpen]);
 
   useEffect(() => {
@@ -208,10 +193,8 @@ export const ProjectPicker = () => {
   // Scroll active row into view
   useEffect(() => {
     if (!listRef.current) return;
-    const el = listRef.current.querySelector(
-      `[data-row-idx="${activeIdxClamped}"]`,
-    );
-    el?.scrollIntoView({ block: "nearest" });
+    const el = listRef.current.querySelector(`[data-row-idx="${activeIdxClamped}"]`);
+    el?.scrollIntoView({ block: 'nearest' });
   }, [activeIdxClamped]);
 
   return (
@@ -234,7 +217,7 @@ export const ProjectPicker = () => {
             initial={{ opacity: 0, y: -16, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.96 }}
-            transition={{ type: "spring", stiffness: 500, damping: 40 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 40 }}
             className="z-picker bg-overlay-high/96 border-white-dim shadow-overlay backdrop-blur-high fixed top-[20%] left-1/2 w-[580px] max-w-[90vw] -translate-x-1/2 overflow-hidden rounded-2xl border"
           >
             {/* Input */}
@@ -250,7 +233,7 @@ export const ProjectPicker = () => {
               {query && (
                 <button
                   onClick={() => {
-                    setQuery("");
+                    setQuery('');
                     inputRef.current?.focus();
                   }}
                   className="text-ink-ghost/30 hover:text-ink-ghost/60 cursor-pointer border-0 bg-transparent p-0 transition-colors"
@@ -263,13 +246,10 @@ export const ProjectPicker = () => {
             <div className="bg-white-dim h-px" />
 
             {/* Results */}
-            <div
-              ref={listRef}
-              className="oracle-scroll max-h-[360px] overflow-y-auto"
-            >
+            <div ref={listRef} className="oracle-scroll max-h-[360px] overflow-y-auto">
               {allItems.length === 0 && (
                 <p className="text-ink-ghost/30 text-label py-10 text-center font-mono">
-                  {projects.length === 0 ? "no projects loaded" : "no matches"}
+                  {projects.length === 0 ? 'no projects loaded' : 'no matches'}
                 </p>
               )}
 
@@ -287,15 +267,9 @@ export const ProjectPicker = () => {
                         active={isActive}
                         autoSuggest={isAutoSuggest}
                         onHover={() => setActiveIdx(idx)}
-                        onClick={() =>
-                          executeItem({ kind: "command", data: cmd })
-                        }
-                        icon={
-                          <Terminal size={10} className="text-rose-400/65" />
-                        }
-                        title={
-                          cmd.param ? `${cmd.label} ${cmd.param}` : cmd.label
-                        }
+                        onClick={() => executeItem({ kind: 'command', data: cmd })}
+                        icon={<Terminal size={10} className="text-rose-400/65" />}
+                        title={cmd.param ? `${cmd.label} ${cmd.param}` : cmd.label}
                         subtitle={cmd.description}
                         pillType="command"
                         isSelected={false}
@@ -318,17 +292,11 @@ export const ProjectPicker = () => {
                         rowIdx={idx}
                         active={isActive}
                         onHover={() => setActiveIdx(idx)}
-                        onClick={() =>
-                          executeItem({ kind: "project", data: proj })
-                        }
+                        onClick={() => executeItem({ kind: 'project', data: proj })}
                         icon={
                           <FolderOpen
                             size={10}
-                            className={
-                              isSelected
-                                ? "text-secondary/70"
-                                : "text-ink-ghost/35"
-                            }
+                            className={isSelected ? 'text-secondary/70' : 'text-ink-ghost/35'}
                           />
                         }
                         title={proj.name}
@@ -379,16 +347,16 @@ function KbdHint({ keys, label }) {
 
 function Pill({ color, children }) {
   const styles = {
-    red: "bg-rose-500/10 text-rose-400/65 border border-rose-500/18",
-    blue: "bg-blue-500/10 text-blue-400/65 border border-blue-500/18",
+    red: 'bg-rose-500/10 text-rose-400/65 border border-rose-500/18',
+    blue: 'bg-blue-500/10 text-blue-400/65 border border-blue-500/18',
   };
   return (
     <span
       className={[
-        "inline-flex shrink-0 items-center rounded px-1.5 py-[2px]",
-        "font-mono text-[9px] leading-none",
-        styles[color] ?? "text-ink-ghost/35",
-      ].join(" ")}
+        'inline-flex shrink-0 items-center rounded px-1.5 py-[2px]',
+        'font-mono text-[9px] leading-none',
+        styles[color] ?? 'text-ink-ghost/35',
+      ].join(' ')}
     >
       {children}
     </span>
@@ -415,24 +383,24 @@ function PaletteRow({
       onMouseEnter={onHover}
       onClick={onClick}
       className={[
-        "relative flex w-full items-center gap-3 px-5 py-2.5",
-        "cursor-pointer border-0 text-left transition-all duration-75",
-        active ? "bg-white-dim" : "bg-transparent",
+        'relative flex w-full items-center gap-3 px-5 py-2.5',
+        'cursor-pointer border-0 text-left transition-all duration-75',
+        active ? 'bg-white-dim' : 'bg-transparent',
         // Autocomplete suggestion: subtle ring + dimmed (not active)
-        autoSuggest ? "ring-1 ring-rose-400/15 ring-inset" : "",
-      ].join(" ")}
+        autoSuggest ? 'ring-1 ring-rose-400/15 ring-inset' : '',
+      ].join(' ')}
     >
       {/* Active left bar */}
       {active && (
         <div
           className={[
-            "absolute inset-y-2 left-0 w-[2px] rounded-[1px]",
-            pillType === "command"
-              ? "bg-rose-400/60"
+            'absolute inset-y-2 left-0 w-[2px] rounded-[1px]',
+            pillType === 'command'
+              ? 'bg-rose-400/60'
               : isSelected
-                ? "bg-secondary"
-                : "bg-primary/50",
-          ].join(" ")}
+                ? 'bg-secondary'
+                : 'bg-primary/50',
+          ].join(' ')}
         />
       )}
 
@@ -441,19 +409,15 @@ function PaletteRow({
       <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
         <span
           className={[
-            "text-label truncate font-mono",
-            active
-              ? "text-ink/80"
-              : autoSuggest
-                ? "text-ink/28"
-                : "text-ink/50",
-            isSelected && !active ? "text-secondary/75" : "",
-          ].join(" ")}
+            'text-label truncate font-mono',
+            active ? 'text-ink/80' : autoSuggest ? 'text-ink/28' : 'text-ink/50',
+            isSelected && !active ? 'text-secondary/75' : '',
+          ].join(' ')}
         >
           {title}
         </span>
 
-        {pillType === "command" && <Pill color="red">cmd</Pill>}
+        {pillType === 'command' && <Pill color="red">cmd</Pill>}
 
         {tags?.map((t) => (
           <Pill key={t} color="blue">
@@ -465,22 +429,16 @@ function PaletteRow({
       {subtitle && (
         <span
           className={[
-            "text-micro max-w-[200px] shrink-0 truncate font-mono",
-            active
-              ? "text-ink-ghost/50"
-              : autoSuggest
-                ? "text-ink-ghost/18"
-                : "text-ink-ghost/25",
-          ].join(" ")}
+            'text-micro max-w-[200px] shrink-0 truncate font-mono',
+            active ? 'text-ink-ghost/50' : autoSuggest ? 'text-ink-ghost/18' : 'text-ink-ghost/25',
+          ].join(' ')}
         >
           {subtitle}
         </span>
       )}
 
       {lang && !subtitle && (
-        <span className="text-micro text-ink-ghost/25 shrink-0 font-mono">
-          {lang}
-        </span>
+        <span className="text-micro text-ink-ghost/25 shrink-0 font-mono">{lang}</span>
       )}
     </button>
   );

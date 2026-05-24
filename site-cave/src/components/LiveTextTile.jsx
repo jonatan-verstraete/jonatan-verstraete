@@ -1,16 +1,16 @@
-import { useCallback, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useAtomValue } from "jotai";
-import { TypeAnimation } from "react-type-animation";
-import { RESIZE_HANDLES, useFloatResize } from "../hooks/useFloatResize";
-import { historyAtom } from "../store/cave";
+import { useCallback, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useAtomValue } from 'jotai';
+import { TypeAnimation } from 'react-type-animation';
+import { RESIZE_HANDLES, useFloatResize } from '../hooks/useFloatResize';
+import { historyAtom } from '../store/cave';
 
 const formatTime = (ts) => {
   const d = new Date(ts);
   return d.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
     hour12: false,
   });
 };
@@ -26,7 +26,7 @@ export function LiveTextTile() {
   const history = useAtomValue(historyAtom);
   const latest = history[history.length - 1] ?? null;
 
-  const { size, setSize, startResize } = useFloatResize("tile", DEFAULT_POS(), {
+  const { size, setSize, startResize } = useFloatResize('tile', DEFAULT_POS(), {
     minW: 160,
     maxW: 480,
     minH: 80,
@@ -54,16 +54,13 @@ export function LiveTextTile() {
       }
 
       function onUp() {
-        localStorage.setItem(
-          "cave-resize-oracle-tile",
-          JSON.stringify(sizeRef.current),
-        );
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup", onUp);
+        localStorage.setItem('cave-resize-oracle-tile', JSON.stringify(sizeRef.current));
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
       }
 
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseup", onUp);
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
     },
     [setSize],
   );
@@ -84,7 +81,7 @@ export function LiveTextTile() {
           key={h.id}
           onMouseDown={(e) => startResize(e, h.edges)}
           style={{
-            position: "absolute",
+            position: 'absolute',
             cursor: h.cursor,
             zIndex: 20,
             ...h.pos,
@@ -96,10 +93,10 @@ export function LiveTextTile() {
             style={{
               background:
                 h.id.length === 1
-                  ? "linear-gradient(to " +
-                    { n: "bottom", s: "top", e: "left", w: "right" }[h.id] +
-                    ", rgba(255,180,50,0.18), transparent)"
-                  : "rgba(255,180,50,0.12)",
+                  ? 'linear-gradient(to ' +
+                    { n: 'bottom', s: 'top', e: 'left', w: 'right' }[h.id] +
+                    ', rgba(255,180,50,0.18), transparent)'
+                  : 'rgba(255,180,50,0.12)',
               borderRadius: 2,
             }}
           />
@@ -113,7 +110,7 @@ export function LiveTextTile() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: '100%', height: '100%' }}
           >
             <div className="border-white-subtle bg-overlay-high/90 shadow-overlay flex h-full flex-col overflow-hidden rounded-2xl border backdrop-blur-xl">
               {/* Header row — drag zone */}

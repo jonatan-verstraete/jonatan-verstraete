@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { folder, useControls } from "leva";
-import { SCENE_CONFIG as C } from "@/scene/config.js";
-import { Fire } from "./Fire";
-import { Sun } from "./Sun";
+import { useEffect, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { folder, useControls } from 'leva';
+import { SCENE_CONFIG as C } from '@/scene/config.js';
+import { Fire } from './Fire';
+import { Sun } from './Sun';
 
 export const Lighting = ({ surfaceRef }) => {
   const spotRef = useRef();
@@ -29,10 +29,7 @@ export const Lighting = ({ surfaceRef }) => {
 
     // Subtle fire-flicker color temperature on the projector spotlight
     const t = clock.getElapsedTime();
-    const flicker =
-      Math.sin(t * 2.7) * 0.4 +
-      Math.sin(t * 4.1) * 0.3 +
-      Math.sin(t * 0.9) * 0.3;
+    const flicker = Math.sin(t * 2.7) * 0.4 + Math.sin(t * 4.1) * 0.3 + Math.sin(t * 0.9) * 0.3;
     const n = (flicker + 1) * 0.5;
     spot.color.setRGB(0.97 + n * 0.03, 0.91 + n * 0.04, 0.78 + n * 0.06);
   }); // add: -1

@@ -17,7 +17,7 @@ export const SCENE_CONFIG = {
   // Atmosphere
   ambientIntensity: 0.0,
   dustOpacity: 0.0,
-  fogColor: "#000000",
+  fogColor: '#000000',
   fogDensity: 0.15,
 
   // Fire point light (warm fill)

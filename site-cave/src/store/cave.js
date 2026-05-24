@@ -1,15 +1,15 @@
-import { atom } from "jotai";
+import { atom } from 'jotai';
 
 const MAX_HISTORY = 100;
 
-export const githubUserAtom = atom("");
+export const githubUserAtom = atom('');
 export const sidebarOpenAtom = atom(false);
 export const selectedProjectAtom = atom(null);
 export const pickerOpenAtom = atom(false);
 export const historyAtom = atom([
   {
     id: String(Math.random()),
-    description: "text ".repeat(40),
+    description: 'text '.repeat(40),
     imageBlob: null,
     timestamp: Date.now(),
   },

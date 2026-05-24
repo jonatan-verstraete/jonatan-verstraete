@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useImperativeHandle, useRef } from "react";
-import { Environment, OrbitControls, Preload } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
-import { useSetAtom } from "jotai";
-import { folder, useControls } from "leva";
-import { historyAtom } from "../store/cave";
-import { devLog } from "../utils";
-import { Ground } from "./Ground/Ground";
-import { Lighting } from "./Lighting";
-import { ProjectedSurface } from "./ProjectedSurface";
-import { Wall } from "./Wall/Wall";
-import { SCENE_CONFIG as C } from "./config";
+import { useCallback, useEffect, useImperativeHandle, useRef } from 'react';
+import { Environment, OrbitControls, Preload } from '@react-three/drei';
+import { useThree } from '@react-three/fiber';
+import { useSetAtom } from 'jotai';
+import { folder, useControls } from 'leva';
+import { historyAtom } from '../store/cave';
+import { devLog } from '../utils';
+import { Ground } from './Ground/Ground';
+import { Lighting } from './Lighting';
+import { ProjectedSurface } from './ProjectedSurface';
+import { Wall } from './Wall/Wall';
+import { SCENE_CONFIG as C } from './config';
 
 export const Scene = ({ videoRef, isActive, captureRef }) => {
   const getCanvasBlobRef = useRef();
@@ -41,12 +41,12 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
             reader.onerror = () => {
-              devLog("Failed to read canvas blob");
+              devLog('Failed to read canvas blob');
               resolve(null);
             };
             reader.readAsDataURL(blob);
           },
-          "image/jpeg",
+          'image/jpeg',
           quality,
         );
       }),
@@ -54,7 +54,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
 
   return (
     <>
-      <color attach="background" args={["#080604"]} />
+      <color attach="background" args={['#080604']} />
       <Environment files="/stars.hdr" background />
 
       <fogExp2 attach="fog" args={[fogColor, fogDensity]} />
@@ -69,11 +69,7 @@ export const Scene = ({ videoRef, isActive, captureRef }) => {
       <Ground />
 
       {/* <Dust opacity={dustOpacity} /> */}
-      <ProjectedSurface
-        videoRef={videoRef}
-        isActive={isActive}
-        surfaceRef={surfaceRef}
-      />
+      <ProjectedSurface videoRef={videoRef} isActive={isActive} surfaceRef={surfaceRef} />
 
       <Preload all />
     </>
@@ -90,20 +86,20 @@ function CameraDebugger() {
 
     // press "p" to print current values
     const onKey = (e) => {
-      if (e.key === "p") {
-        console.log("camera position", camera.position);
-        console.log("camera rotation", camera.rotation);
-        console.log("controls target", controlsRef.current.target);
+      if (e.key === 'p') {
+        console.log('camera position', camera.position);
+        console.log('camera rotation', camera.rotation);
+        console.log('controls target', controlsRef.current.target);
 
         console.log(camera.position.toArray());
         console.log(controls.target.toArray());
       }
     };
 
-    window.addEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
 
     return () => {
-      window.removeEventListener("keydown", onKey);
+      window.removeEventListener('keydown', onKey);
     };
   }, [camera]);
 
