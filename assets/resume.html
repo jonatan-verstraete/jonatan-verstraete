@@ -1,4 +1,4 @@
-<!DoCtYpE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -14,266 +14,7 @@
       rel="stylesheet"
     />
 
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      :root {
-        --ink: #1a1a1a;
-        --mid: #555;
-        --soft: #888;
-        --rule: #ddd;
-        --page: #faf9f7;
-        --page: #faf9f7;
-        /* --serif: 'Libre Baskerville', Georgia, serif;
-    --sans: 'DM Sans', system-ui, sans-serif; */
-        /* --serif: 'Libre Baskerville', Georgia, serif; */
-        --sans: "Inter", system-ui, sans-serif;
-        --serif: "Inter", system-ui, sans-serif;
-        /* --link: #0066cc; */
-        --link: #363636;
-
-        font-size: 11px;
-      }
-
-      html {
-        background: #363636;
-      }
-
-      a {
-        color: var(--link) !important;
-        border-bottom: 1px solid var(--rule);
-        text-decoration: none;
-      }
-
-      li::marker {
-        color: var(--soft);
-      }
-
-      li {
-        list-style-type: "- ";
-      }
-
-      body {
-        font-family: var(--sans);
-        font-weight: 300;
-        color: var(--ink);
-        background: var(--page);
-        max-width: 780px;
-        margin: 40px auto;
-        padding: 6ch 10ch;
-        line-height: 1.6;
-
-        box-shadow: 0 4px 40px rgba(0, 0, 0, 0.12);
-      }
-
-      header {
-        /* margin-bottom: 2rem; */
-        margin-bottom: 1rem;
-        /* border-bottom: 1.5px solid var(--ink); */
-        /* text-align: center; */
-      }
-
-      h1 {
-        font-family: var(--sans);
-        font-family: Helvetica;
-        font-size: 3rem;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        line-height: 1.1;
-        margin-bottom: 0.5rem;
-        text-align: center;
-      }
-
-      .tagline {
-        font-size: 1rem;
-        color: var(--mid);
-        font-weight: 400;
-        font-style: italic;
-        font-family: var(--serif);
-        margin-bottom: -1rem;
-        text-align: center;
-      }
-
-      .contact-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 6px 30px;
-        font-size: 1rem;
-        color: var(--mid);
-        font-weight: 400;
-        /* padding: 0 5rem; */
-        /* padding-right: 20%; */
-      }
-
-      .contact-row a {
-        /* color: var(--soft); */
-        /* text-decoration: none; */
-        /* border-bottom: 1px solid transparent; */
-        font-weight: 500;
-      }
-
-      .contact-row a:hover {
-        color: var(--ink);
-        border-bottom-color: var(--ink);
-      }
-
-      section {
-        margin-bottom: 30px;
-      }
-
-      h2 {
-        font-family: var(--serif);
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: 0.4px;
-        text-transform: uppercase;
-        color: var(--soft);
-        margin-bottom: 0.8rem;
-        /* padding-bottom: 0.5rem; */
-        border-bottom: 1px solid var(--rule);
-      }
-
-      .entry {
-        margin-bottom: 20px;
-      }
-
-      .entry-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin-bottom: 2px;
-        flex-wrap: wrap;
-        gap: 4px;
-      }
-
-      .entry-title {
-        font-family: var(--serif);
-        font-weight: 700;
-        font-size: 1.1rem;
-      }
-
-      .entry-date {
-        color: var(--soft);
-        white-space: nowrap;
-      }
-
-      .entry-sub {
-        color: var(--mid);
-        margin-bottom: 0.8rem;
-        font-style: italic;
-      }
-
-      ul {
-        padding-left: 16px;
-        /* list-style: none; */
-      }
-
-      ul li {
-        position: relative;
-        margin-left: 2rem;
-        margin-bottom: 5px;
-        color: #333;
-        line-height: 1.5;
-      }
-
-      .rating {
-        margin-left: 2px;
-        font-size: 0.8rem;
-        color: #444;
-      }
-
-      /* 
-    ul li::before {
-      content: "-";
-      position: absolute;
-      left: 2px;
-      top: 2px;
-      color: var(--soft);
-      font-size: 0.9rem;
-      top: 1px;
-    } */
-
-      .skills-grid {
-        display: grid;
-        grid-template-columns: 120px 1fr;
-        gap: 0.5rem 1rem;
-        font-size: 0.9rem;
-      }
-
-      .skill-value {
-        color: var(--ink);
-        line-height: 1.5;
-        font-size: 0.9rem;
-      }
-
-      .project {
-        margin-bottom: 10px;
-        display: grid;
-        grid-template-columns: 140px 1fr;
-        gap: 0 16px;
-        align-items: baseline;
-      }
-
-      .project-name,
-      .skill-label {
-        font-family: var(--serif);
-        /* font-size: 0.8rem; */
-        font-weight: 500;
-      }
-
-      .project-name a:hover {
-        border-bottom-color: var(--ink);
-      }
-
-      .project-desc {
-        /* font-size: 0.8rem; */
-        color: #444;
-        line-height: 1.5;
-      }
-
-      footer {
-        padding-top: 1rem;
-        /* border-top: 1px solid var(--rule); */
-        font-size: 0.8rem;
-        color: var(--soft);
-        font-style: italic;
-        text-align: center;
-      }
-
-      @media print {
-        html {
-          background: var(--page);
-        }
-
-        body {
-          margin: 0;
-          /* padding: 48px 60px; */
-          box-shadow: none;
-          font-size: 1rem;
-          max-width: 100%;
-        }
-
-        a {
-          color: inherit !important;
-        }
-
-        .contact-row a {
-          border-bottom: none;
-        }
-      }
-
-      @page {
-        margin: 0;
-        size: A4;
-      }
-    </style>
+    <link rel="stylesheet" href="./resume-styles.css">
   </head>
 
   <body>
@@ -389,7 +130,7 @@
       <span class="project-desc">Chrome extension for per-tab audio control (speed, reverb, bass..) focused on YouTube, with optional Flask SSE backend for LAN-wide remote triggering from any device.</span>
     </div> -->
 
-      <div class="project">
+      <!-- <div class="project">
         <span class="project-name"
           ><a href="https://github.com/jayf0x/PIIPAYA/">PIIPAYA</a></span
         >
@@ -409,7 +150,19 @@
           etc.) from any copied URL by updating the clipboard periodically.
           Prevents being tracked while sharing shopping.</span
         >
+      </div> 
+      
+      
+      <div class="project">
+        <span class="project-name">Timesheet Automation</span>
+        <span class="project-desc"
+          >Headless background process and CLI that pulls Git commits and PR
+          data to auto-fill R&D entries into the internal Bricsys timesheets
+          app. Turned a slow manual daily/weekly process into a quick
+          review.</span
+        >
       </div>
+      -->
 
       <!-- <div class="project">
       <span class="project-name"><a href="https://github.com/jayf0x/fluidity">Fluidity-js</a></span>
@@ -426,16 +179,6 @@
       <span class="project-name"><a href="https://github.com/jayf0x/pod-tooling">Podcast Tooling</a></span>
       <span class="project-desc">To assist with editing our podcast, I created a local pipeline using WhisperX and Ollama to transcribes audio, generates summaries, and outputs ready-to-post social clips.</span>
     </div> -->
-
-      <div class="project">
-        <span class="project-name">Timesheet Automation</span>
-        <span class="project-desc"
-          >Headless background process and CLI that pulls Git commits and PR
-          data to auto-fill R&D entries into the internal Bricsys timesheets
-          app. Turned a slow manual daily/weekly process into a quick
-          review.</span
-        >
-      </div>
 
       <!-- <div class="project">
       <span class="project-name"><a href="https://github.com/jayf0x/ideaditor">Ideaditor</a></span>
@@ -465,9 +208,9 @@
           >Experienced<span class="rating">[3/5]</span></span
         >
         <span class="skill-value"
-          >Python · Vite · Playwright/Cypress · Storybook · Ollama ·
-          Bash · Vue 2 </span
-        >
+          >Python · Vite · Playwright/Cypress · Storybook · Ollama · Bash · Vue
+          2
+        </span>
 
         <span class="skill-label">Honorable mentions</span>
         <span class="skill-value"

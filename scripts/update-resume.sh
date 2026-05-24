@@ -1,7 +1,12 @@
 #/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-export PYTHONPATH="$SCRIPT_DIR/gen:$PYTHONPATH"
+export PYTHONPATH="$REPO_ROOT"
+
+if [ "$(pwd)" != "$REPO_ROOT" ]; then
+    echo "Must exec from repo root."
+    exit 1
+fi
 
 # means the HTML was updated more recent than the README, so no cache.
 if [[ ./assets/resume.html -nt ./README.md ]]; then
@@ -9,7 +14,8 @@ if [[ ./assets/resume.html -nt ./README.md ]]; then
         echo "No models found. Boot ollama..."
         exit 1
     fi
-    python3 -m gen --no-cachea
+    echo "Run without using cache"
+    python3 -m gen --no-cache
 else
     python3 -m gen
 fi

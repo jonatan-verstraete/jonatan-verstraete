@@ -16,7 +16,7 @@
 
 <br/>
 
-**Podcast Tooling & Production** @BLANC.zone (Jan 2022)
+**Podcast Tooling & Production** @BLANC.zone (Jan 2022 - May 2026)
 - Maintained website, social media and handled editing workflows.
 - Explored AI-assisted automation (transcription, summarization) to reduce manual editing effort.
 
@@ -32,20 +32,29 @@
 ### Projects
 <table width="100%"><tr>
 <td width="50%" valign="top">
-  <a href="https://github.com/jayf0x/PIIPAYA/"><b>PIIPAYA</b></a>
+  <a href="https://blanc.zone/pod/"><b>Podcast Tooling & Production</b></a>
 
-<p style="font-size: 0.85em; margin-top: 4px;">Offline Tauri/Python/Svelt PII reduction desktop app to anonymizes sensitive documents while keeping the narrative intact. So instead of NAME and DATE you get a narrative coherent James and 2nd August.</p>
+<p style="font-size: 0.85em; margin-top: 4px;"></p>
 </td>
 <td width="50%" valign="top">
-  <a href="https://github.com/jayf0x/Pure-Paste"><b>Pure-Paste</b></a>
+  <a href="https://info.curvefever.pro/"><b>Game Dev</b></a>
 
-<p style="font-size: 0.85em; margin-top: 4px;">macOS menu-bar tool that strips tracking parameters (utm_*, fbclid, etc.) from any copied URL by updating the clipboard periodically. Prevents being tracked while sharing shopping.</p>
+<p style="font-size: 0.85em; margin-top: 4px;"></p>
 </td></tr><tr>
 <td width="50%" valign="top">
-  <b>Timesheet Automation</b>
+  <a href="https://github.com/jayf0x/PIIPAYA"><b>PIIPAYA</b></a>
 
+<p style="font-size: 0.85em; margin-top: 4px;">Local macOS app that anonymizes sensitive documents while keeping the narrative intact. Replaces names, dates, emails and other PII with consistent pseudonyms using a deterministic seeding layer on top of Microsoft Presidio, so anonymized text stays coherent for LLM analysis or human review.</p>
+</td>
+<td width="50%" valign="top">
+  <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
 
-<p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process into a quick review.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">WebGL fluid simulation for React — text & image effects</p>
+</td></tr><tr>
+<td width="50%" valign="top">
+  <a href="https://github.com/jayf0x/audio-bonanza"><b>audio-bonanza</b></a>
+
+<p style="font-size: 0.85em; margin-top: 4px;">Chrome extension for per-tab audio control (speed, reverb, bass..) focused on YouTube, with optional Flask SSE backend for LAN-wide remote triggering from any device. Free & local</p>
 </td></tr>
 </table>
 
