@@ -11,3 +11,4 @@ TEMPLATE_PATH = root / "gen/template.readme.j2"
 
 MODEL = "qwen3.5:9b"
 GITHUB_USER = "jayf0x"
+TARGET_PROJECTS = 3
