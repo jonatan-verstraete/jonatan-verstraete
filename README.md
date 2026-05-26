@@ -24,7 +24,7 @@
 
 **Game Dev (part time)** @Curve Fever (April 2026 - present)
 - Maintain game and prep release on Steam.
-- Playing since highschool, now "going pro" (Steven Pressfield).
+- Playing since highschool, now "going pro" (Steven Pressfield)
 
 
 
@@ -50,9 +50,15 @@
 </table>
 
 ### Tech Stack  <img src="./assets/clippy.gif" width="20px" />
-**Core:** React • TypeScript • JavaScript • Tailwind/SASS • Claude Code • Python • Ollama • WhisperX • Bash • TanStack • Zustand • Node • Vite • Redux • ChakraUI • Vue2 • Playwright • Figma • Keycloakify • Tauri • Three.js
+**Core:** React • TypeScript • JavaScript • Tailwind/SASS
 
-**Libraries & Tools:** 
+**AI/Tooling:** Claude Code • Python • Ollama • WhisperX • Bash
+
+**Ecosystem:** TanStack • Zustand • Node • Vite • Redux • ChakraUI
+
+**Experienced:** Vue2 • Playwright • Figma • Keycloakify • Tauri • Three.js
+
+**Languages:** Dutch (native) • English (C2) • French (B1)
 
 ---
 <p align="center">
