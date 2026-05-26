@@ -36,7 +36,7 @@ fi
 
 
 
-if [ "$1" ]; then
+if [ "${1:-}" ]; then
     # has been changed by the command above
     # if find README.md -mmin -1 -ls; then
     #     echo "README is unchanged"

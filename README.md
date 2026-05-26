@@ -1,6 +1,6 @@
 <h1 align="center">Hey, I'm Jonatan <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="25"></h1>
 <p align="center">
-  <b>Friction > Problem > Solution</b> &nbsp;•&nbsp; Ghent, Belgium<br/>
+  <b>Observe → Understand → Build</b> &nbsp;•&nbsp; Ghent, Belgium<br/>
   <!-- <a href="mailto:jonatanverstraete@outlook.com">Email</a> &nbsp;•&nbsp; -->
   <a href="https://linkedin.com/in/jonatan-verstraete">LinkedIn</a>
 </p>
@@ -11,8 +11,8 @@
 **Frontend Engineer** @Bricsys 24/7 (Hexagon) (Sep 2023 - Mar 2026)
 - Conversion of Vue 2 to React as part of a migration using Module Federation (team effort).
 - Built real time (NRL) projection of 3D annotations into 2D space for the browser based BIM viewer using React and CSS transforms across both 2D and 3D repos with shared functionality.
-- Strategic support cross teams, eg. implementing form-validation, popover to Bricsys internal component library
-- Daily tasks included: feature design, releasing (Azure), cross team feature/bug ideation, writing documentation, component performance measuring, i18n... etc
+- Diagnosed and resolved critical localization failures after global Keycloak upgrade by implementing scalable language and dialect support and automating translation workflows.
+- Daily tasks included: feature design, releasing (Azure), cross team feature ideation, writing documentation, component performance measuring, i18n/i11y, testing... etc.
 
 <br/>
 
@@ -23,8 +23,8 @@
 <br/>
 
 **Game Dev (part time)** @Curve Fever (April 2026 - present)
-- Maintain game and prep release on Steam
-- Playing since highschool, now "going pro" (Steven Pressfield)
+- Maintain game and prep release on Steam.
+- Playing since highschool, now "going pro" (Steven Pressfield).
 
 
 
@@ -35,24 +35,24 @@
   <b>Timesheet Automation</b>
 
 
-<p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process into a quick review.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process into a quick review. Why? Because of bad UI for the internal app.</p>
 </td>
 <td width="50%" valign="top">
   <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
 
-<p style="font-size: 0.85em; margin-top: 4px;">WebGPU-first fluid simulation React library with Navier-Stokes solver. Supports text and image effects with fallback to WebGL2/WebGL1. Features advection, divergence, pressure, and vorticity solving with multiple rendering algorithms (standard, glass, ink, aurora, ripple). Runs in Web Worker via OffscreenCanvas for optimal performance.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">WebGPU-first fluid simulation library with Navier-Stokes solver. Supports text and image React components. Runs in Web Worker via OffscreenCanvas for optimal performance.</p>
 </td></tr><tr>
 <td width="50%" valign="top">
   <a href="https://github.com/jayf0x/PIIPAYA"><b>PIIPAYA</b></a>
 
-<p style="font-size: 0.85em; margin-top: 4px;">Local macOS app that anonymizes sensitive documents while keeping the narrative intact. Replaces names, dates, emails and other PII with consistent pseudonyms using a deterministic seeding layer on top of Microsoft Presidio, so anonymized text stays coherent for LLM analysis or human review.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">Local macOS PII redaction app with narrative coherence so text stays coherent for LLM analysis or human review. With easy file-drop > convert > download workflow.</p>
 </td></tr>
 </table>
 
 ### Tech Stack  <img src="./assets/clippy.gif" width="20px" />
-**Core:** React • TypeScript • JavaScript (ESNext) • HTML • CSS/SCSS/Tailwind
+**Core:** React • TypeScript • JavaScript • Tailwind/SASS • Claude Code • Python • Ollama • WhisperX • Bash • TanStack • Zustand • Node • Vite • Redux • ChakraUI • Vue2 • Playwright • Figma • Keycloakify • Tauri • Three.js
 
-**Libraries & Tools:** NodeJS • TanStack (Query, Form, Router, Table...) • Zustand • Canvas API • Claude Code • Python • Vite • Playwright/Cypress • Storybook • Ollama • Bash • Vue 2 • PHP • Adobe Suite • Three.js • p5.js • Keycloakify • vMLX • Blender • Svelte • Tauri • Logic Pro x • WhisperX/FastWhisper
+**Libraries & Tools:** 
 
 ---
 <p align="center">
