@@ -25,13 +25,13 @@ JSON Structure:
   "projects": [
     {{"name": "", "link": "", "description": ""}}
   ],
-  "skills": {{"core": [], "libraries": []}}
+  "skills": {{"core": [], "ai_tooling": [], "ecosystem": [], "experienced": [], "languages": []}}
 }}
 
 Rules:
 - Output ONLY valid **JSON data**.
 - No markdown formatting in the response.
-- Ensure skills are categorized.
+- Ensure skills are categorized into the exact keys: core, ai_tooling, ecosystem, experienced, languages.
 - Extract links (a) from a project and add as `link`. Leave empty if there is no link.
 - `projects` must only include items from the "Project Highlights" section — NOT from experience/work history.
 - if key is not found (eg. no experience[0].name), use an empty string
