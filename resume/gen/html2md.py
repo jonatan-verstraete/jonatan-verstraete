@@ -4,7 +4,7 @@ from jinja2 import Template
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-from gen.config import HTML_PATH, OUTPUT_MD, CACHE_DIR, TEMPLATE_PATH, MODEL
+from gen.config import RESUME_HTML_PATH, OUTPUT_MD, CACHE_DIR, TEMPLATE_PATH, MODEL
 
 TEMP_JSON = CACHE_DIR / "resume-data.json"
 
@@ -52,7 +52,7 @@ def get_clean_html(html_path: Path) -> str:
     return soup.find("body").get_text(strip=False)
 
 
-def main(html_path: Path = HTML_PATH, use_cache: bool = True, model: str = MODEL):
+def main(html_path: Path = RESUME_HTML_PATH, use_cache: bool = True):
     if not TEMPLATE_PATH.exists():
         print(f"Oi.. template file is not there: {TEMPLATE_PATH}")
         return
@@ -69,7 +69,7 @@ def main(html_path: Path = HTML_PATH, use_cache: bool = True, model: str = MODEL
     if not data:
         html_text = get_clean_html(html_path)
         response = chat(
-            model=model,
+            model=MODEL,
             messages=[{"role": "user", "content": PROMPT.format(html_content=html_text)}],
             format="json",
             think=False,
@@ -96,6 +96,5 @@ def main(html_path: Path = HTML_PATH, use_cache: bool = True, model: str = MODEL
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate a fancy GitHub README from an HTML resume.")
     parser.add_argument("--no-cache", action="store_false", dest="use_cache", help="Skip cache and force LLM generation")
-    parser.add_argument("--model", type=str, default=MODEL, help=f"Ollama model to use (default: {MODEL})")
     args = parser.parse_args()
     main(use_cache=args.use_cache, model=args.model)

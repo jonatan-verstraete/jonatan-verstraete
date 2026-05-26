@@ -1,7 +1,9 @@
 #/bin/bash
+set -euo pipefail
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-export PYTHONPATH="$REPO_ROOT"
+export PYTHONPATH="$REPO_ROOT/resume"
 
 if [ "$(pwd)" != "$REPO_ROOT" ]; then
     echo "Must exec from repo root."

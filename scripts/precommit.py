@@ -7,25 +7,24 @@ code  .git/hooks/pre-commit
 
 python3 ./scripts/precommit.py
 
-git add ./gen/__init__.py
+git add ./resume/gen/__init__.py
 git add ./README.md
 
 """
 
 
-import re
-import subprocess
 from pathlib import Path
-
 
 root = Path(__file__).resolve().parent.parent
 
-INIT_FILE = root / "gen/__init__.py"
+INIT_FILE = root / "resume/gen/__init__.py"
 
 
 def should_bump_version():
     """Check if git changes include root README.md, ./gen, or ./scripts folders."""
     try:
+        import subprocess
+
         result = subprocess.run(
             ["git", "diff", "--cached", "--name-only"],
             cwd=root,
@@ -58,27 +57,9 @@ def main():
     if not INIT_FILE.exists():
         raise SystemExit("__init__ file not found")
 
-    text = INIT_FILE.read_text()
-
-    m = re.search(r"\d+\.\d+\.\d+", text)
-    if not m:
-        print(text)
-        print(m)
-        raise SystemExit("Version not found")
-
-    # Update like abacus
-    major, minor, patch = map(int, m.group(0).split("."))
-
-    patch += 1
-    if patch >= 100:
-        patch = 0
-        minor += 1
-
-    if minor >= 100:
-        minor = 0
-        major += 1
-
-    new_version = f"{major}.{minor}.{patch}"
+    from datetime import datetime
+    now = datetime.now()
+    new_version = now.strftime("%Y%m.%d.%H%M")
 
     new_text = f"""
 __VERSION__ = "{new_version}"

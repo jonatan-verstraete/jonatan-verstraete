@@ -166,28 +166,16 @@ ul li {
   line-height: 1.5;
 }
 
-.rating {
-  margin-left: 2px;
-  font-size: 0.8rem;
-  color: #444;
-}
-
-/* 
-    ul li::before {
-      content: "-";
-      position: absolute;
-      left: 2px;
-      top: 2px;
-      color: var(--soft);
-      font-size: 0.9rem;
-      top: 1px;
-    } */
-
 .skills-grid {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 0.5rem 1rem;
+  grid-template-columns: 90px 1fr;
+  gap: 0.4rem 1.2rem;
   font-size: 0.9rem;
+}
+
+.skill-label::after {
+  content: ":";
+  color: var(--soft);
 }
 
 .skill-value {
@@ -255,4 +243,8 @@ footer {
 @page {
   margin: 0;
   size: A4;
+}
+
+.daily-tasks {
+  font-weight: 800;
 }
