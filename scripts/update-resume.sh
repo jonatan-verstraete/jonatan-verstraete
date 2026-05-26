@@ -13,7 +13,7 @@ fi
 # means the HTML was updated more recent than the README, so no cache.
 if [[ ./assets/resume.html -nt ./README.md ]]; then
     if ! ollama list | grep -q .; then
-        echo "No models found. Boot ollama..."
+        echo "Exit. Please boot ollama"
         exit 1
     fi
     echo "Run without using cache"
