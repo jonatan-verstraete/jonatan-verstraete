@@ -7,8 +7,7 @@ code  .git/hooks/pre-commit
 
 python3 ./scripts/precommit.py
 
-git add ./resume/gen/__init__.py
-git add ./README.md
+git add .
 
 """
 
