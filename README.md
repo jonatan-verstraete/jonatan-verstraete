@@ -1,6 +1,6 @@
 <h1 align="center">Hey, I'm Jonatan <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="25"></h1>
 <p align="center">
-  <b>Observe → Understand → Build</b> &nbsp;•&nbsp; Ghent, Belgium<br/>
+  <b>Friction → Focus → Understanding</b> &nbsp;•&nbsp; Ghent, Belgium<br/>
   <!-- <a href="mailto:jonatanverstraete@outlook.com">Email</a> &nbsp;•&nbsp; -->
   <a href="https://linkedin.com/in/jonatan-verstraete">LinkedIn</a>
 </p>
@@ -8,7 +8,7 @@
 ---
 
 ### Experience
-**Frontend Engineer** @Bricsys 24/7 (Hexagon) (Sep 2023 - Mar 2026)
+**Frontend Engineer** @Bricsys 24/7 (Hexagon AB) (Sep 2023 - Mar 2026)
 - Conversion of Vue 2 to React as part of a migration using Module Federation (team effort).
 - Built real time (NRL) projection of 3D annotations into 2D space for the browser based BIM viewer using React and CSS transforms across both 2D and 3D repos with shared functionality.
 - Diagnosed and resolved critical localization failures after global Keycloak upgrade by implementing scalable language and dialect support and automating translation workflows.
@@ -16,14 +16,14 @@
 
 <br/>
 
-**Podcast Tooling & Production** @BLANC.zone (Jan 2022 - May 2026)
+**Podcast Tooling & Production** @BLANC (Jan 2022 - May 2026)
 - Maintained website, social media and handled editing workflows.
-- Explored AI-assisted automation (transcription, summarization) to reduce manual editing effort.
+- Explored AI-assisted automation to reduce manual editing effort.
 
 <br/>
 
 **Game Dev (part time)** @Curve Fever (April 2026 - present)
-- Maintain game and prep release on Steam.
+- Maintain game and prep release on Steam
 - Playing since highschool, now "going pro" (Steven Pressfield)
 
 

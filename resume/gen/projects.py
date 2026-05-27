@@ -86,6 +86,6 @@ def build_working_html(html_path: Path, extra_projects: list[dict], cache_dir: P
             section.append(new_tag)
 
     cache_dir.mkdir(exist_ok=True)
-    working_path = cache_dir / "resume_working.html"
+    working_path = cache_dir / "resume_cached.html"
     working_path.write_text(str(soup), encoding="utf-8")
     return working_path

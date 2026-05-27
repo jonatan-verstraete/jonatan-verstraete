@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jonatan Verstraete — Frontend Engineer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
       rel="stylesheet"
@@ -12,13 +12,13 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
       rel="stylesheet"
-    />
+    /> -->
   </head>
 
   <body>
     <header>
-      <h1>Jonatan Verstraete</h1>
-      <p class="tagline">Observe → Understand → Build</p>
+      <h1 class="main-title">Jonatan Verstraete</h1>
+      <p class="tagline">Friction → Focus → Understanding</p>
       <div class="contact-row">
         <div>Ghent, Belgium</div>
         <a href="https://jayf0x.github.io/jayf0x/">Website</a>
@@ -46,8 +46,11 @@
       <div class="entry">
         <div class="entry-header">
           <span class="entry-title"
-            >Frontend Engineer — Bricsys 24/7 (Hexagon)</span
-          >
+            >Frontend Engineer —
+            <a href="https://bricscad.octave.com/247"
+              >Bricsys 24/7 (Hexagon AB)</a
+            >
+          </span>
           <span class="entry-date">Sep 2023 - Mar 2026</span>
         </div>
         <div class="entry-sub">
@@ -81,7 +84,7 @@
         <div class="entry-header">
           <span class="entry-title"
             >Podcast Tooling & Production -
-            <a href="https://blanc.zone/pod/">BLANC.zone</a></span
+            <a href="https://blanc.zone/">BLANC</a></span
           >
           <span class="entry-date">Jan 2022 - May 2026</span>
         </div>
@@ -90,8 +93,7 @@
             Maintained website, social media and handled editing workflows.
           </li>
           <li>
-            Explored AI-assisted automation (transcription, summarization) to
-            reduce manual editing effort.
+            Explored AI-assisted automation to reduce manual editing effort.
           </li>
         </ul>
       </div>
@@ -99,7 +101,7 @@
       <div class="entry">
         <div class="entry-header">
           <span class="entry-title"
-            >Game Dev (part time) at
+            >Game Dev (part time) -
             <a href="https://info.curvefever.pro/">Curve Fever</a></span
           >
           <span class="entry-date">April 2026 - present</span>
@@ -254,8 +256,8 @@
     :root {
       --ink: #1a1a1a;
       --mid: #555;
-      --soft: #888;
-      --rule: #ddd;
+      --soft: #737373;
+      --rule: #e9e9e9;
       --page: #faf9f7;
       --page: #faf9f7;
       /* --serif: 'Libre Baskerville', Georgia, serif;
@@ -264,7 +266,7 @@
       --sans: "Inter", system-ui, sans-serif;
       --serif: "Inter", system-ui, sans-serif;
       /* --link: #0066cc; */
-      --link: #363636;
+      --link: #828386;
 
       font-size: 11px;
     }
@@ -292,12 +294,12 @@
       font-weight: 300;
       color: var(--ink);
       background: var(--page);
-      max-width: 780px;
-      margin: 40px auto;
       padding: 6ch 10ch;
       line-height: 1.6;
-
-      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.12);
+      position: relative;
+      margin: 0 auto;
+      width: 210mm;
+      height: 297mm;
     }
 
     header {
@@ -307,15 +309,22 @@
       /* text-align: center; */
     }
 
-    h1 {
+    header .main-title {
       font-family: var(--sans);
       font-family: Helvetica;
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 700;
       letter-spacing: -0.5px;
       line-height: 1.1;
       margin-bottom: 0.5rem;
       text-align: center;
+
+      /* background-image: url(../assets/bg-fluidity.png);
+      background-size: 70%;
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-clip: text; */
+      color: #777;
     }
 
     .tagline {
@@ -366,6 +375,7 @@
       margin-bottom: 0.8rem;
       /* padding-bottom: 0.5rem; */
       border-bottom: 1px solid var(--rule);
+      width: 100%;
     }
 
     .entry {
@@ -390,6 +400,7 @@
     .entry-date {
       color: var(--soft);
       white-space: nowrap;
+      font-style: italic;
     }
 
     .entry-sub {
