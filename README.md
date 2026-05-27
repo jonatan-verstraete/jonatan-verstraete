@@ -22,8 +22,8 @@
 
 <br/>
 
-**Game Dev (part time)** @Curve Fever (April 2026 - present)
-- Maintain game and prep release on Steam
+**Indie Game Developer** @Curve Fever (April 2026 - present)
+- Game development and prep Steam release
 - Playing since highschool, now "going pro" (Steven Pressfield)
 
 

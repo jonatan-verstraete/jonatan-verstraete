@@ -12,7 +12,7 @@ fi
 
 # means the HTML was updated more recent than the README, so no cache.
 if [[ ./resume/index.html -nt ./README.md ]]; then
-    if ! ollama list | grep -q .; then
+    if ! curl http://localhost:11434; then
         echo "Exit. Please boot ollama"
         exit 1
     fi
