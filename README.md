@@ -35,7 +35,7 @@
   <b>Timesheet Automation</b>
 
 
-<p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process into a quick review. Why? Because of bad UI for the internal app.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process into am optional review.</p>
 </td>
 <td width="50%" valign="top">
   <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
