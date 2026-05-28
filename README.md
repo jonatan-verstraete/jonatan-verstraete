@@ -23,8 +23,9 @@
 <br/>
 
 **Indie Game Developer** @Curve Fever (April 2026 - present)
-- Game development and prep Steam release
-- Playing since highschool, now "going pro" (Steven Pressfield)
+- Game development and prep
+- Steam release
+- Playing since highschool, now going pro (Steven Pressfield)
 
 
 
@@ -32,10 +33,9 @@
 ### Projects
 <table width="100%"><tr>
 <td width="50%" valign="top">
-  <b>Timesheet Automation</b>
+  <a href="https://github.com/jayf0x/timesheet-automation-snapshot"><b>Timesheet Automation</b></a>
 
-
-<p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process into am optional review.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into a optional quick review.</p>
 </td>
 <td width="50%" valign="top">
   <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
