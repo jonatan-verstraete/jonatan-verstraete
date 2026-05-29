@@ -10,9 +10,9 @@ import {
 } from "./hooks/usePerformanceCheckpoint";
 
 import { WidgetsContainer } from "./components/widgets";
-import { type CheckpointItem } from "./lib/performanceStore";
 import { Home } from "./pages/Home";
 import { Resume } from "./pages/Resume";
+import { type CheckpointItem } from "./store/checkPointStore";
 
 const allPages: { label: string; component: () => React.JSX.Element }[] = [
   { label: "127.0.0.1", component: Home },

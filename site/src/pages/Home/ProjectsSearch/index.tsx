@@ -1,16 +1,13 @@
-import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, X } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { useRepoSearch } from "@/hooks/useRepoSearch";
-import { withLocalStorageCache } from "@/lib/queryClient";
-import {
-  fetchUserRepos,
-  type GithubRepo,
-} from "@/utils/fetch-repository";
-import { RepoCard } from "./RepoCard";
 import { CACHE_INVALIDATION_TIME, OWNER } from "@/config";
+import { useRepoSearch } from "@/hooks/useRepoSearch";
+import { fetchUserRepos, type GithubRepo } from "@/utils/fetch-repository";
+import { withLocalStorageCache } from "@/utils/queryClient";
+import { useQuery } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
+import { Search, X } from "lucide-react";
+import { useRef, useState } from "react";
 import { FilterRow } from "./FilterRow";
+import { RepoCard } from "./RepoCard";
 import { Sidebar } from "./Sidebar";
 
 const spring = { type: "spring" as const, stiffness: 500, damping: 40 };

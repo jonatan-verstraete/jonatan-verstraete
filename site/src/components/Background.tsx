@@ -61,7 +61,7 @@ export const Background = () => {
 
       {showBackground && (
         <div
-          className="absolute inset-0 opacity-100"
+          className="absolute inset-0 opacity-50"
           title="bun add @jayf0x/fluidity-js"
         >
           <FluidText
@@ -73,12 +73,17 @@ export const Background = () => {
             }
             config={{
               densityDissipation: 0.99,
+              velocityDissipation: 0.98,
               waterColor: "#312",
               glowColor: "#29a",
-              shine: 0.1,
+              shine: 0,
               splatRadius: 0.005,
-              specularExp: 7,
-              pressureIterations: 0,
+              specularExp: 0.1,
+              pressureIterations: 3,
+            }}
+            quality={{
+              dpr: 0.4,
+              sim: 0.4,
             }}
             fontSize={200}
             fontFamily="Ubuntu"

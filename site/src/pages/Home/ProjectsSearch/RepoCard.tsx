@@ -1,23 +1,23 @@
+import { CACHE_INVALIDATION_TIME, OWNER } from "@/config";
+import {
+  fetchLatestDmgUrl,
+  fetchNpmUrl,
+  fetchPreviewUrl,
+  fetchRepoLanguages,
+  GithubRepo,
+} from "@/utils/fetch-repository";
+import { withLocalStorageCache } from "@/utils/queryClient";
+import { getStackMeta } from "@/utils/stackMeta";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
   Archive,
-  Scale,
-  Github,
-  Package,
   Download,
+  Github,
   GlobeIcon,
+  Package,
+  Scale,
 } from "lucide-react";
 import { PropsWithChildren } from "react";
-import { withLocalStorageCache } from "@/lib/queryClient";
-import { getStackMeta } from "@/lib/stackMeta";
-import {
-  GithubRepo,
-  fetchRepoLanguages,
-  fetchPreviewUrl,
-  fetchNpmUrl,
-  fetchLatestDmgUrl,
-} from "@/utils/fetch-repository";
-import { CACHE_INVALIDATION_TIME, OWNER } from "@/config";
 
 const queryOpts = {
   staleTime: CACHE_INVALIDATION_TIME,
@@ -48,9 +48,7 @@ const RepoInfo = ({ repo }: { repo: GithubRepo }) => {
   return (
     <div className="min-w-0 flex-1 space-y-2">
       <div className="flex flex-wrap items-center gap-2">
-        <h3 className="text-sm font-semibold text-(--text)">
-          {repo.name}
-        </h3>
+        <h3 className="text-sm font-semibold text-(--text)">{repo.name}</h3>
         {repo.archived && (
           <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-1.5 py-0 font-mono text-[10px] text-amber-400">
             <Archive size={9} />

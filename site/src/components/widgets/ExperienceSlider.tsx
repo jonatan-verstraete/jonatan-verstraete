@@ -2,7 +2,7 @@ import {
   checkpointOverridesAtom,
   checkpointsAtom,
   sliderValueAtom,
-} from "@/lib/performanceStore";
+} from "@/store/checkPointStore";
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useRef } from "react";
 
@@ -142,9 +142,7 @@ export const ExperienceSlider = () => {
                 bottom: major ? 3 : mid ? 5 : 8,
                 width: 1,
                 height: h,
-                background: lit
-                  ? "rgba(79,124,255,0.45)"
-                  : "var(--overlay-md)",
+                background: lit ? "rgba(79,124,255,0.45)" : "var(--overlay-md)",
                 transform: "translateX(-50%)",
                 borderRadius: 0.5,
                 transition: "background 0.15s",

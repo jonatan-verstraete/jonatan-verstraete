@@ -1,4 +1,4 @@
-import { getStackMeta } from "@/lib/stackMeta";
+import { getStackMeta } from "@/utils/stackMeta";
 
 export const FilterRow = ({
   label,

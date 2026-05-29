@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
 import {
-  checkpointsAtom,
   checkpointOverridesAtom,
+  checkpointsAtom,
   sliderValueAtom,
   type CheckpointItem,
-} from "@/lib/performanceStore";
+} from "@/store/checkPointStore";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useEffect } from "react";
 
 export const useRegisterCheckpoints = <
   const T extends readonly CheckpointItem[],
