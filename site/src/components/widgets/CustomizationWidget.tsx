@@ -1,50 +1,26 @@
-import { useState, useRef, useCallback } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
-import { useAtom, useAtomValue } from "jotai";
 import {
-  sliderValueAtom,
-  checkpointsAtom,
   checkpointOverridesAtom,
+  checkpointsAtom,
   OverrideState,
+  sliderValueAtom,
 } from "@/lib/performanceStore";
-import { InfoPopover } from "./InfoPopover";
-
-const TICKS = Array.from({ length: 21 }, (_, i) => i * 5);
-const SCALE_LABELS = [0, 25, 50, 75, 100];
+import { AnimatePresence, motion } from "framer-motion";
+import { useAtom, useAtomValue } from "jotai";
+import { Sparkles } from "lucide-react";
+import { useCallback, useState } from "react";
+import { InfoPopover } from "../InfoPopover";
+import { ExperienceSlider } from "./ExperienceSlider";
 
 const AMBER = "var(--amber)";
 const AMBER_DIM = "color-mix(in srgb, var(--amber) 18%, transparent)";
 const AMBER_MID = "color-mix(in srgb, var(--amber) 40%, transparent)";
 const AMBER_GLOW = "var(--amber-glow)";
 
-function cycleOverride(current: OverrideState): OverrideState {
-  if (current === "auto") return "off";
-  if (current === "off") return "on";
-  if (current === "on") return "auto";
-  return "off";
-}
-
-export const PerformanceWidget = () => {
+export const CustomizationWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useAtom(sliderValueAtom);
+  const value = useAtomValue(sliderValueAtom);
   const checkpoints = useAtomValue(checkpointsAtom);
   const [overrides, setOverrides] = useAtom(checkpointOverridesAtom);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
-
-  const applyClientX = useCallback(
-    (clientX: number) => {
-      if (!trackRef.current) return;
-      const { left, width } = trackRef.current.getBoundingClientRect();
-      const pct = Math.max(
-        0,
-        Math.min(100, Math.round(((clientX - left) / width) * 100)),
-      );
-      setValue(pct);
-    },
-    [setValue],
-  );
 
   const toggleOverride = useCallback(
     (tag: string) => {
@@ -82,7 +58,8 @@ export const PerformanceWidget = () => {
                 boxShadow: `0 8px 40px var(--bg-a65), 0 0 0 1px ${AMBER_GLOW} inset, 0 0 32px ${AMBER_GLOW}`,
               }}
             >
-              <div className="flex items-center justify-between mb-3">
+              {/* Header row */}
+              <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
                   <span
                     className="inline-block w-1.5 h-1.5 rounded-full"
@@ -116,196 +93,15 @@ export const PerformanceWidget = () => {
                 </span>
               </div>
 
-              {checkpoints.length > 0 && (
-                <div className="relative h-7 mb-0.5">
-                  {checkpoints.map((cp, idx) => {
-                    const overridden = (overrides[cp.tag] ?? "auto") !== "auto";
-                    const active = value >= cp.percentage;
-                    return (
-                      <div
-                        key={`checkpoint-tag-${cp.tag}`}
-                        className="absolute bottom-0 flex flex-col items-center"
-                        style={{
-                          left: `${cp.percentage}%`,
-                          transform: `translate(-50%, ${getLabelOffset(idx)}px)`,
-                        }}
-                      >
-                        <span
-                          className="text-[8px] font-mono uppercase tracking-wider whitespace-nowrap mb-1 transition-colors duration-300"
-                          style={{
-                            color: overridden
-                              ? "var(--overlay-lg)"
-                              : active
-                                ? "color-mix(in srgb, var(--amber) 95%, transparent)"
-                                : "var(--overlay-lg)",
-                          }}
-                        >
-                          {cp.tag}
-                        </span>
-                        <div
-                          className="transition-colors duration-300"
-                          style={{
-                            width: 0,
-                            height: 0,
-                            borderLeft: "3px solid transparent",
-                            borderRight: "3px solid transparent",
-                            borderTop: `5px solid ${
-                              overridden
-                                ? "var(--overlay-md)"
-                                : active
-                                  ? "color-mix(in srgb, var(--amber) 90%, transparent)"
-                                  : "var(--overlay-lg)"
-                            }`,
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              <div
-                ref={trackRef}
-                className="relative cursor-ew-resize"
-                style={{ height: 32, touchAction: "none" }}
-                onPointerDown={(e) => {
-                  dragging.current = true;
-                  e.currentTarget.setPointerCapture(e.pointerId);
-                  applyClientX(e.clientX);
-                }}
-                onPointerMove={(e) => {
-                  if (dragging.current) applyClientX(e.clientX);
-                }}
-                onPointerUp={() => {
-                  dragging.current = false;
-                }}
-                onPointerCancel={() => {
-                  dragging.current = false;
-                }}
+              {/* Section title */}
+              <p
+                className="text-[10px] font-mono tracking-[0.18em] uppercase mb-3"
+                style={{ color: "rgba(255,255,255,0.25)" }}
               >
-                <div
-                  className="absolute inset-x-0 overflow-hidden"
-                  style={{
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    height: 8,
-                    borderRadius: 4,
-                  }}
-                >
-                  <div
-                    className="absolute inset-y-0 left-0"
-                    style={{
-                      width: `${value}%`,
-                      background: `linear-gradient(90deg, var(--amber) 0%, var(--c-ef4444) 60%, var(--c-dd3162) 100%)`,
-                      opacity: 0.85,
-                      border: "1px solid var(--border)",
-                      backgroundClip: "padding-box",
-                    }}
-                  />
-                  <div
-                    className="absolute inset-0 rounded"
-                    style={{ background: "var(--overlay-sm)" }}
-                  />
-                </div>
+                Customize experience
+              </p>
 
-                {TICKS.map((tick) => {
-                  const major = tick % 25 === 0;
-                  const mid = tick % 10 === 0;
-                  const lit = tick <= value;
-                  const h = major ? 14 : mid ? 9 : 5;
-                  return (
-                    <div
-                      key={`slider-tick-${tick}`}
-                      className="absolute pointer-events-none"
-                      style={{
-                        left: `${tick}%`,
-                        bottom: major ? 3 : mid ? 5 : 8,
-                        width: 1,
-                        height: h,
-                        background: lit
-                          ? "var(--border-a55)"
-                          : "var(--overlay-md)" /* tick mark */,
-                        transform: "translateX(-50%)",
-                        borderRadius: 0.5,
-                        transition: "background 0.15s",
-                      }}
-                    />
-                  );
-                })}
-
-                {checkpoints.map((cp, idx) => {
-                  const overridden = (overrides[cp.tag] ?? "auto") !== "auto";
-                  const active = value >= cp.percentage;
-                  const indexOffset = getLabelOffset(idx);
-                  return (
-                    <div
-                      key={`tag-line-${cp.tag}`}
-                      className="absolute pointer-events-none z-10"
-                      style={{
-                        left: `${cp.percentage}%`,
-                        top: 2,
-                        bottom: 2,
-                        height: 25 + Math.abs(indexOffset),
-                        width: 2,
-                        borderRadius: 1,
-                        transform: `translate(-50%, ${indexOffset}px)`,
-                        background: overridden
-                          ? "var(--overlay-md)"
-                          : active
-                            ? AMBER
-                            : "var(--overlay-lg)",
-                        boxShadow:
-                          !overridden && active
-                            ? "0 0 8px 2px color-mix(in srgb, var(--amber) 55%, transparent)"
-                            : "none",
-                        transition: "background 0.25s, box-shadow 0.25s",
-                      }}
-                    />
-                  );
-                })}
-
-                <div
-                  className="absolute top-0 bottom-0 flex items-center justify-center pointer-events-none z-20"
-                  style={{ left: `${value}%`, transform: "translateX(-50%)" }}
-                >
-                  <div
-                    className="flex flex-col items-center justify-center gap-1"
-                    style={{
-                      width: 14,
-                      height: 26,
-                      borderRadius: 4,
-                      background:
-                        "linear-gradient(180deg, var(--border-a96) 0%, var(--c-ffdc96-a90) 100%)",
-                      boxShadow:
-                        "0 0 14px color-mix(in srgb, var(--amber) 50%, transparent), 0 3px 8px var(--bg-a70)",
-                    }}
-                  >
-                    {[0, 1, 2].map((i) => (
-                      <div
-                        key={`thumb-line-${i}`}
-                        className="rounded-sm"
-                        style={{
-                          width: 6,
-                          height: 1,
-                          background: "var(--bg-a28)",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative mt-1" style={{ height: 14 }}>
-                {SCALE_LABELS.map((v) => (
-                  <span
-                    key={`scale-label-${v}`}
-                    className="absolute text-[8px] font-mono -translate-x-1/2 tabular-nums"
-                    style={{ left: `${v}%`, color: "var(--overlay-lg)" }}
-                  >
-                    {v}
-                  </span>
-                ))}
-              </div>
+              <ExperienceSlider />
 
               {checkpoints.length > 0 && (
                 <div
@@ -397,6 +193,7 @@ export const PerformanceWidget = () => {
               )}
             </div>
 
+            {/* Caret */}
             <div
               className="absolute -bottom-[5px] right-[19px]"
               style={{
@@ -414,6 +211,7 @@ export const PerformanceWidget = () => {
       </AnimatePresence>
 
       <motion.button
+        id="performance-widget-btn"
         type="button"
         onClick={() => setIsOpen((v) => !v)}
         whileHover={{ scale: 1.07 }}
@@ -446,5 +244,9 @@ export const PerformanceWidget = () => {
   );
 };
 
-const getLabelOffset = (index: number, max = 25, stable = 1) =>
-  Math.abs(Math.sin(index / stable) * max) - max / stable;
+function cycleOverride(current: OverrideState): OverrideState {
+  if (current === "auto") return "off";
+  if (current === "off") return "on";
+  if (current === "on") return "auto";
+  return "off";
+}

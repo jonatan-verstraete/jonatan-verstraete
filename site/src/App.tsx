@@ -1,20 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Background } from "./components/Background";
-import { ChatWidget } from "./components/ChatWidget";
 
-import { useIsMobile } from "./hooks/useIsMobile";
 import { FakeAds } from "./components/FakeAds";
-import { PerformanceWidget } from "./components/PerformanceWidget";
+import { useIsMobile } from "./hooks/useIsMobile";
 import {
   useCheckpointValue,
   useRegisterCheckpoints,
 } from "./hooks/usePerformanceCheckpoint";
 
-import { Info } from "./pages/Info";
+import { WidgetsContainer } from "./components/widgets";
+import { type CheckpointItem } from "./lib/performanceStore";
 import { Home } from "./pages/Home";
 import { Resume } from "./pages/Resume";
-import { type CheckpointItem } from "./lib/performanceStore";
 
 const allPages: { label: string; component: () => React.JSX.Element }[] = [
   { label: "127.0.0.1", component: Home },
@@ -43,10 +41,7 @@ export const App = () => {
 
   return (
     <div className="h-screen w-screen text-text">
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
-        <PerformanceWidget />
-        <ChatWidget />
-      </div>
+      <WidgetsContainer />
       <FakeAds />
       <Background />
       <main

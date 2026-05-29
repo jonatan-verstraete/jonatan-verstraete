@@ -1,9 +1,9 @@
+import { useChatLLM } from "@/hooks/useChatLLM";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, Send, Square, TriangleAlert, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { ChevronDown, Send, Square, TriangleAlert, X } from "lucide-react";
-import { useChatLLM } from "@/hooks/useChatLLM";
-import { InfoPopover } from "./InfoPopover";
+import { InfoPopover } from "../InfoPopover";
 
 type Message = {
   id: string;
@@ -467,8 +467,10 @@ export const ChatWidget = () => {
                     <div
                       className="flex items-center gap-2 text-xs px-3 py-2 rounded-xl"
                       style={{
-                        background: "color-mix(in srgb, var(--red) 7%, transparent)",
-                        border: "1px solid color-mix(in srgb, var(--red) 18%, transparent)",
+                        background:
+                          "color-mix(in srgb, var(--red) 7%, transparent)",
+                        border:
+                          "1px solid color-mix(in srgb, var(--red) 18%, transparent)",
                         color: "var(--red)",
                       }}
                     >
@@ -503,7 +505,10 @@ export const ChatWidget = () => {
                         {countdown !== null && (
                           <span
                             className="text-[11px] tabular-nums font-mono"
-                            style={{ color: "color-mix(in srgb, var(--gold) 50%, transparent)" }}
+                            style={{
+                              color:
+                                "color-mix(in srgb, var(--gold) 50%, transparent)",
+                            }}
                           >
                             ~{countdown}s
                           </span>
@@ -534,7 +539,10 @@ export const ChatWidget = () => {
                             exit={{ opacity: 0, y: -3 }}
                             transition={{ duration: 0.18 }}
                             className="text-[11px] font-mono"
-                            style={{ color: "color-mix(in srgb, var(--gold-text) 70%, transparent)" }}
+                            style={{
+                              color:
+                                "color-mix(in srgb, var(--gold-text) 70%, transparent)",
+                            }}
                           >
                             {statusMessage}…
                           </motion.span>
@@ -570,9 +578,7 @@ export const ChatWidget = () => {
             <div
               className="px-3 py-3 shrink-0"
               style={{
-                borderTop: isPending
-                  ? "none"
-                  : "1px solid var(--overlay-sm)",
+                borderTop: isPending ? "none" : "1px solid var(--overlay-sm)",
               }}
             >
               <div
@@ -629,7 +635,8 @@ export const ChatWidget = () => {
             transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
             className="w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-xl select-none relative"
             style={{
-              background: "linear-gradient(135deg, var(--accent) 0%, var(--c-7c4fff) 100%)",
+              background:
+                "linear-gradient(135deg, var(--accent) 0%, var(--c-7c4fff) 100%)",
               boxShadow:
                 "0 4px 24px color-mix(in srgb, var(--accent) 35%, transparent), 0 1px 0 var(--overlay-lg) inset",
               border: "1px solid var(--overlay-md)",
