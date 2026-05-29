@@ -79,7 +79,7 @@ export const ProjectSection = () => {
             <div className="absolute right-3 flex items-center top-0 h-full">
               <X
                 size={13}
-                className="hover:scale-[2]  hover:text-(--accent) hover:rotate-180 transition-all"
+                className="hover:scale-[2] hover:text-(--accent) hover:rotate-180 transition-all"
                 onClick={() => {
                   setQuery("");
                   inputRef.current?.focus();

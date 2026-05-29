@@ -1,8 +1,8 @@
-import { FluidText } from "@jayf0x/fluidity-js";
-import { useCallback, useEffect, useRef } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useCheckpointValue } from "@/hooks/usePerformanceCheckpoint";
+import { FluidText } from "@jayf0x/fluidity-js";
 import { useMotionValue, useMotionValueEvent } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
 
 export const Background = () => {
   const fluidRef = useRef<FluidHandle>(null);
@@ -73,7 +73,8 @@ export const Background = () => {
             }
             config={{
               densityDissipation: 0.99,
-              waterColor: [0.15, 0.1, 0.1],
+              waterColor: "#312",
+              glowColor: "#29a",
               shine: 0.1,
               splatRadius: 0.005,
               specularExp: 7,
