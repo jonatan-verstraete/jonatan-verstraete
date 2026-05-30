@@ -1,197 +1,9 @@
 import { useIsMobile } from "@/hooks/useDevice";
-import {
-  checkpointOverridesAtom,
-  checkpointsAtom,
-  OverrideState,
-  sliderValueAtom,
-} from "@/store/checkPointStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { useAtom, useAtomValue } from "jotai";
 import { SlidersHorizontal, X } from "lucide-react";
-import { useCallback, useState } from "react";
-import { InfoPopover } from "../InfoPopover";
-import { ExperienceSlider } from "./ExperienceSlider";
-
-const BLUE = "var(--accent)";
-const BLUE_DIM = "color-mix(in srgb, var(--accent) 15%, transparent)";
-const BLUE_MID = "color-mix(in srgb, var(--accent) 35%, transparent)";
-const BLUE_GLOW = "color-mix(in srgb, var(--accent) 18%, transparent)";
-
-function cycleOverride(current: OverrideState): OverrideState {
-  if (current === "auto") return "off";
-  if (current === "off") return "on";
-  if (current === "on") return "auto";
-  return "off";
-}
-
-export const InfoWidgetContent = () => {
-  const value = useAtomValue(sliderValueAtom);
-  const checkpoints = useAtomValue(checkpointsAtom);
-  const [overrides, setOverrides] = useAtom(checkpointOverridesAtom);
-
-  const toggleOverride = useCallback(
-    (tag: string) => {
-      setOverrides((prev) => {
-        const next = cycleOverride(prev[tag]);
-        if (next === "auto") {
-          const { [tag]: _, ...rest } = prev;
-          return rest;
-        }
-        return { ...prev, [tag]: next };
-      });
-    },
-    [setOverrides],
-  );
-
-  const featureLabel =
-    value < 25
-      ? "Zen"
-      : value < 50
-        ? "Focused"
-        : value < 75
-          ? "Enriched"
-          : "Full";
-
-  return (
-    <div>
-      {/* Slider header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span
-            className="text-[10px] font-mono tracking-[0.2em] uppercase"
-            style={{ color: "rgba(255,255,255,0.28)" }}
-          >
-            <InfoPopover
-              title="Temperature"
-              items={[
-                [
-                  "About LLM temperature",
-                  "https://www.promptingguide.ai/introduction/settings#:~:text=Temperature",
-                ],
-                [
-                  "Common misunderstandings about temperature",
-                  "https://dev.to/hermup299/llm-predictability-vs-determinism-2idb",
-                ],
-              ]}
-            />
-          </span>
-          <p
-            className="text-[10px] font-mono tracking-[0.2em] uppercase"
-            style={{ color: "rgba(255,255,255,0.28)" }}
-          >
-            Tune the experience
-          </p>
-        </div>
-        <span
-          className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md tabular-nums"
-          style={{
-            background: "color-mix(in srgb, var(--accent) 12%, transparent)",
-            border: `1px solid color-mix(in srgb, var(--accent) 22%, transparent)`,
-            color: BLUE,
-          }}
-        >
-          {featureLabel} · {value}%
-        </span>
-      </div>
-
-      <ExperienceSlider />
-
-      {checkpoints.length > 0 && (
-        <div
-          className="mt-5 pt-4 space-y-1.5"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <p
-            className="text-[9px] font-mono tracking-[0.22em] uppercase mb-2.5"
-            style={{ color: "rgba(255,255,255,0.2)" }}
-          >
-            Checkpoint overrides
-          </p>
-          {checkpoints.map((cp) => {
-            const override = overrides[cp.tag] ?? "auto";
-            return (
-              <div
-                key={`override-${cp.tag}`}
-                className="flex items-center justify-between gap-3 py-0.5"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-300"
-                    style={{
-                      background: override !== "auto" ? "var(--green)" : BLUE,
-                      boxShadow:
-                        override !== "auto"
-                          ? "0 0 5px color-mix(in srgb, var(--green) 60%, transparent)"
-                          : `0 0 5px ${BLUE_GLOW}`,
-                    }}
-                  />
-                  <span
-                    className="text-[11px] font-mono uppercase tracking-wider truncate transition-colors duration-200"
-                    style={{
-                      color:
-                        override !== "auto"
-                          ? "var(--border-a70)"
-                          : "var(--border-a35)",
-                    }}
-                  >
-                    {cp.tag}
-                  </span>
-                  <span
-                    className="text-[9px] font-mono tabular-nums shrink-0"
-                    style={{ color: "var(--overlay-lg)" }}
-                  >
-                    @{cp.percentage}%
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => toggleOverride(cp.tag)}
-                  className="flex items-center gap-1.5 px-2 py-0.5 rounded-md shrink-0 transition-all duration-150"
-                  style={{
-                    background:
-                      override === "on"
-                        ? "color-mix(in srgb, var(--green) 12%, transparent)"
-                        : override === "off"
-                          ? "color-mix(in srgb, var(--red) 10%, transparent)"
-                          : "var(--overlay-xs)",
-                    border:
-                      override === "on"
-                        ? "1px solid color-mix(in srgb, var(--green) 30%, transparent)"
-                        : override === "off"
-                          ? "1px solid color-mix(in srgb, var(--red) 25%, transparent)"
-                          : "1px solid var(--border)",
-                    color:
-                      override === "on"
-                        ? "var(--green)"
-                        : override === "off"
-                          ? "var(--red)"
-                          : "var(--overlay-lg)",
-                  }}
-                >
-                  <span
-                    className="w-1 h-1 rounded-full shrink-0"
-                    style={{
-                      background:
-                        override === "on"
-                          ? "var(--green)"
-                          : override === "off"
-                            ? "var(--red)"
-                            : "var(--overlay-lg)",
-                    }}
-                  />
-                  <span className="text-[9px] font-mono uppercase tracking-wider">
-                    {override ?? "auto"}
-                  </span>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-};
+import { useState } from "react";
+import { InfoWidgetContent } from "./Content";
+import { BLUE, BLUE_DIM, BLUE_GLOW, BLUE_MID } from "./utils";
 
 export const InfoWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -208,7 +20,7 @@ export const InfoWidget = () => {
           {isOpen && (
             <motion.div
               key="info-widget-backdrop"
-              className="fixed inset-0 z-[80]"
+              className="fixed inset-0 z-80"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -230,7 +42,7 @@ export const InfoWidget = () => {
               key="info-widget-panel"
               className={
                 isMobile
-                  ? "fixed inset-x-0 bottom-0 z-[90] p-3"
+                  ? "fixed inset-x-0 bottom-0 z-90 p-3"
                   : "relative select-none"
               }
               initial={{

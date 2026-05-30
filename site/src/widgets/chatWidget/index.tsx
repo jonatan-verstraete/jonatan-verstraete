@@ -1,9 +1,9 @@
+import { InfoPopover } from "@/components/InfoPopover";
 import { useChatLLM } from "@/hooks/useChatLLM";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Send, Square, TriangleAlert, X } from "lucide-react";
+import { Send, Square, TriangleAlert, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { TypeAnimation } from "react-type-animation";
-import { InfoPopover } from "../InfoPopover";
+import { BotMessage } from "./BotMessage";
 
 type Message = {
   id: string;
@@ -11,6 +11,7 @@ type Message = {
   content: string;
   animate?: boolean;
 };
+
 const STATUS_MESSAGES = [
   "Autocompleting",
   "Generating gibberish",
@@ -24,123 +25,6 @@ const STATUS_MESSAGES = [
 ];
 
 const animatedIds = new Set<string>(["init"]);
-
-const cleanResponse = (raw: string): string =>
-  raw
-    .split("\n")
-    .map((l) => l.replace(/"/g, "").trim())
-    .filter((l) => l.length > 0)
-    .join("\n");
-
-const splitAtRepeat = (text: string): { unique: string; repeated: string } => {
-  const lines = text.split("\n").filter((l) => l.length > 0);
-  const counts = new Map<string, number>();
-  let repeatStart = -1;
-
-  for (let i = 0; i < lines.length; i++) {
-    const n = (counts.get(lines[i]) ?? 0) + 1;
-    counts.set(lines[i], n);
-    if (n === 2) {
-      repeatStart = i;
-      break;
-    }
-  }
-
-  if (repeatStart === -1) return { unique: lines.join("\n"), repeated: "" };
-  return {
-    unique: lines.slice(0, repeatStart).join("\n"),
-    repeated: lines.slice(repeatStart).join("\n"),
-  };
-};
-
-const BotMessage = ({
-  id,
-  content,
-  shouldAnimate,
-}: {
-  id: string;
-  content: string;
-  shouldAnimate: boolean;
-}) => {
-  const [expanded, setExpanded] = useState(false);
-  const [typed, setTyped] = useState(!shouldAnimate);
-
-  const clean = cleanResponse(content);
-  const { unique, repeated } = splitAtRepeat(clean);
-  const hasRepeat = repeated.length > 0;
-  const repeatLineCount = repeated
-    .split("\n")
-    .filter((l) => l.length > 0).length;
-
-  return (
-    <div className="flex flex-col items-start">
-      {shouldAnimate ? (
-        <span className="whitespace-pre-wrap">
-          <TypeAnimation
-            key={`message-bot-${id}`}
-            sequence={[
-              unique,
-              () => {
-                animatedIds.add(id);
-                setTyped(true);
-              },
-            ]}
-            speed={62}
-            cursor={false}
-            wrapper="span"
-          />
-        </span>
-      ) : (
-        <span className="whitespace-pre-wrap">{unique}</span>
-      )}
-
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            key="repeated"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden w-full"
-          >
-            <div
-              className="mt-2 pt-2 whitespace-pre-wrap"
-              style={{
-                borderTop: "1px solid var(--gold-dim)",
-                opacity: 0.55,
-              }}
-            >
-              {repeated}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {hasRepeat && typed && (
-        <motion.button
-          initial={{ opacity: 0, y: 3 }}
-          animate={{ opacity: 1, y: 0 }}
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          className="mt-2 flex items-center gap-1 text-[11px] transition-opacity hover:opacity-100"
-          style={{ color: "color-mix(in srgb, var(--gold) 50%, transparent)" }}
-        >
-          <motion.span
-            animate={{ rotate: expanded ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex"
-          >
-            <ChevronDown size={11} />
-          </motion.span>
-          {expanded
-            ? "Show less"
-            : `${repeatLineCount} repeated lines — Show more`}
-        </motion.button>
-      )}
-    </div>
-  );
-};
 
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -403,6 +287,9 @@ export const ChatWidget = () => {
                           id={msg.id}
                           content={msg.content}
                           shouldAnimate={shouldAnimate}
+                          addAnimateId={() => {
+                            animatedIds.add(msg.id);
+                          }}
                         />
                       ) : (
                         msg.content

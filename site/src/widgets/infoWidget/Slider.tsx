@@ -14,7 +14,7 @@ const BLUE = "var(--accent)";
 const getLabelOffset = (index: number, max = 25, stable = 1) =>
   Math.abs(Math.sin(index / stable) * max) - max / stable;
 
-export const ExperienceSlider = () => {
+export const InfoWidgetSlider = () => {
   const [value, setValue] = useAtom(sliderValueAtom);
   const checkpoints = useAtomValue(checkpointsAtom);
   const overrides = useAtomValue(checkpointOverridesAtom);

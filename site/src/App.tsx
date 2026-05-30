@@ -9,9 +9,9 @@ import {
 } from "./hooks/useCheckpoint";
 import { useIsMobile, useRegisterIsMobile } from "./hooks/useDevice";
 
-import { WidgetsContainer } from "./components/widgets";
 import { Home } from "./pages/Home";
 import { Resume } from "./pages/Resume";
+import { WidgetsContainer } from "./widgets";
 
 const allPages: { label: string; component: () => React.JSX.Element }[] = [
   { label: "127.0.0.1", component: Home },

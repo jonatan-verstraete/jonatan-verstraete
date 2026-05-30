@@ -1,14 +1,22 @@
-import { useState } from "react";
-import { Info, ArrowUpRight } from "lucide-react";
-import { motion } from "framer-motion";
 import { Popover } from "@/lib/popover";
 import "@/styles/info-popover.css";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Info } from "lucide-react";
+import { useState } from "react";
 
 type InfoItem = [label: string, href?: string];
-type InfoPopoverProps = { title?: string; items: InfoItem[] };
+type InfoPopoverProps = {
+  title?: string;
+  items: InfoItem[];
+  forceOpen?: boolean;
+};
 
-export const InfoPopover = ({ title, items }: InfoPopoverProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const InfoPopover = ({
+  title,
+  items,
+  forceOpen = false,
+}: InfoPopoverProps) => {
+  const [isOpen, setIsOpen] = useState(forceOpen);
 
   return (
     <div className="flex flex-row items-center gap-1">
@@ -17,6 +25,7 @@ export const InfoPopover = ({ title, items }: InfoPopoverProps) => {
         trigger="click"
         onOpenChange={setIsOpen}
         padding={8}
+        isOpen={forceOpen ? true : undefined}
         content={isOpen ? <PopoverContent items={items} /> : null}
       >
         <button
@@ -45,10 +54,8 @@ const PopoverContent = ({ items }: { items: InfoPopoverProps["items"] }) => (
       boxShadow: "0 24px 64px var(--bg-a65), 0 0 0 1px var(--overlay-xs) inset",
     }}
   >
-    
     <div className="ip-snake" aria-hidden />
 
-    
     <div className="relative z-10 backdrop-blur-[28px] backdrop-saturate-200 rounded-[14.5px] overflow-hidden min-w-[196px] max-w-[276px] bg-(--glass)">
       {items.map(([label, href], i) => (
         <motion.div
