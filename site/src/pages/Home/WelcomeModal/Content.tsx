@@ -1,9 +1,10 @@
 import { InfoPopover } from "@/components/InfoPopover";
 import { useAnimateSlider } from "@/hooks/useAnimateSlider";
 import { InfoWidgetContent } from "@/widgets/infoWidget/Content";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const CardContent = () => {
+  const [isActive, setIsActive] = useState(false);
   const animate = useAnimateSlider({
     sequence: [0, 50, -20, 20],
     duration: 1,
@@ -11,18 +12,31 @@ export const CardContent = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      animate();
-    }, 300);
+      setIsActive(true);
+      // setTimeout(() => {
+      //   setIsActive(false);
+      // }, 500);
+    }, 1000);
     return () => {
       window.clearTimeout(timeoutId);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (isActive) {
+      animate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isActive]);
 
   return (
     <>
-      <InfoWidgetContent />
-      <InfoPopover items={[["Example link"]]} forceOpen={true} />
+      <div className="w-1/2">
+        <InfoWidgetContent />
+      </div>
+      <div className="relative">
+        <InfoPopover items={[["Example link"]]} forceOpen={isActive} />
+      </div>
     </>
   );
 };

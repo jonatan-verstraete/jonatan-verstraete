@@ -16,7 +16,7 @@ export const InfoPopover = ({
   items,
   forceOpen = false,
 }: InfoPopoverProps) => {
-  const [isOpen, setIsOpen] = useState(forceOpen);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="flex flex-row items-center gap-1">
@@ -26,7 +26,7 @@ export const InfoPopover = ({
         onOpenChange={setIsOpen}
         padding={8}
         isOpen={forceOpen ? true : undefined}
-        content={isOpen ? <PopoverContent items={items} /> : null}
+        content={isOpen || forceOpen ? <PopoverContent items={items} /> : null}
       >
         <button
           type="button"
