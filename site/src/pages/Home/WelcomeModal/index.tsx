@@ -1,18 +1,15 @@
-import { useIsMobile } from "@/hooks/useDevice";
-import { BLUE_DIM } from "@/widgets/infoWidget/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { CardContent } from "./Content";
 import { CardFooter } from "./Footer";
 import { CardHeader } from "./Header";
-import { Messages } from "./Messages";
+import { MobileNotice } from "./Messages";
 
-const SESSION_KEY = "info-widget-visited";
+const SESSION_KEY = "welcome-modal-visited";
 
 export const WelcomeModal = () => {
-  const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(
-    () => true, //!sessionStorage.getItem(SESSION_KEY),
+    () => !sessionStorage.getItem(SESSION_KEY),
   );
 
   const handleClose = () => {
@@ -25,15 +22,15 @@ export const WelcomeModal = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            key="greeting-backdrop"
+            key="welcome-backdrop"
             className="fixed inset-0 z-90"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             style={{
-              background: "rgba(4,4,8,0.75)",
-              backdropFilter: "blur(16px)",
+              background: "rgba(4,4,8,0.8)",
+              backdropFilter: "blur(20px)",
             }}
             onClick={handleClose}
           />
@@ -43,40 +40,42 @@ export const WelcomeModal = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            key="greeting-modal"
-            className={isMobile ? "fixed inset-0 z-100" : "fixed inset-4 z-100"}
-            initial={{ opacity: 0, scale: 0.97, y: 12 }}
+            key="welcome-modal"
+            className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6"
+            initial={{ opacity: 0, scale: 0.96, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.97, y: 8 }}
+            exit={{ opacity: 0, scale: 0.96, y: 10 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            onClick={handleClose}
           >
             <div
-              className="relative p-[1.5px] rounded-2xl h-full"
+              className="relative p-[1.5px] rounded-2xl w-full max-w-xl flex flex-col"
               style={{
-                background: BLUE_DIM,
+                maxHeight: "min(90vh, 680px)",
+                background:
+                  "color-mix(in srgb, var(--accent) 18%, transparent)",
                 boxShadow:
-                  "0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05) inset, 0 0 40px rgba(79,124,255,0.06)",
+                  "0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05) inset, 0 0 48px rgba(79,124,255,0.07)",
               }}
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="ip-snake" aria-hidden />
 
               <div
-                className="relative z-10 rounded-[14.5px] overflow-hidden h-full flex flex-col"
+                className="relative z-10 rounded-[14.5px] flex flex-col overflow-hidden"
                 style={{
                   background: "rgba(6,6,10,0.97)",
                   backdropFilter: "blur(32px) saturate(1.8)",
+                  maxHeight: "inherit",
                 }}
               >
-                <div className="px-7 pt-6 pb-7 flex-1 overflow-y-auto">
-                  <Messages />
+                <MobileNotice />
+
+                <div className="px-7 pt-7 pb-2 overflow-y-auto flex-1">
                   <CardHeader onClose={handleClose} />
-
-                  <div
-                    className="mb-5"
-                    style={{ height: 1, background: "rgba(255,255,255,0.05)" }}
-                  />
-
-                  <CardContent />
+                  <div className="mt-7">
+                    <CardContent />
+                  </div>
                 </div>
 
                 <CardFooter onClose={handleClose} />
