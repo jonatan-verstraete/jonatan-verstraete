@@ -28,10 +28,12 @@ export const Background = () => {
 
   useEffect(() => {
     const onPointerMove = (event: MouseEvent) => {
-      mx.set(-event.clientX / window.innerWidth);
-      my.set(-event.clientY / window.innerHeight);
+      if (event.isTrusted) {
+        mx.set(-event.clientX / window.innerWidth);
+        my.set(-event.clientY / window.innerHeight);
 
-      splatCanvas(event.clientX, event.clientY);
+        splatCanvas(event.clientX, event.clientY);
+      }
     };
 
     window.addEventListener("pointermove", onPointerMove, {
@@ -51,7 +53,9 @@ export const Background = () => {
     document.documentElement.style.setProperty("--my", v.toFixed(2));
   });
 
-  const fluidTextSpace = " ".repeat(Math.floor(window.innerWidth / 100));
+  const fluidTextSpace = " ".repeat(
+    Math.max(5, Math.min(10, Math.floor(window.innerWidth / 100))),
+  );
 
   return (
     <div
@@ -61,7 +65,7 @@ export const Background = () => {
 
       {showBackground && (
         <div
-          className="absolute inset-0 opacity-50"
+          className="absolute inset-0 opacity-100"
           title="bun add @jayf0x/fluidity-js"
         >
           <FluidText
@@ -75,9 +79,9 @@ export const Background = () => {
               densityDissipation: 0.99,
               velocityDissipation: 0.998,
               waterColor: "#312",
-              glowColor: "#299",
-              shine: 0.1,
-              splatRadius: 0.005,
+              glowColor: "#2af",
+              shine: 0.2,
+              splatRadius: 0.002,
               specularExp: 5,
               pressureIterations: 3,
             }}

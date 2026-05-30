@@ -87,6 +87,7 @@ export const InfoWidgetSlider = () => {
 
       <div
         ref={trackRef}
+        id="visibility_slider_id"
         className="relative cursor-ew-resize"
         style={{ height: 32, touchAction: "none" }}
         onPointerDown={(e) => {

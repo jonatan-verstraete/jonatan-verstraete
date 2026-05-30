@@ -9,6 +9,7 @@ import {
 } from "./hooks/useCheckpoint";
 import { useIsMobile, useRegisterIsMobile } from "./hooks/useDevice";
 
+import { allCheckpointItems } from "./config";
 import { Home } from "./pages/Home";
 import { Resume } from "./pages/Resume";
 import { WidgetsContainer } from "./widgets";
@@ -24,12 +25,17 @@ export const App = () => {
   const [page, setPage] = useState<string>(allPages[0].label);
   const pageVariants = usePageAnimation(page);
 
-  useRegisterCheckpoints();
-  useRegisterIsMobile();
+  const registerCheckpoints = useRegisterCheckpoints();
+  const watchIsMobile = useRegisterIsMobile();
 
   const isVoid = useCheckpointValue("Void");
 
   const CurrentPage = allPages.find(({ label }) => label === page)!.component;
+
+  useEffect(() => {
+    watchIsMobile();
+    registerCheckpoints(allCheckpointItems);
+  }, [watchIsMobile, registerCheckpoints]);
 
   return (
     <div className="h-screen w-screen text-text">

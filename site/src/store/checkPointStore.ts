@@ -4,6 +4,7 @@ export type CheckpointItem = {
   tag: Capitalize<string>;
   percentage: number;
   invert?: boolean;
+  isEnabled?: boolean;
 };
 
 export type OverrideState = "on" | "off" | "auto";
