@@ -1,4 +1,4 @@
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useIsMobile } from "@/hooks/useDevice";
 import {
   checkpointOverridesAtom,
   checkpointsAtom,

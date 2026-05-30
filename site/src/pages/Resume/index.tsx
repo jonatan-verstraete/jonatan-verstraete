@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { createConwayEngine, ConwayControls } from "@/lib/conway/conway";
+import { ConwayControls, createConwayEngine } from "@/lib/conway/conway";
 import { FileHeart, Pause, Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-import "./styles.css";
 import { InfoPopover } from "@/components/InfoPopover";
-import { useCheckpointValue } from "@/hooks/usePerformanceCheckpoint";
+import { useCheckpointValue } from "@/hooks/useCheckpoint";
+import "./styles.css";
 
 type SimMode = "conway" | "daynight";
 

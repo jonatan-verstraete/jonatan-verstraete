@@ -3,16 +3,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Background } from "./components/Background";
 
 import { FakeAds } from "./components/FakeAds";
-import { useIsMobile } from "./hooks/useIsMobile";
 import {
   useCheckpointValue,
   useRegisterCheckpoints,
-} from "./hooks/usePerformanceCheckpoint";
+} from "./hooks/useCheckpoint";
+import { useIsMobile, useRegisterIsMobile } from "./hooks/useDevice";
 
 import { WidgetsContainer } from "./components/widgets";
 import { Home } from "./pages/Home";
 import { Resume } from "./pages/Resume";
-import { type CheckpointItem } from "./store/checkPointStore";
 
 const allPages: { label: string; component: () => React.JSX.Element }[] = [
   { label: "127.0.0.1", component: Home },
@@ -20,20 +19,13 @@ const allPages: { label: string; component: () => React.JSX.Element }[] = [
   // { label: "Info", component: Info },
 ];
 
-const allCheckpoints: CheckpointItem[] = [
-  { tag: "Conway", percentage: 20 },
-  { tag: "Fluid", percentage: 50 },
-  { tag: "Void", percentage: 0, invert: true },
-  { tag: "🐔🥚", percentage: 60 },
-  { tag: "Ads", percentage: 80 },
-  { tag: "Red Button", percentage: 30 },
-];
 export const App = () => {
   const isMobile = useIsMobile();
   const [page, setPage] = useState<string>(allPages[0].label);
   const pageVariants = usePageAnimation(page);
 
-  useRegisterCheckpoints(allCheckpoints);
+  useRegisterCheckpoints();
+  useRegisterIsMobile();
 
   const isVoid = useCheckpointValue("Void");
 

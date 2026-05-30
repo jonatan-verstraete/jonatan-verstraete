@@ -1,7 +1,7 @@
+import { useIsMobile } from "@/hooks/useDevice";
 import { motion } from "framer-motion";
-import { TypeAnimation } from "react-type-animation";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { memo } from "react";
+import { TypeAnimation } from "react-type-animation";
 
 const terminalLines = [
   "Frontend engineer++",

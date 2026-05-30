@@ -1,5 +1,5 @@
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { useCheckpointValue } from "@/hooks/usePerformanceCheckpoint";
+import { useCheckpointValue } from "@/hooks/useCheckpoint";
+import { useIsMobile } from "@/hooks/useDevice";
 import { FluidText } from "@jayf0x/fluidity-js";
 import { useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
@@ -73,21 +73,21 @@ export const Background = () => {
             }
             config={{
               densityDissipation: 0.99,
-              velocityDissipation: 0.98,
+              velocityDissipation: 0.998,
               waterColor: "#312",
-              glowColor: "#29a",
-              shine: 0,
+              glowColor: "#299",
+              shine: 0.1,
               splatRadius: 0.005,
-              specularExp: 0.1,
+              specularExp: 5,
               pressureIterations: 3,
             }}
             quality={{
-              dpr: 0.4,
-              sim: 0.4,
+              dpr: 0.5,
+              sim: 0.5,
             }}
             fontSize={200}
             fontFamily="Ubuntu"
-            algorithm="ripple"
+            // algorithm="aurora"
             style={{
               filter: "grayscale(0.5)",
             }}

@@ -1,3 +1,4 @@
+import { allCheckpointItems } from "@/config";
 import {
   checkpointOverridesAtom,
   checkpointsAtom,
@@ -7,17 +8,13 @@ import {
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 
-export const useRegisterCheckpoints = <
-  const T extends readonly CheckpointItem[],
->(
-  items: T,
-) => {
+export const useRegisterCheckpoints = () => {
   const setCheckpoints = useSetAtom(checkpointsAtom);
 
   useEffect(() => {
     setCheckpoints((prev) => {
       const updated = prev.slice();
-      for (const item of items) {
+      for (const item of allCheckpointItems) {
         const idx = updated.findIndex(({ tag }) => tag === item.tag);
         if (idx >= 0) {
           updated[idx] = item;
@@ -28,7 +25,7 @@ export const useRegisterCheckpoints = <
 
       return updated;
     });
-  }, [items, setCheckpoints]);
+  }, []);
 };
 
 export const useCheckpointValue = (tag: CheckpointItem["tag"]) => {

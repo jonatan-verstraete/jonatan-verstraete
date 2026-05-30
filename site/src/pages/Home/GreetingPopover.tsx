@@ -1,5 +1,5 @@
 import { InfoWidgetContent } from "@/components/widgets/InfoWidget";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useIsMobile } from "@/hooks/useDevice";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ const BLUE_DIM = "color-mix(in srgb, var(--accent) 15%, transparent)";
 export const GreetingPopover = () => {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(
-    () => !sessionStorage.getItem(SESSION_KEY),
+    () => true, //!sessionStorage.getItem(SESSION_KEY),
   );
 
   const handleClose = () => {
@@ -25,7 +25,7 @@ export const GreetingPopover = () => {
         {isOpen && (
           <motion.div
             key="greeting-backdrop"
-            className="fixed inset-0 z-[90]"
+            className="fixed inset-0 z-90"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -43,7 +43,7 @@ export const GreetingPopover = () => {
         {isOpen && (
           <motion.div
             key="greeting-modal"
-            className={isMobile ? "fixed inset-0 z-[100]" : "fixed inset-4 z-[100]"}
+            className={isMobile ? "fixed inset-0 z-100" : "fixed inset-4 z-100"}
             initial={{ opacity: 0, scale: 0.97, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 8 }}

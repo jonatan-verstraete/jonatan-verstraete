@@ -1,3 +1,6 @@
+import { useCheckpointValue } from "@/hooks/useCheckpoint";
+import { useIsMobile } from "@/hooks/useDevice";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   PropsWithChildren,
   useCallback,
@@ -5,10 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { TypeAnimation } from "react-type-animation";
-import { useCheckpointValue } from "@/hooks/usePerformanceCheckpoint";
 
 type AdComp = React.FC;
 
