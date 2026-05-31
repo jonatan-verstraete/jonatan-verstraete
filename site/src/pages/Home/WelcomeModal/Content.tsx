@@ -3,13 +3,6 @@ import { useIsMobile } from "@/hooks/useDevice";
 import { Info, SlidersHorizontal } from "lucide-react";
 import Xarrow, { Xwrapper } from "react-xarrows";
 
-const BLUE = "rgba(79,124,255,1)";
-const BLUE_DIM = "rgba(79,124,255,0.14)";
-const BLUE_BORDER = "rgba(79,124,255,0.28)";
-
-const PURPLE_DIM = "rgba(168,85,247,0.14)";
-const PURPLE_BORDER = "rgba(168,85,247,0.28)";
-
 export const CardContent = () => {
   const isMobile = useIsMobile();
 
@@ -17,7 +10,7 @@ export const CardContent = () => {
     <div className="space-y-6 pb-5">
       <p
         className="text-sm leading-relaxed"
-        style={{ color: "rgba(255,255,255,0.42)" }}
+        style={{ color: "var(--border-a40)" }}
       >
         A portfolio meets playground — here's a quick look at what's on the
         page.
@@ -27,7 +20,7 @@ export const CardContent = () => {
         <div className="relative">
           <p
             className="text-[9px] font-mono tracking-[0.22em] uppercase mb-4"
-            style={{ color: "rgba(255,255,255,0.18)" }}
+            style={{ color: "var(--overlay-lg)" }}
           >
             Page guide
           </p>
@@ -38,20 +31,20 @@ export const CardContent = () => {
               <div id="gd-slider" className="flex items-start gap-3">
                 <span
                   className="shrink-0 mt-0.5 w-6 h-6 rounded-md flex items-center justify-center"
-                  style={{ background: BLUE_DIM, color: BLUE }}
+                  style={{ background: "var(--accent-glow)", color: "var(--accent)" }}
                 >
                   <SlidersHorizontal size={13} strokeWidth={1.5} />
                 </span>
                 <div>
                   <p
                     className="text-[13px] font-medium mb-1"
-                    style={{ color: "rgba(255,255,255,0.72)" }}
+                    style={{ color: "var(--border-a70)" }}
                   >
                     Temperature slider
                   </p>
                   <p
                     className="text-xs leading-relaxed"
-                    style={{ color: "rgba(255,255,255,0.35)" }}
+                    style={{ color: "var(--border-a35)" }}
                   >
                     Controls how much is shown — from a clean minimal view to
                     the full experience.
@@ -62,20 +55,20 @@ export const CardContent = () => {
               <div id="gd-chat" className="flex items-start gap-3">
                 <span
                   className="shrink-0 mt-0.5 w-6 h-6 rounded-md flex items-center justify-center text-sm select-none"
-                  style={{ background: PURPLE_DIM }}
+                  style={{ background: "var(--purple-dim)" }}
                 >
                   🤖
                 </span>
                 <div>
                   <p
                     className="text-[13px] font-medium mb-1"
-                    style={{ color: "rgba(255,255,255,0.72)" }}
+                    style={{ color: "var(--border-a70)" }}
                   >
                     GPT-1 Chat
                   </p>
                   <p
                     className="text-xs leading-relaxed"
-                    style={{ color: "rgba(255,255,255,0.35)" }}
+                    style={{ color: "var(--border-a35)" }}
                   >
                     Say hello to the original 2018 OpenAI model — historically
                     quirky by design.
@@ -87,8 +80,8 @@ export const CardContent = () => {
                 <span
                   className="shrink-0 mt-0.5 w-6 h-6 rounded-md flex items-center justify-center"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    color: "rgba(255,255,255,0.35)",
+                    background: "var(--overlay-sm)",
+                    color: "var(--border-a35)",
                   }}
                 >
                   <Info size={13} strokeWidth={1.5} />
@@ -96,7 +89,7 @@ export const CardContent = () => {
                 <div>
                   <div
                     className="text-[13px] font-medium mb-1 flex items-center gap-1.5 flex-wrap"
-                    style={{ color: "rgba(255,255,255,0.72)" }}
+                    style={{ color: "var(--border-a70)" }}
                   >
                     Info popovers
                     <InfoPopover
@@ -108,7 +101,7 @@ export const CardContent = () => {
                   </div>
                   <p
                     className="text-xs leading-relaxed"
-                    style={{ color: "rgba(255,255,255,0.35)" }}
+                    style={{ color: "var(--border-a35)" }}
                   >
                     The ℹ buttons scattered around reveal context or linked
                     sources.
@@ -124,32 +117,32 @@ export const CardContent = () => {
                 style={{
                   width: 116,
                   height: 156,
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  background: "rgba(255,255,255,0.015)",
+                  border: "1px solid var(--border)",
+                  background: "var(--overlay-xs)",
                 }}
               >
                 {/* Skeleton content */}
                 <div className="p-3 space-y-2">
                   <div
                     className="h-2.5 w-10 rounded-full mx-auto"
-                    style={{ background: "rgba(255,255,255,0.07)" }}
+                    style={{ background: "var(--border)" }}
                   />
                   <div
                     className="h-1 w-16 rounded-full mx-auto"
-                    style={{ background: "rgba(255,255,255,0.04)" }}
+                    style={{ background: "var(--overlay-xs)" }}
                   />
                   <div
                     className="h-1 w-14 rounded-full mx-auto"
-                    style={{ background: "rgba(255,255,255,0.04)" }}
+                    style={{ background: "var(--overlay-xs)" }}
                   />
                   <div className="mt-3 space-y-1">
                     <div
                       className="h-1 w-full rounded-full"
-                      style={{ background: "rgba(255,255,255,0.03)" }}
+                      style={{ background: "var(--overlay-xs)" }}
                     />
                     <div
                       className="h-1 w-5/6 rounded-full"
-                      style={{ background: "rgba(255,255,255,0.03)" }}
+                      style={{ background: "var(--overlay-xs)" }}
                     />
                   </div>
                 </div>
@@ -160,9 +153,9 @@ export const CardContent = () => {
                     id="gd-slider-w"
                     className="w-8 h-8 rounded-full flex items-center justify-center"
                     style={{
-                      background: BLUE_DIM,
-                      border: `1px solid ${BLUE_BORDER}`,
-                      color: BLUE,
+                      background: "var(--accent-glow)",
+                      border: "1px solid var(--accent-a28)",
+                      color: "var(--accent)",
                     }}
                   >
                     <SlidersHorizontal size={13} strokeWidth={1.5} />
@@ -171,8 +164,8 @@ export const CardContent = () => {
                     id="gd-chat-w"
                     className="w-8 h-8 rounded-full flex items-center justify-center text-sm select-none"
                     style={{
-                      background: PURPLE_DIM,
-                      border: `1px solid ${PURPLE_BORDER}`,
+                      background: "var(--purple-dim)",
+                      border: "1px solid var(--purple-border)",
                     }}
                   >
                     🤖

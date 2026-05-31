@@ -29,7 +29,7 @@ export const WelcomeModal = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             style={{
-              background: "rgba(4,4,8,0.8)",
+              background: "var(--bg-a80)",
               backdropFilter: "blur(20px)",
             }}
             onClick={handleClose}
@@ -55,7 +55,7 @@ export const WelcomeModal = () => {
                 background:
                   "color-mix(in srgb, var(--accent) 18%, transparent)",
                 boxShadow:
-                  "0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05) inset, 0 0 48px rgba(79,124,255,0.07)",
+                  "0 32px 80px var(--bg-a70), 0 0 0 1px var(--overlay-sm) inset, 0 0 48px color-mix(in srgb, var(--accent) 7%, transparent)",
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -64,7 +64,7 @@ export const WelcomeModal = () => {
               <div
                 className="relative z-10 rounded-[14.5px] flex flex-col overflow-hidden"
                 style={{
-                  background: "rgba(6,6,10,0.97)",
+                  background: "var(--glass)",
                   backdropFilter: "blur(32px) saturate(1.8)",
                   maxHeight: "inherit",
                 }}

@@ -7,7 +7,7 @@ import {
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback } from "react";
 import { InfoWidgetSlider } from "./Slider";
-import { BLUE, BLUE_GLOW, getNextOverRideState } from "./utils";
+import { getNextOverRideState } from "./utils";
 
 export const InfoWidgetContent = () => {
   const value = useAtomValue(sliderValueAtom);
@@ -35,7 +35,7 @@ export const InfoWidgetContent = () => {
         <div className="flex items-center gap-2">
           <span
             className="text-[10px] font-mono tracking-[0.2em] uppercase"
-            style={{ color: "rgba(255,255,255,0.28)" }}
+            style={{ color: "var(--border-a28)" }}
           >
             <InfoPopover
               title="Temperature"
@@ -57,7 +57,7 @@ export const InfoWidgetContent = () => {
           style={{
             background: "color-mix(in srgb, var(--accent) 12%, transparent)",
             border: `1px solid color-mix(in srgb, var(--accent) 22%, transparent)`,
-            color: BLUE,
+            color: "var(--accent)",
           }}
         >
           {featureLabel} · {value}%
@@ -69,11 +69,11 @@ export const InfoWidgetContent = () => {
       {checkpoints.length > 0 && (
         <div
           className="mt-5 pt-4 space-y-1.5"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ borderTop: "1px solid var(--overlay-sm)" }}
         >
           <p
             className="text-[9px] font-mono tracking-[0.22em] uppercase mb-2.5"
-            style={{ color: "rgba(255,255,255,0.2)" }}
+            style={{ color: "var(--overlay-lg)" }}
           >
             Checkpoint overrides
           </p>
@@ -88,11 +88,11 @@ export const InfoWidgetContent = () => {
                   <span
                     className="w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-300"
                     style={{
-                      background: override !== "auto" ? "var(--green)" : BLUE,
+                      background: override !== "auto" ? "var(--green)" : "var(--accent)",
                       boxShadow:
                         override !== "auto"
                           ? "0 0 5px color-mix(in srgb, var(--green) 60%, transparent)"
-                          : `0 0 5px ${BLUE_GLOW}`,
+                          : "0 0 5px color-mix(in srgb, var(--accent) 18%, transparent)",
                     }}
                   />
                   <span

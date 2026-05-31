@@ -8,13 +8,13 @@ export const CardHeader = ({ onClose }: { onClose: () => void }) => (
           className="inline-block w-1.5 h-1.5 rounded-full"
           style={{
             background: "var(--accent)",
-            boxShadow: "0 0 8px var(--accent), 0 0 16px rgba(79,124,255,0.4)",
+            boxShadow: "0 0 8px var(--accent), 0 0 16px color-mix(in srgb, var(--accent) 40%, transparent)",
             animation: "pulse 2.4s ease-in-out infinite",
           }}
         />
         <span
           className="text-[9px] font-mono tracking-[0.28em] uppercase"
-          style={{ color: "rgba(79,124,255,0.55)" }}
+          style={{ color: "color-mix(in srgb, var(--accent) 55%, transparent)" }}
         >
           Welcome
         </span>

@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { SlidersHorizontal, X } from "lucide-react";
 import { useState } from "react";
 import { InfoWidgetContent } from "./Content";
-import { BLUE, BLUE_DIM, BLUE_GLOW, BLUE_MID } from "./utils";
 
 export const InfoWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +25,7 @@ export const InfoWidget = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               style={{
-                background: "rgba(4,4,8,0.8)",
+                background: "var(--bg-a80)",
                 backdropFilter: "blur(12px)",
               }}
               onClick={close}
@@ -70,28 +69,28 @@ export const InfoWidget = () => {
               <div
                 className="relative p-[1px] rounded-2xl"
                 style={{
-                  background: `linear-gradient(135deg, ${BLUE_MID} 0%, rgba(255,255,255,0.06) 50%, transparent 100%)`,
-                  boxShadow: `0 24px 64px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04) inset, 0 0 48px ${BLUE_GLOW}`,
+                  background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 35%, transparent) 0%, var(--overlay-sm) 50%, transparent 100%)",
+                  boxShadow: "0 24px 64px var(--bg-a65), 0 0 0 1px var(--overlay-xs) inset, 0 0 48px color-mix(in srgb, var(--accent) 18%, transparent)",
                 }}
               >
                 <div
                   className="rounded-[15px] overflow-hidden"
                   style={{
-                    background: "rgba(6,6,10,0.97)",
+                    background: "var(--glass)",
                     backdropFilter: "blur(32px) saturate(1.8)",
                   }}
                 >
                   {/* Panel header */}
                   <div
                     className="flex items-center justify-between px-5 pt-4 pb-3"
-                    style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+                    style={{ borderBottom: "1px solid var(--overlay-sm)" }}
                   >
                     <div className="flex items-center gap-2">
                       <span
                         className="inline-block w-1.5 h-1.5 rounded-full"
                         style={{
-                          background: BLUE,
-                          boxShadow: `0 0 8px ${BLUE}, 0 0 16px ${BLUE_GLOW}`,
+                          background: "var(--accent)",
+                          boxShadow: "0 0 8px var(--accent), 0 0 16px color-mix(in srgb, var(--accent) 18%, transparent)",
                           animation: "pulse 2.4s ease-in-out infinite",
                         }}
                       />
@@ -110,19 +109,19 @@ export const InfoWidget = () => {
                       onClick={close}
                       className="flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-150"
                       style={{
-                        background: "rgba(255,255,255,0.04)",
-                        border: "1px solid rgba(255,255,255,0.07)",
+                        background: "var(--overlay-xs)",
+                        border: "1px solid var(--border)",
                         color: "var(--muted)",
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.background =
-                          "rgba(255,255,255,0.08)";
+                          "var(--border)";
                         (e.currentTarget as HTMLElement).style.color =
                           "var(--text)";
                       }}
                       onMouseLeave={(e) => {
                         (e.currentTarget as HTMLElement).style.background =
-                          "rgba(255,255,255,0.04)";
+                          "var(--overlay-xs)";
                         (e.currentTarget as HTMLElement).style.color =
                           "var(--muted)";
                       }}
@@ -145,8 +144,8 @@ export const InfoWidget = () => {
                   style={{
                     width: 10,
                     height: 10,
-                    background: "rgba(6,6,10,0.97)",
-                    border: `1px solid ${BLUE_DIM}`,
+                    background: "var(--glass)",
+                    border: "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
                     borderTop: "none",
                     borderLeft: "none",
                     transform: "rotate(45deg)",
@@ -166,13 +165,15 @@ export const InfoWidget = () => {
           transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
           className="relative w-14 h-14 rounded-full flex items-center justify-center shadow-xl"
           style={{
-            background: isOpen ? BLUE_GLOW : "var(--glass)",
+            background: isOpen ? "color-mix(in srgb, var(--accent) 18%, transparent)" : "var(--glass)",
             backdropFilter: "blur(14px)",
-            border: `1px solid ${isOpen ? BLUE_MID : BLUE_DIM}`,
+            border: isOpen
+              ? "1px solid color-mix(in srgb, var(--accent) 35%, transparent)"
+              : "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
             boxShadow: isOpen
-              ? `0 0 28px ${BLUE_GLOW}, 0 4px 20px var(--bg-a50), 0 1px 0 var(--overlay-sm) inset`
-              : `0 4px 20px var(--bg-a45), 0 1px 0 var(--overlay-sm) inset`,
-            color: BLUE,
+              ? "0 0 28px color-mix(in srgb, var(--accent) 18%, transparent), 0 4px 20px var(--bg-a50), 0 1px 0 var(--overlay-sm) inset"
+              : "0 4px 20px var(--bg-a45), 0 1px 0 var(--overlay-sm) inset",
+            color: "var(--accent)",
           }}
         >
           <SlidersHorizontal size={18} strokeWidth={1.5} />
@@ -182,7 +183,7 @@ export const InfoWidget = () => {
             animate={{ opacity: 0, scale: 1.65 }}
             transition={{ duration: 2.8, repeat: Infinity, ease: "easeOut" }}
             style={{
-              border: `1px solid ${BLUE_DIM}`,
+              border: "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
               background: "color-mix(in srgb, var(--accent) 4%, transparent)",
             }}
           />

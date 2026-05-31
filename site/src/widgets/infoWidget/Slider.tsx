@@ -9,8 +9,6 @@ import { useCallback, useRef } from "react";
 const TICKS = Array.from({ length: 21 }, (_, i) => i * 5);
 const SCALE_LABELS = [0, 25, 50, 75, 100];
 
-const BLUE = "var(--accent)";
-
 const getLabelOffset = (index: number, max = 25, stable = 1) =>
   Math.abs(Math.sin(index / stable) * max) - max / stable;
 
@@ -57,7 +55,7 @@ export const InfoWidgetSlider = () => {
                     color: overridden
                       ? "var(--overlay-lg)"
                       : active
-                        ? BLUE
+                        ? "var(--accent)"
                         : "var(--overlay-lg)",
                   }}
                 >
@@ -74,7 +72,7 @@ export const InfoWidgetSlider = () => {
                       overridden
                         ? "var(--overlay-md)"
                         : active
-                          ? BLUE
+                          ? "var(--accent)"
                           : "var(--overlay-lg)"
                     }`,
                   }}
@@ -116,14 +114,14 @@ export const InfoWidgetSlider = () => {
         >
           <div
             className="absolute inset-0 rounded"
-            style={{ background: "rgba(255,255,255,0.06)" }}
+            style={{ background: "var(--overlay-sm)" }}
           />
           <div
             className="absolute inset-y-0 left-0"
             style={{
               width: `${value}%`,
-              background: `linear-gradient(90deg, rgba(79,124,255,0.55) 0%, var(--accent) 100%)`,
-              boxShadow: "0 0 12px rgba(79,124,255,0.4)",
+              background: "linear-gradient(90deg, color-mix(in srgb, var(--accent) 55%, transparent) 0%, var(--accent) 100%)",
+              boxShadow: "0 0 12px color-mix(in srgb, var(--accent) 40%, transparent)",
               transition: "width 0.04s",
             }}
           />
@@ -143,7 +141,7 @@ export const InfoWidgetSlider = () => {
                 bottom: major ? 3 : mid ? 5 : 8,
                 width: 1,
                 height: h,
-                background: lit ? "rgba(79,124,255,0.45)" : "var(--overlay-md)",
+                background: lit ? "var(--accent-a45)" : "var(--overlay-md)",
                 transform: "translateX(-50%)",
                 borderRadius: 0.5,
                 transition: "background 0.15s",
@@ -171,11 +169,11 @@ export const InfoWidgetSlider = () => {
                 background: overridden
                   ? "var(--overlay-md)"
                   : active
-                    ? BLUE
+                    ? "var(--accent)"
                     : "var(--overlay-lg)",
                 boxShadow:
                   !overridden && active
-                    ? "0 0 8px 2px rgba(79,124,255,0.35)"
+                    ? "0 0 8px 2px color-mix(in srgb, var(--accent) 35%, transparent)"
                     : "none",
                 transition: "background 0.25s, box-shadow 0.25s",
               }}
@@ -194,9 +192,9 @@ export const InfoWidgetSlider = () => {
               height: 26,
               borderRadius: 4,
               background:
-                "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(180,200,255,0.85) 100%)",
+                "linear-gradient(180deg, var(--border-a90) 0%, var(--thumb-hi) 100%)",
               boxShadow:
-                "0 0 14px rgba(79,124,255,0.5), 0 3px 8px rgba(0,0,0,0.6)",
+                "0 0 14px color-mix(in srgb, var(--accent) 50%, transparent), 0 3px 8px var(--bg-a60)",
             }}
           >
             {[0, 1].map((i) => (
@@ -206,7 +204,7 @@ export const InfoWidgetSlider = () => {
                   width: 6,
                   height: 1,
                   borderRadius: 1,
-                  background: "rgba(0,0,0,0.25)",
+                  background: "var(--bg-a28)",
                 }}
               />
             ))}

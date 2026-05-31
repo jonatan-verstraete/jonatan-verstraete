@@ -9,7 +9,8 @@ export const Background = () => {
 
   const isMobile = useIsMobile();
   const showVoid = useCheckpointValue("Void");
-  const showBackground = useCheckpointValue("Fluid");
+  const showFLuid = useCheckpointValue("Fluid");
+  const isFluidHighQuality = useCheckpointValue("Fluid Quality");
   const showChickenEgg = useCheckpointValue("🐔🥚");
 
   const splatCanvas = useCallback(
@@ -53,9 +54,7 @@ export const Background = () => {
     document.documentElement.style.setProperty("--my", v.toFixed(2));
   });
 
-  const fluidTextSpace = " ".repeat(
-    Math.max(5, Math.min(10, Math.floor(window.innerWidth / 100))),
-  );
+  const fluidTextSpace = " ".repeat(Math.floor(window.innerWidth / 100));
 
   return (
     <div
@@ -63,7 +62,7 @@ export const Background = () => {
     >
       {showVoid && <Void />}
 
-      {showBackground && (
+      {showFLuid && (
         <div
           className="absolute inset-0 opacity-100"
           title="bun add @jayf0x/fluidity-js"
@@ -77,30 +76,38 @@ export const Background = () => {
             }
             config={{
               densityDissipation: 0.99,
-              velocityDissipation: 0.998,
-              waterColor: "#312",
-              glowColor: "#2af",
-              shine: 0.2,
-              splatRadius: 0.002,
-              specularExp: 5,
-              pressureIterations: 3,
+              velocityDissipation: 0.994,
+              waterColor: "#020a13",
+              glowColor: "#a32",
+              shine: isFluidHighQuality ? 0.1 : 0.5,
+              splatRadius: isFluidHighQuality ? 0.002 : 0.004,
+              specularExp: 6,
+              pressureIterations: isFluidHighQuality ? 2 : 0,
+              // curl: 0.2,
             }}
-            quality={{
-              dpr: 0.5,
-              sim: 0.5,
-            }}
-            fontSize={200}
+            quality={
+              isFluidHighQuality
+                ? {
+                    dpr: 0.5,
+                    sim: 0.5,
+                  }
+                : {
+                    dpr: 0.3,
+                    sim: 0.5,
+                  }
+            }
+            fontSize={120}
             fontFamily="Ubuntu"
             // algorithm="aurora"
-            style={{
-              filter: "grayscale(0.5)",
-            }}
+            // style={{
+            //   filter: "grayscale(0.5)",
+            // }}
           />
         </div>
       )}
 
-      <div className="blob absolute -left-40 -top-40 h-125 w-125 rounded-full bg-gradient-to-br from-(--accent) to-(--c-8b5cf6) opacity-[0.1] blur-3xl" />
-      <div className="blob absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-linear-to-tr from-(--accent) to-(--c-8b5cf6) opacity-[0.1] blur-3xl [animation-delay:3s]" />
+      <div className="blob absolute -left-40 -top-40 h-125 w-125 rounded-full bg-linear-to-br from-accent to-(--c-8b5cf6) opacity-[0.1] blur-3xl" />
+      <div className="blob absolute -bottom-40 -right-40 h-105 w-105 rounded-full bg-linear-to-tr from-accent to-(--c-8b5cf6) opacity-[0.1] blur-3xl [animation-delay:3s]" />
     </div>
   );
 };

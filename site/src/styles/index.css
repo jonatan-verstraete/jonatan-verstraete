@@ -58,6 +58,24 @@ body {
   --gold-dim: rgba(255, 176, 0, 0.09);
   --gold-text: #e2d090;
 
+  /* Purple (secondary accent — chat widget icon, xarrow) */
+  --purple: #a855f7;
+  --purple-dim: rgba(168, 85, 247, 0.14);
+  --purple-border: rgba(168, 85, 247, 0.28);
+
+  /* Accent alpha variants */
+  --accent-a28: rgba(79, 124, 255, 0.28);
+
+  /* Border alpha */
+  --border-a28: rgba(255, 255, 255, 0.28);
+
+  /* Amber alpha */
+  --amber-border: rgba(245, 158, 11, 0.12);
+  --amber-text: rgba(245, 158, 11, 0.65);
+
+  /* Component-specific */
+  --thumb-hi: rgba(180, 200, 255, 0.85);
+
   /* auto-generated */
   --accent-a45: rgba(79, 124, 255, 0.45);
   --bg-a12: rgba(0, 0, 0, 0.12);
@@ -210,6 +228,14 @@ body {
   --color-gold: var(--gold);
   --color-gold-dim: var(--gold-dim);
   --color-gold-text: var(--gold-text);
+  --color-purple: var(--purple);
+  --color-purple-dim: var(--purple-dim);
+  --color-purple-border: var(--purple-border);
+  --color-accent-a28: var(--accent-a28);
+  --color-border-a28: var(--border-a28);
+  --color-amber-border: var(--amber-border);
+  --color-amber-text: var(--amber-text);
+  --color-thumb-hi: var(--thumb-hi);
 
   /* auto-generated */
   --coloraccent-a45: var(--accent-a45);

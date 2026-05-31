@@ -4,9 +4,9 @@ import { ArrowRight } from "lucide-react";
 export const CardFooter = ({ onClose }: { onClose: () => void }) => (
   <div
     className="px-7 py-4 flex items-center justify-between shrink-0"
-    style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+    style={{ borderTop: "1px solid var(--overlay-sm)" }}
   >
-    <span className="text-xs" style={{ color: "rgba(255,255,255,0.18)" }}>
+    <span className="text-xs" style={{ color: "var(--overlay-lg)" }}>
       Click anywhere outside to dismiss
     </span>
 
