@@ -1,3 +1,4 @@
+import { InfoPopover } from "@/components/InfoPopover";
 import { useIsMobile } from "@/hooks/useDevice";
 import { AnimatePresence, motion } from "framer-motion";
 import { SlidersHorizontal, X } from "lucide-react";
@@ -69,8 +70,10 @@ export const InfoWidget = () => {
               <div
                 className="relative p-[1px] rounded-2xl"
                 style={{
-                  background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 35%, transparent) 0%, var(--overlay-sm) 50%, transparent 100%)",
-                  boxShadow: "0 24px 64px var(--bg-a65), 0 0 0 1px var(--overlay-xs) inset, 0 0 48px color-mix(in srgb, var(--accent) 18%, transparent)",
+                  background:
+                    "linear-gradient(135deg, color-mix(in srgb, var(--accent) 35%, transparent) 0%, var(--overlay-sm) 50%, transparent 100%)",
+                  boxShadow:
+                    "0 24px 64px var(--bg-a65), 0 0 0 1px var(--overlay-xs) inset, 0 0 48px color-mix(in srgb, var(--accent) 18%, transparent)",
                 }}
               >
                 <div
@@ -90,18 +93,28 @@ export const InfoWidget = () => {
                         className="inline-block w-1.5 h-1.5 rounded-full"
                         style={{
                           background: "var(--accent)",
-                          boxShadow: "0 0 8px var(--accent), 0 0 16px color-mix(in srgb, var(--accent) 18%, transparent)",
+                          boxShadow:
+                            "0 0 8px var(--accent), 0 0 16px color-mix(in srgb, var(--accent) 18%, transparent)",
                           animation: "pulse 2.4s ease-in-out infinite",
                         }}
                       />
                       <span
-                        className="text-[9px] font-mono tracking-[0.28em] uppercase"
-                        style={{
-                          color:
-                            "color-mix(in srgb, var(--accent) 55%, transparent)",
-                        }}
+                        className="text-[10px] font-mono tracking-[0.2em] uppercase"
+                        style={{ color: "var(--border-a28)" }}
                       >
-                        Experience settings
+                        <InfoPopover
+                          title="Temperature Control"
+                          items={[
+                            // [
+                            //   "About LLM temperature",
+                            //   "https://www.promptingguide.ai/introduction/settings#:~:text=Temperature",
+                            // ],
+                            [
+                              "Common misunderstandings about temperature",
+                              "https://dev.to/hermup299/llm-predictability-vs-determinism-2idb",
+                            ],
+                          ]}
+                        />
                       </span>
                     </div>
                     <button
@@ -145,7 +158,8 @@ export const InfoWidget = () => {
                     width: 10,
                     height: 10,
                     background: "var(--glass)",
-                    border: "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
+                    border:
+                      "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
                     borderTop: "none",
                     borderLeft: "none",
                     transform: "rotate(45deg)",
@@ -165,7 +179,9 @@ export const InfoWidget = () => {
           transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
           className="relative w-14 h-14 rounded-full flex items-center justify-center shadow-xl"
           style={{
-            background: isOpen ? "color-mix(in srgb, var(--accent) 18%, transparent)" : "var(--glass)",
+            background: isOpen
+              ? "color-mix(in srgb, var(--accent) 18%, transparent)"
+              : "var(--glass)",
             backdropFilter: "blur(14px)",
             border: isOpen
               ? "1px solid color-mix(in srgb, var(--accent) 35%, transparent)"
@@ -183,7 +199,8 @@ export const InfoWidget = () => {
             animate={{ opacity: 0, scale: 1.65 }}
             transition={{ duration: 2.8, repeat: Infinity, ease: "easeOut" }}
             style={{
-              border: "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
+              border:
+                "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
               background: "color-mix(in srgb, var(--accent) 4%, transparent)",
             }}
           />

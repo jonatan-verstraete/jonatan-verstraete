@@ -1,8 +1,6 @@
-import { InfoPopover } from "@/components/InfoPopover";
 import {
   checkpointOverridesAtom,
   checkpointsAtom,
-  sliderValueAtom,
 } from "@/store/checkPointStore";
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback } from "react";
@@ -10,7 +8,7 @@ import { InfoWidgetSlider } from "./Slider";
 import { getNextOverRideState } from "./utils";
 
 export const InfoWidgetContent = () => {
-  const value = useAtomValue(sliderValueAtom);
+  // const value = useAtomValue(sliderValueAtom);
   const checkpoints = useAtomValue(checkpointsAtom);
   const [overrides, setOverrides] = useAtom(checkpointOverridesAtom);
 
@@ -19,39 +17,9 @@ export const InfoWidgetContent = () => {
     [setOverrides],
   );
 
-  const featureLabel =
-    value < 25
-      ? "Zen"
-      : value < 50
-        ? "Focused"
-        : value < 75
-          ? "Enriched"
-          : "Full";
-
   return (
     <div>
-      {/* Slider header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span
-            className="text-[10px] font-mono tracking-[0.2em] uppercase"
-            style={{ color: "var(--border-a28)" }}
-          >
-            <InfoPopover
-              title="Temperature"
-              items={[
-                // [
-                //   "About LLM temperature",
-                //   "https://www.promptingguide.ai/introduction/settings#:~:text=Temperature",
-                // ],
-                [
-                  "Common misunderstandings about temperature",
-                  "https://dev.to/hermup299/llm-predictability-vs-determinism-2idb",
-                ],
-              ]}
-            />
-          </span>
-        </div>
+      {/* <div className="flex items-center justify-between mb-3">
         <span
           className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md tabular-nums"
           style={{
@@ -60,9 +28,16 @@ export const InfoWidgetContent = () => {
             color: "var(--accent)",
           }}
         >
-          {featureLabel} · {value}%
+          {value < 25
+            ? "Zen"
+            : value < 50
+              ? "Focused"
+              : value < 75
+                ? "Enriched"
+                : "Full"}{" "}
+          · {value}%
         </span>
-      </div>
+      </div> */}
 
       <InfoWidgetSlider />
 
@@ -88,7 +63,8 @@ export const InfoWidgetContent = () => {
                   <span
                     className="w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-300"
                     style={{
-                      background: override !== "auto" ? "var(--green)" : "var(--accent)",
+                      background:
+                        override !== "auto" ? "var(--green)" : "var(--accent)",
                       boxShadow:
                         override !== "auto"
                           ? "0 0 5px color-mix(in srgb, var(--green) 60%, transparent)"

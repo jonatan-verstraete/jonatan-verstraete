@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Background } from "./components/Background";
 
-import { FakeAds } from "./components/FakeAds";
 import {
   useCheckpointValue,
   useRegisterCheckpoints,
@@ -40,7 +39,6 @@ export const App = () => {
   return (
     <div className="h-screen w-screen text-text">
       <WidgetsContainer />
-      <FakeAds />
       <Background />
       <main
         className="relative z-20 pointer-events-none"
