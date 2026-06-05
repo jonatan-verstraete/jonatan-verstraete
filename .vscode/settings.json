@@ -4,5 +4,6 @@
   },
 
   "prettier.printWidth": 999,
-  "prettier.htmlWhitespaceSensitivity": "ignore"
+  "prettier.htmlWhitespaceSensitivity": "ignore",
+  "editor.formatOnSave": true
 }

@@ -14,13 +14,9 @@ export const queryClient = new QueryClient({
   },
 });
 
-export async function withLocalStorageCache<T>(
-  key: string,
-  ttl: number,
-  fn: () => Promise<T>,
-): Promise<T> {
+export async function withLocalCache<T>(key: string, ttl: number, fn: () => Promise<T>): Promise<T> {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = sessionStorage.getItem(key);
     if (raw) {
       const { data, ts } = JSON.parse(raw) as { data: T; ts: number };
       if (Date.now() - ts < ttl) return data;
@@ -32,7 +28,7 @@ export async function withLocalStorageCache<T>(
   const data = await fn();
 
   try {
-    localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() }));
+    sessionStorage.setItem(key, JSON.stringify({ data, ts: Date.now() }));
   } catch (e) {
     devLog(e);
   }

@@ -183,10 +183,10 @@ export const usePopover = (props: UsePopoverProps): UsePopoverResult => {
         boundaryInset,
       );
 
-      let finalTop = Math.round(
+      const finalTop = Math.round(
         (shouldNudge ? nudgedTop : top) - scoutRect.top,
       );
-      let finalLeft = Math.round(
+      const finalLeft = Math.round(
         (shouldNudge ? nudgedLeft : left) - scoutRect.left,
       );
 

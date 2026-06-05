@@ -48,7 +48,7 @@ export const App = () => {
             <div
               className={`flex flex-col relative bg-(--bg-a20) pointer-events-auto isolate ${isMobile ? "w-full h-[120vh]" : "w-[60%] m-auto h-[90vh] mt-[5vh] rounded-xl"}`}
               style={{
-                backdropFilter: "blur(10px) brightness(0.5)",
+                backdropFilter: "blur(10px) brightness(0.4)",
               }}
             >
               <nav className="items-center justify-end px-12 pt-8 mb-2 w-full flex">
