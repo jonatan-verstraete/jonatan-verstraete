@@ -18,44 +18,47 @@ const terminalLines = [
 export const HeroSection = () => {
   const isMobile = useIsMobile();
   return (
-    <section className="flex flex-col justify-center px-6 pb-8 w-full text-nowrap">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mx-auto flex max-w-3xl flex-col gap-5 w-full text-center"
-      >
+    <>
+      <section className="flex flex-col justify-center px-6 pb-8 w-full text-nowrap absolute top-6">
         <motion.div
-          className="w-full center"
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto flex max-w-3xl flex-col gap-2 w-full text-center"
         >
-          {!isMobile && (
-            <div className="lg:text-5xl sm:text-xl font-black tracking-tighter text-(--text)">
-              <TextWithSecret text="Jonatan" secret="JayF0x" />
-            </div>
-          )}
-        </motion.div>
+          <motion.div
+            className="w-full center"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            {!isMobile && (
+              <div className="lg:text-4xl sm:text-xl font-black tracking-tighter text-(--text)">
+                <TextWithSecret text="Jonatan" secret="JayF0x" />
+              </div>
+            )}
+          </motion.div>
 
-        <motion.div
-          className="font-mono text-sm text-(--muted) md:text-base"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <div className="mt-2 min-h-[2rem] text-(--accent)">
-            <TypeAnimation
-              sequence={terminalLines}
-              wrapper="span"
-              speed={65}
-              repeat={Infinity}
-            />
-            <span className="ml-1 inline-block h-4 w-[2px] animate-blink bg-(--accent) align-middle" />
-          </div>
+          <motion.div
+            className="font-mono text-sm text-(--muted) md:text-base"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="mt-2 min-h-[2rem] text-(--accent)">
+              <TypeAnimation
+                sequence={terminalLines}
+                wrapper="span"
+                speed={65}
+                repeat={Infinity}
+              />
+              <span className="ml-1 inline-block h-4 w-[2px] animate-blink bg-(--accent) align-middle" />
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </section>
+      </section>
+      <div className="w-full h-14"></div>
+    </>
   );
 };
 
@@ -86,19 +89,19 @@ export const TextWithSecret = memo(
           return (
             <span
               key={i}
-              className="relative inline-block pointer-events-none [perspective:700px]"
+              className="relative inline-block pointer-events-none perspective-[700px]"
               style={{ width: "0.7em" }}
             >
               <span
-                className="relative block [transform-style:preserve-3d] transition-transform duration-500 ease-[cubic-bezier(.2,.8,.2,1)] group-hover:[transform:rotateX(180deg)]"
+                className="relative block transform-3d transition-transform duration-500 ease-[cubic-bezier(.2,.8,.2,1)] group-hover:transform-[rotateX(180deg)]"
                 style={{
                   transitionDelay: `${delays[i]}ms`,
                 }}
               >
-                <span className="block [backface-visibility:hidden]">
+                <span className="block backface-hidden">
                   {textSlots[i] === " " ? "\u00A0" : textSlots[i]}
                 </span>
-                <span className="absolute inset-0 block [transform:rotateX(180deg)] [backface-visibility:hidden]">
+                <span className="absolute inset-0 block transform-[rotateX(180deg)] backface-hidden">
                   {secretSlots[i] === " " ? "\u00A0" : secretSlots[i]}
                 </span>
               </span>

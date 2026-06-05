@@ -15,7 +15,7 @@ export const FilterRow = ({
     <span className="font-mono text-[10px] uppercase tracking-widest text-(--muted)">
       {label}
     </span>
-    <div className="flex gap-1.5 overflow-x-scroll pb-1">
+    <div className="flex gap-1.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
       {items.map((name) => (
         <FilterItem
           key={name}
@@ -42,15 +42,15 @@ const FilterItem = ({
     <button
       type="button"
       onClick={onToggle}
-      className={`shrink-0 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-xs transition-all duration-150 hover:scale-110 origin-top-left ${
+      className={`shrink-0 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-xs transition-all duration-150 ${
         active
-          ? "border-(--accent) bg-(--accent) text-(--text)"
-          : "border-(--border) text-(--muted) hover:border-(--accent) hover:text-(--text)"
+          ? "border-(--accent) bg-(--accent)/15 text-(--accent)"
+          : "border-(--border) text-(--muted) hover:border-(--accent)/50 hover:text-(--text) hover:bg-(--surface)"
       }`}
     >
       {m.bg !== "transparent" && (
         <span
-          className="inline-block h-2 w-2 rounded-sm"
+          className="inline-block h-2 w-2 rounded-sm shrink-0"
           style={{ background: m.bg }}
         />
       )}

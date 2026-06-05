@@ -27,13 +27,27 @@ export const ProjectSection = () => {
 
   const { results, allStacks, allTopics } = useRepoSearch(repos, query, filters);
 
-  const toggleFilter = (value: string) =>
+  const toggleFilter = (value: string) => {
     setFilters((prev) => {
       const next = new Set(prev);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      next.has(value) ? next.delete(value) : next.add(value);
+      if (next.has(value)) {
+        next.delete(value);
+      } else {
+        next.add(value);
+        // clear text query when adding a new filter — avoids AND-compound dead-ends
+        setQuery("");
+      }
       return next;
     });
+  };
+
+  const removeFilter = (value: string) => {
+    setFilters((prev) => {
+      const next = new Set(prev);
+      next.delete(value);
+      return next;
+    });
+  };
 
   const clearAll = () => {
     setQuery("");
@@ -41,8 +55,9 @@ export const ProjectSection = () => {
     inputRef.current?.focus();
   };
 
-  const hasInput = query.trim().length > 0 || filters.size > 0;
+  const hasQuery = query.trim().length > 0;
   const hasActiveFilters = filters.size > 0;
+  const hasInput = hasQuery || hasActiveFilters;
 
   return (
     <section className="flex flex-col flex-1 min-h-0 px-6 py-4">
@@ -51,17 +66,34 @@ export const ProjectSection = () => {
         <div className="flex-1 min-w-0 flex flex-col min-h-0 gap-4 pl-4">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={springGentle} className="relative">
             <Search size={15} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-(--muted)" />
-            <input ref={inputRef} type="text" placeholder="Search projects by name, keyword, stack…" value={query} onChange={(e) => setQuery(e.target.value)} className="w-full rounded-xl border border-(--border) bg-(--surface) py-3 pl-10 pr-10 text-sm text-(--text) placeholder:text-(--muted) outline-none transition-colors duration-150 focus:border-(--accent)" />
-            <div className="absolute right-3 flex items-center top-0 h-full">
-              <X
-                size={13}
-                className="hover:scale-[2] hover:text-(--accent) hover:rotate-180 transition-all"
-                onClick={() => {
-                  setQuery("");
-                  inputRef.current?.focus();
-                }}
-              />
-            </div>
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Search projects by name, keyword, stack…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full rounded-xl border border-(--border) bg-(--surface) py-3 pl-10 pr-10 text-sm text-(--text) placeholder:text-(--muted) outline-none transition-colors duration-150 focus:border-(--accent)"
+            />
+            <AnimatePresence>
+              {hasQuery && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.7 }}
+                  transition={{ duration: 0.1 }}
+                  className="absolute right-3 flex items-center top-0 h-full"
+                >
+                  <button
+                    type="button"
+                    aria-label="Clear search"
+                    onClick={() => { setQuery(""); inputRef.current?.focus(); }}
+                    className="text-(--muted) hover:text-(--accent) transition-colors duration-100 p-0.5 rounded"
+                  >
+                    <X size={13} />
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
           {!isLoading && (
@@ -71,16 +103,63 @@ export const ProjectSection = () => {
             </motion.div>
           )}
 
+          {/* Active filter chips — always visible while filters are on, survives scroll */}
+          <AnimatePresence>
+            {hasActiveFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={springGentle}
+                className="overflow-hidden"
+              >
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-(--muted) shrink-0">active:</span>
+                  {[...filters].map((f) => (
+                    <motion.button
+                      key={f}
+                      type="button"
+                      onClick={() => removeFilter(f)}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.12 }}
+                      className="group inline-flex items-center gap-1 rounded-sm border border-[#00ff88]/40 bg-[#00ff88]/5 px-2 py-0.5 font-mono text-[11px] text-[#00ff88] transition-colors duration-100 hover:border-[#00ff88]/80 hover:bg-[#00ff88]/10"
+                    >
+                      {f}
+                      <X size={9} className="opacity-50 group-hover:opacity-100 transition-opacity" />
+                    </motion.button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={clearAll}
+                    className="ml-auto font-mono text-xs text-(--muted) transition-colors hover:text-(--accent)"
+                  >
+                    clear all
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Results count — only when query text is active (filters already show above) */}
           <AnimatePresence>
             {hasInput && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={springGentle} className="flex items-center justify-between overflow-hidden">
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={springGentle}
+                className="flex items-center justify-between overflow-hidden"
+              >
                 <span className="font-mono text-xs text-(--muted)">
                   {results.length} {results.length === 1 ? "project" : "projects"}
-                  {hasActiveFilters && ` · ${filters.size} filter${filters.size > 1 ? "s" : ""} active`}
                 </span>
-                <button type="button" onClick={clearAll} className="font-mono text-xs text-(--muted) transition-colors hover:text-(--accent)">
-                  clear all
-                </button>
+                {!hasActiveFilters && (
+                  <button type="button" onClick={clearAll} className="font-mono text-xs text-(--muted) transition-colors hover:text-(--accent)">
+                    clear
+                  </button>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
