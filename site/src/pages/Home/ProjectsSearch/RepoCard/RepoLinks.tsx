@@ -29,7 +29,7 @@ export const RepoLinks = ({ repo }: { repo: GithubRepo }) => {
 
   const queryNpmPkg = useQuery<string | false>({
     queryKey: ["npm-badge", repo.name],
-    queryFn: async () => npmExists(`${OWNER}/${repo.name}`, { silent: false }),
+    queryFn: async () => npmExists(`@${OWNER}/${repo.name.startsWith("fluid") ? repo.name + "-js" : repo.name}`, { silent: false }),
     ...queryOpts,
   });
 

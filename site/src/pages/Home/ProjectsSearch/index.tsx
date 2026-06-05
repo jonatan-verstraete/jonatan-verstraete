@@ -98,7 +98,7 @@ export const ProjectSection = () => {
 
                 {results.map((repo, i) => (
                   <motion.div
-                    key={repo.id}
+                    key={`repo-card=${repo.id}`}
                     layout
                     initial={{ opacity: 0, y: 10, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
