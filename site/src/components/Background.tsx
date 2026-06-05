@@ -8,9 +8,7 @@ export const Background = () => {
   const fluidRef = useRef<FluidHandle>(null);
 
   const isMobile = useIsMobile();
-  const showVoid = useCheckpointValue("Void");
-  const showFLuid = useCheckpointValue("Fluid");
-  const isFluidHighQuality = useCheckpointValue("Fluid Quality");
+  const isVoid = useCheckpointValue("Void");
   const showChickenEgg = useCheckpointValue("🐔🥚");
 
   const splatCanvas = useCallback(
@@ -54,84 +52,40 @@ export const Background = () => {
     document.documentElement.style.setProperty("--my", v.toFixed(2));
   });
 
+  const fontSize = showChickenEgg ? 120 : isVoid ? Math.min(Math.max(window.innerWidth, 300), 2000) : 300
   const fluidTextSpace = " ".repeat(Math.floor(window.innerWidth / 100));
 
   return (
-    <div className={`fixed inset-0 overflow-hidden ${showVoid ? "z-10" : "-z-10"}`}>
-      {showVoid && <Void />}
-
-      {showFLuid && (
-        <div className="absolute inset-0 opacity-100" title="bun add @jayf0x/fluidity-js">
-          <FluidText
-            // workerEnabled={true}
-            mouseEnabled={false}
-            ref={fluidRef}
-            text={showChickenEgg ? `🐔${fluidTextSpace}<3/>${fluidTextSpace}🥚` : ""}
-            // densityDissipation={0.995}
-            // velocityDissipation={0.994}
-            waterColor="#020a10"
-            glowColor="#301045"
-            // shine={isFluidHighQuality ? 0.1 : 0.5}
-            splatRadius={0.05}
-            specularExp={6}
-            pressureIterations={3}
-            // pixelRatio={isFluidHighQuality ? 0.5 : 0.3}
-            // simResolution={0.5}
-            // curl={0.2}
-            fontSize={120}
-            fontFamily="Ubuntu"
-            // algorithm="aurora"
-            // style={{
-            //   filter: "grayscale(0.5)",
-            // }}
-          />
-        </div>
-      )}
+    <div className="fixed inset-0 overflow-hidden -z-10">
+      <div className="absolute inset-0 opacity-100" title="bun add @jayf0x/fluidity-js">
+        <FluidText
+          // workerEnabled={true}
+          mouseEnabled={false}
+          ref={fluidRef}
+          text={showChickenEgg ? `🐔${fluidTextSpace}<3/>${fluidTextSpace}🥚` : "□"}
+          // densityDissipation={0.995}
+          // velocityDissipation={0.994}
+          waterColor="#020a10"
+          glowColor="#301045"
+          // shine={isFluidHighQuality ? 0.1 : 0.5}
+          splatRadius={isVoid ? 0.1 : 0.05}
+          specularExp={6}
+          pressureIterations={3}
+          // pixelRatio={isFluidHighQuality ? 0.5 : 0.3}
+          // simResolution={0.5}
+          // curl={0.2}
+          fontSize={fontSize}
+          fontFamily="Ubuntu"
+          color={isVoid ? "black" : "#777"}
+          // algorithm="aurora"
+          // style={{
+          //   filter: "grayscale(0.5)",
+          // }}
+        />
+      </div>
 
       <div className="blob absolute -left-40 -top-40 h-125 w-125 rounded-full bg-linear-to-br from-accent to-(--c-8b5cf6) opacity-[0.1] blur-3xl" />
       <div className="blob absolute -bottom-40 -right-40 h-105 w-105 rounded-full bg-linear-to-tr from-accent to-(--c-8b5cf6) opacity-[0.1] blur-3xl [animation-delay:3s]" />
-    </div>
-  );
-};
-
-const Void = () => {
-  const fluidRef = useRef<FluidHandle>(null);
-
-  return (
-    <div className="w-full h-full flex justify-center items-center relative">
-      <div
-        className="rounded-[100%] lg:size-[70vw] sm:size-full overflow-hidden relative"
-        style={{
-          background: "radial-gradient(circle at 100%, var(--bg)a, #fff0 50%)",
-        }}
-      >
-        <FluidText
-          ref={fluidRef}
-          text="<2&/>"
-          fontSize={200}
-          densityDissipation={1}
-          velocityDissipation={0.9}
-          waterColor={"#000508"}
-          glowColor={"#fee"}
-          curl={0.3}
-          shine={0.5}
-          splatRadius={0.01}
-          splatForce={3}
-          specularExp={0.3}
-          refraction={0}
-          backgroundColor="radial-gradient(circle at 100%, var(--bg)a, #fff0 50%)"
-          style={{
-            filter: "grayscale(0.4)",
-            opacity: 0.9,
-          }}
-        />
-        <div
-          className="absolute z-10 w-full h-full inset-0 pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, #fff0,  var(--bg) 50%, var(--bg) 100%)",
-          }}
-        ></div>
-      </div>
     </div>
   );
 };

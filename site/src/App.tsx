@@ -2,10 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Background } from "./components/Background";
 
-import {
-  useCheckpointValue,
-  useRegisterCheckpoints,
-} from "./hooks/useCheckpoint";
+import { useCheckpointValue, useRegisterCheckpoints } from "./hooks/useCheckpoint";
 import { useIsMobile, useRegisterIsMobile } from "./hooks/useDevice";
 
 import { allCheckpointItems } from "./config";
@@ -29,7 +26,7 @@ export const App = () => {
 
   const isVoid = useCheckpointValue("Void");
 
-  const CurrentPage = allPages.find(({ label }) => label === page)!.component;
+  const CurrentPage = isVoid ? null : allPages.find(({ label }) => label === page)?.component;
 
   useEffect(() => {
     watchIsMobile();
@@ -47,44 +44,24 @@ export const App = () => {
         }}
       >
         <AnimatePresence mode="popLayout">
-          <motion.div
-            key={`motion-page-${page}`}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.842, ease: "anticipate" }}
-          >
+          <motion.div key={`motion-page-${page}`} variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.842, ease: "anticipate" }}>
             <div
-              className={`flex flex-col relative bg-(--bg-a20) pointer-events-auto isolate ${
-                isMobile
-                  ? "w-full h-[120vh]"
-                  : "w-[60%] m-auto h-[90vh] mt-[5vh] rounded-xl"
-              }`}
+              className={`flex flex-col relative bg-(--bg-a20) pointer-events-auto isolate ${isMobile ? "w-full h-[120vh]" : "w-[60%] m-auto h-[90vh] mt-[5vh] rounded-xl"}`}
               style={{
-                backdropFilter: "blur(15px) brightness(0.2)",
+                backdropFilter: "blur(10px) brightness(0.5)",
               }}
             >
               <nav className="items-center justify-end px-12 pt-8 mb-2 w-full flex">
                 <div className="flex items-center gap-6">
                   {allPages.map(({ label }) => (
-                    <button
-                      key={`page-${label}`}
-                      type="button"
-                      onClick={() => setPage(label)}
-                      className={`text-lg capitalize transition hover:underline ${
-                        label === page
-                          ? "text-accent"
-                          : "text-muted) hover:text-text"
-                      }`}
-                    >
+                    <button key={`page-${label}`} type="button" onClick={() => setPage(label)} className={`text-lg capitalize transition hover:underline ${label === page ? "text-accent" : "text-muted) hover:text-text"}`}>
                       {label}
                     </button>
                   ))}
                 </div>
               </nav>
 
-              <CurrentPage />
+              {!!CurrentPage && <CurrentPage />}
             </div>
           </motion.div>
         </AnimatePresence>

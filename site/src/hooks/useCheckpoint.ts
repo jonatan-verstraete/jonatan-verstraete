@@ -1,3 +1,4 @@
+import {  CheckPointTag } from "@/config";
 import {
   checkpointOverridesAtom,
   checkpointsAtom,
@@ -31,7 +32,7 @@ export const useRegisterCheckpoints = () => {
   return updateCheckpoints;
 };
 
-export const useCheckpointValue = (tag: CheckpointItem["tag"]) => {
+export const useCheckpointValue = (tag: CheckPointTag) => {
   const sliderValue = useAtomValue(sliderValueAtom);
   const checkpoints = useAtomValue(checkpointsAtom);
 
