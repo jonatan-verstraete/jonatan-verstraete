@@ -163,7 +163,7 @@ export const ChatWidget = () => {
           () => {
             setMessages((prev) => [...prev, msg]);
           },
-          idx * text.length * 50,
+          idx * text.length * 30,
         );
       });
 

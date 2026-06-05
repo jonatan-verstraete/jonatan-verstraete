@@ -102,6 +102,9 @@ export const InfoWidgetSlider = () => {
         onPointerCancel={() => {
           dragging.current = false;
         }}
+        // onPointerLeave={() => {
+        //   dragging.current = false;
+        // }}
       >
         <div
           className="absolute inset-x-0 overflow-hidden"
@@ -120,8 +123,10 @@ export const InfoWidgetSlider = () => {
             className="absolute inset-y-0 left-0"
             style={{
               width: `${value}%`,
-              background: "linear-gradient(90deg, color-mix(in srgb, var(--accent) 55%, transparent) 0%, var(--accent) 100%)",
-              boxShadow: "0 0 12px color-mix(in srgb, var(--accent) 40%, transparent)",
+              background:
+                "linear-gradient(90deg, color-mix(in srgb, var(--accent) 55%, transparent) 0%, var(--accent) 100%)",
+              boxShadow:
+                "0 0 12px color-mix(in srgb, var(--accent) 40%, transparent)",
               transition: "width 0.04s",
             }}
           />
