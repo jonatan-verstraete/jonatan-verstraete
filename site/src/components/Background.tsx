@@ -57,45 +57,27 @@ export const Background = () => {
   const fluidTextSpace = " ".repeat(Math.floor(window.innerWidth / 100));
 
   return (
-    <div
-      className={`fixed inset-0 overflow-hidden ${showVoid ? "z-10" : "-z-10"}`}
-    >
+    <div className={`fixed inset-0 overflow-hidden ${showVoid ? "z-10" : "-z-10"}`}>
       {showVoid && <Void />}
 
       {showFLuid && (
-        <div
-          className="absolute inset-0 opacity-100"
-          title="bun add @jayf0x/fluidity-js"
-        >
+        <div className="absolute inset-0 opacity-100" title="bun add @jayf0x/fluidity-js">
           <FluidText
-            isWorkerEnabled={true}
-            isMouseEnabled={false}
+            // workerEnabled={true}
+            mouseEnabled={false}
             ref={fluidRef}
-            text={
-              showChickenEgg ? `🐔${fluidTextSpace}<3/>${fluidTextSpace}🥚` : ""
-            }
-            config={{
-              densityDissipation: 0.99,
-              velocityDissipation: 0.994,
-              waterColor: "#020a13",
-              glowColor: "#a32",
-              shine: isFluidHighQuality ? 0.1 : 0.5,
-              splatRadius: isFluidHighQuality ? 0.002 : 0.004,
-              specularExp: 6,
-              pressureIterations: isFluidHighQuality ? 2 : 0,
-              // curl: 0.2,
-            }}
-            quality={
-              isFluidHighQuality
-                ? {
-                    dpr: 0.5,
-                    sim: 0.5,
-                  }
-                : {
-                    dpr: 0.3,
-                    sim: 0.5,
-                  }
-            }
+            text={showChickenEgg ? `🐔${fluidTextSpace}<3/>${fluidTextSpace}🥚` : ""}
+            // densityDissipation={0.995}
+            // velocityDissipation={0.994}
+            waterColor="#020a10"
+            glowColor="#301045"
+            // shine={isFluidHighQuality ? 0.1 : 0.5}
+            splatRadius={0.05}
+            specularExp={6}
+            pressureIterations={3}
+            // pixelRatio={isFluidHighQuality ? 0.5 : 0.3}
+            // simResolution={0.5}
+            // curl={0.2}
             fontSize={120}
             fontFamily="Ubuntu"
             // algorithm="aurora"
@@ -125,25 +107,19 @@ const Void = () => {
       >
         <FluidText
           ref={fluidRef}
-          text="{}"
+          text="<2&/>"
           fontSize={200}
-          config={{
-            densityDissipation: 1,
-            velocityDissipation: 0.98,
-            waterColor: [0.1, 0.1, 0.1],
-            glowColor: [0.5, 0.5, 0.5],
-            curl: 0.98,
-            shine: 0.05,
-            splatRadius: 0.001,
-            splatForce: 3,
-            specularExp: 0.5,
-            refraction: 0,
-          }}
+          densityDissipation={1}
+          velocityDissipation={0.9}
+          waterColor={"#000508"}
+          glowColor={"#fee"}
+          curl={0.3}
+          shine={0.5}
+          splatRadius={0.01}
+          splatForce={3}
+          specularExp={0.3}
+          refraction={0}
           backgroundColor="radial-gradient(circle at 100%, var(--bg)a, #fff0 50%)"
-          // quality={{
-          //   dpr: 0.1,
-          //   sim: 0.1
-          // }}
           style={{
             filter: "grayscale(0.4)",
             opacity: 0.9,
@@ -152,8 +128,7 @@ const Void = () => {
         <div
           className="absolute z-10 w-full h-full inset-0 pointer-events-none"
           style={{
-            background:
-              "radial-gradient(circle, #fff0,  var(--bg) 50%, var(--bg) 100%)",
+            background: "radial-gradient(circle, #fff0,  var(--bg) 50%, var(--bg) 100%)",
           }}
         ></div>
       </div>
