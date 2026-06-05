@@ -1,5 +1,5 @@
 import { useIsMobile } from "@/hooks/useDevice";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { memo } from "react";
 import { TypeAnimation } from "react-type-animation";
 
@@ -15,50 +15,47 @@ const terminalLines = [
   "2B||!2B",
 ].flatMap((l) => [l, 4000]);
 
-export const HeroSection = () => {
+export const Title = () => {
   const isMobile = useIsMobile();
   return (
-    <>
-      <section className="flex flex-col justify-center px-6 pb-8 w-full text-nowrap absolute top-6">
+    <AnimatePresence mode="popLayout">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="mx-auto flex justify-center max-w-3xl flex-col gap-2 w-full text-center"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          className="w-full center"
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mx-auto flex max-w-3xl flex-col gap-2 w-full text-center"
+          transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <motion.div
-            className="w-full center"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            {!isMobile && (
-              <div className="lg:text-4xl sm:text-xl font-black tracking-tighter text-(--text)">
-                <TextWithSecret text="Jonatan" secret="JayF0x" />
-              </div>
-            )}
-          </motion.div>
-
-          <motion.div
-            className="font-mono text-sm text-(--muted) md:text-base"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="mt-2 min-h-[2rem] text-(--accent)">
-              <TypeAnimation
-                sequence={terminalLines}
-                wrapper="span"
-                speed={65}
-                repeat={Infinity}
-              />
-              <span className="ml-1 inline-block h-4 w-[2px] animate-blink bg-(--accent) align-middle" />
+          {!isMobile && (
+            <div className="lg:text-4xl sm:text-xl font-black tracking-tighter text-(--text)">
+              <TextWithSecret text="Jonatan" secret="JayF0x" />
             </div>
-          </motion.div>
+          )}
         </motion.div>
-      </section>
-      <div className="w-full h-14"></div>
-    </>
+
+        <motion.div
+          className="font-mono text-sm text-(--muted) md:text-base"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <div className="mt-2 min-h-[2rem] text-(--accent)">
+            <TypeAnimation
+              sequence={terminalLines}
+              wrapper="span"
+              speed={65}
+              repeat={Infinity}
+            />
+            <span className="ml-1 inline-block h-4 w-[2px] animate-blink bg-(--accent) align-middle" />
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

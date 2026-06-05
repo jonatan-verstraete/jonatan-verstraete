@@ -12,3 +12,7 @@ export const allCheckpointItems = [
 ] satisfies CheckpointItem[];
 
 export type CheckPointTag = (typeof allCheckpointItems)[number]["tag"];
+
+export const allPageNames = ["127.0.0.1", "Résumé"] as const;
+
+export type PageName = (typeof allPageNames)[number];

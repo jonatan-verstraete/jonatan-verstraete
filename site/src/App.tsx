@@ -1,32 +1,37 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Background } from "./components/Background";
 
-import { useCheckpointValue, useRegisterCheckpoints } from "./hooks/useCheckpoint";
+import {
+  useCheckpointValue,
+  useRegisterCheckpoints,
+} from "./hooks/useCheckpoint";
 import { useIsMobile, useRegisterIsMobile } from "./hooks/useDevice";
 
-import { allCheckpointItems } from "./config";
+import { useAtomValue } from "jotai";
+import { Header } from "./components/Header";
+import { allCheckpointItems, PageName } from "./config";
 import { Home } from "./pages/Home";
 import { Resume } from "./pages/Resume";
+import { currentPageAtom } from "./store/generalStore";
 import { WidgetsContainer } from "./widgets";
 
-const allPages: { label: string; component: () => React.JSX.Element }[] = [
-  { label: "127.0.0.1", component: Home },
-  { label: "Résumé", component: Resume },
-  // { label: "Info", component: Info },
-];
+const mappedPages: Record<PageName, () => React.JSX.Element> = {
+  "127.0.0.1": Home,
+  Résumé: Resume,
+};
 
 export const App = () => {
   const isMobile = useIsMobile();
-  const [page, setPage] = useState<string>(allPages[0].label);
-  const pageVariants = usePageAnimation(page);
 
-  const registerCheckpoints = useRegisterCheckpoints();
   const watchIsMobile = useRegisterIsMobile();
+  const registerCheckpoints = useRegisterCheckpoints();
 
   const isVoid = useCheckpointValue("Void");
+  const currentPage = useAtomValue(currentPageAtom);
+  const pageVariants = usePageAnimation(currentPage);
 
-  const CurrentPage = isVoid ? null : allPages.find(({ label }) => label === page)?.component;
+  const CurrentPage = isVoid ? null : mappedPages[currentPage];
 
   useEffect(() => {
     watchIsMobile();
@@ -44,22 +49,21 @@ export const App = () => {
         }}
       >
         <AnimatePresence mode="popLayout">
-          <motion.div key={`motion-page-${page}`} variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.842, ease: "anticipate" }}>
+          <motion.div
+            key={`motion-page-${currentPage}`}
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.842, ease: "anticipate" }}
+          >
             <div
               className={`flex flex-col relative bg-(--bg-a20) pointer-events-auto isolate ${isMobile ? "w-full h-[120vh]" : "w-[60%] m-auto h-[90vh] mt-[5vh] rounded-xl"}`}
               style={{
                 backdropFilter: "blur(10px) brightness(0.4)",
               }}
             >
-              <nav className="items-center justify-end px-12 pt-8 mb-2 w-full flex">
-                <div className="flex items-center gap-6">
-                  {allPages.map(({ label }) => (
-                    <button key={`page-${label}`} type="button" onClick={() => setPage(label)} className={`text-lg capitalize transition hover:underline ${label === page ? "text-accent" : "text-muted) hover:text-text"}`}>
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </nav>
+              <Header />
 
               {!!CurrentPage && <CurrentPage />}
             </div>
@@ -70,12 +74,15 @@ export const App = () => {
   );
 };
 
-const usePageAnimation = (page: string) => {
+const loosePages = Object.entries(mappedPages);
+
+const usePageAnimation = (page: PageName) => {
   const prevRef = useRef(page);
 
-  const prev = prevRef.current;
-  const prevIndex = allPages.findIndex(({ label }) => label === prev);
-  const nextIndex = allPages.findIndex(({ label }) => label === page);
+  const prevIndex = loosePages.findIndex(
+    ([label]) => label === prevRef.current,
+  );
+  const nextIndex = loosePages.findIndex(([label]) => label === page);
 
   const dir = prevIndex < nextIndex ? 1 : -1;
   const w = typeof window !== "undefined" ? window.innerWidth * dir : 0;
