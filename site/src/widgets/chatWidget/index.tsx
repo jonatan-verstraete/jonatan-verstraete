@@ -510,64 +510,57 @@ export const ChatWidget = () => {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.button
-            key="fab"
-            type="button"
-            onClick={onToggle}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.07 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-            className="w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-xl select-none relative"
+      <motion.button
+        type="button"
+        onClick={onToggle}
+        whileHover={{ scale: 1.07 }}
+        whileTap={{ scale: 0.9 }}
+        transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
+        className="w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-xl select-none relative"
+        style={{
+          background:
+            "linear-gradient(135deg, var(--accent) 0%, var(--c-7c4fff) 100%)",
+          boxShadow:
+            "0 4px 24px color-mix(in srgb, var(--accent) 35%, transparent), 0 1px 0 var(--overlay-lg) inset",
+          border: "1px solid var(--overlay-md)",
+          pointerEvents: isOpen ? "none" : "auto",
+        }}
+      >
+        🤖
+        {!isPending && (
+          <motion.span
+            className="absolute inset-0 rounded-full pointer-events-none"
+            initial={{ opacity: 0.4, scale: 1 }}
+            animate={{ opacity: 0, scale: 1.6 }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              ease: "easeOut",
+            }}
             style={{
               background:
                 "linear-gradient(135deg, var(--accent) 0%, var(--c-7c4fff) 100%)",
-              boxShadow:
-                "0 4px 24px color-mix(in srgb, var(--accent) 35%, transparent), 0 1px 0 var(--overlay-lg) inset",
-              border: "1px solid var(--overlay-md)",
+            }}
+          />
+        )}
+        {isPending && (
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center"
+            style={{
+              background: "var(--gold)",
+              borderColor: "var(--glass)",
             }}
           >
-            🤖
-            {!isPending && (
-              <motion.span
-                className="absolute inset-0 rounded-full pointer-events-none"
-                initial={{ opacity: 0.4, scale: 1 }}
-                animate={{ opacity: 0, scale: 1.6 }}
-                transition={{
-                  duration: 2.2,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                }}
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--accent) 0%, var(--c-7c4fff) 100%)",
-                }}
-              />
-            )}
-            {isPending && (
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center"
-                style={{
-                  background: "var(--gold)",
-                  borderColor: "var(--glass)",
-                }}
-              >
-                <motion.span
-                  className="block w-2 h-2 rounded-full bg-amber-400"
-                  animate={{ scale: [1, 1.5, 1] }}
-                  transition={{ duration: 1.2, repeat: Infinity }}
-                />
-              </motion.span>
-            )}
-          </motion.button>
+            <motion.span
+              className="block w-2 h-2 rounded-full bg-amber-400"
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 1.2, repeat: Infinity }}
+            />
+          </motion.span>
         )}
-      </AnimatePresence>
+      </motion.button>
     </div>
   );
 };
