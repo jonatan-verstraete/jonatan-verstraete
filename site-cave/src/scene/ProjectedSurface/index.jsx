@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal, useFrame } from '@react-three/fiber';
 import { folder, useControls } from 'leva';
 import {
@@ -13,7 +13,6 @@ import {
 } from 'three';
 import { useDisposableItems } from '@/hooks/useDisposableItems';
 import { SCENE_CONFIG as C } from '@/scene/config';
-import { devLog } from '@/utils';
 import { ProjectText } from './ProjectText';
 import { Video } from './Video';
 import { VideoCam } from './VideoCam';

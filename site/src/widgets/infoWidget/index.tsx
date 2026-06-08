@@ -1,16 +1,13 @@
 import { InfoPopover } from "@/components/InfoPopover";
 import { useIsMobile } from "@/hooks/useDevice";
+import { useWidgetDisclosure } from "@/hooks/useWidgetDisclosure";
 import { AnimatePresence, motion } from "framer-motion";
 import { SlidersHorizontal, X } from "lucide-react";
-import { useState } from "react";
 import { InfoWidgetContent } from "./Content";
 
 export const InfoWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
-
-  const close = () => setIsOpen(false);
-  const toggle = () => setIsOpen((v) => !v);
+  const { isOpen, onToggle, onClose } = useWidgetDisclosure("info");
 
   return (
     <>
@@ -29,7 +26,7 @@ export const InfoWidget = () => {
                 background: "var(--bg-a80)",
                 backdropFilter: "blur(12px)",
               }}
-              onClick={close}
+              onClick={onClose}
             />
           )}
         </AnimatePresence>
@@ -68,7 +65,7 @@ export const InfoWidget = () => {
               }
             >
               <div
-                className="relative p-[1px] rounded-2xl"
+                className="relative p-px rounded-2xl"
                 style={{
                   background:
                     "linear-gradient(135deg, color-mix(in srgb, var(--accent) 35%, transparent) 0%, var(--overlay-sm) 50%, transparent 100%)",
@@ -119,7 +116,7 @@ export const InfoWidget = () => {
                     </div>
                     <button
                       type="button"
-                      onClick={close}
+                      onClick={onClose}
                       className="flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-150"
                       style={{
                         background: "var(--overlay-xs)",
@@ -173,7 +170,7 @@ export const InfoWidget = () => {
         {/* Floating button */}
         <motion.button
           type="button"
-          onClick={toggle}
+          onClick={onToggle}
           whileHover={{ scale: 1.07 }}
           whileTap={{ scale: 0.9 }}
           transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}

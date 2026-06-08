@@ -52,17 +52,26 @@ export const Background = () => {
     document.documentElement.style.setProperty("--my", v.toFixed(2));
   });
 
-  const fontSize = showChickenEgg ? 120 : isVoid ? Math.min(Math.max(window.innerWidth, 300), 2000) : 300
+  const fontSize = showChickenEgg
+    ? 120
+    : isVoid
+      ? Math.min(Math.max(window.innerWidth, 300), 2000)
+      : 300;
   const fluidTextSpace = " ".repeat(Math.floor(window.innerWidth / 100));
 
   return (
     <div className="fixed inset-0 overflow-hidden -z-10">
-      <div className="absolute inset-0 opacity-100" title="bun add @jayf0x/fluidity-js">
+      <div
+        className="absolute inset-0 opacity-100"
+        title="bun add @jayf0x/fluidity-js"
+      >
         <FluidText
           // workerEnabled={true}
           mouseEnabled={false}
           ref={fluidRef}
-          text={showChickenEgg ? `🐔${fluidTextSpace}<3/>${fluidTextSpace}🥚` : "□"}
+          text={
+            showChickenEgg ? `🐔${fluidTextSpace}<3/>${fluidTextSpace}🥚` : "□"
+          }
           // densityDissipation={0.995}
           // velocityDissipation={0.994}
           waterColor="#020a10"

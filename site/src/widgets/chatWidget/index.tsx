@@ -1,5 +1,6 @@
 import { InfoPopover } from "@/components/InfoPopover";
 import { useChatLLM } from "@/hooks/useChatLLM";
+import { useWidgetDisclosure } from "@/hooks/useWidgetDisclosure";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send, Square, TriangleAlert, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -27,7 +28,6 @@ const STATUS_MESSAGES = [
 const animatedIds = new Set<string>(["init"]);
 
 export const ChatWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [statusMessage, setStatusMessage] = useState("");
@@ -44,6 +44,8 @@ export const ChatWidget = () => {
   const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const elapsedTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const prevResponseRef = useRef<string | null>(null);
+
+  const { isOpen, onToggle, onClose } = useWidgetDisclosure("chat");
 
   useEffect(() => {
     if (isOpen) {
@@ -231,7 +233,7 @@ export const ChatWidget = () => {
               </div>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={onClose}
                 className="text-(--muted) hover:text-(--text) transition-colors rounded-lg p-1.5 hover:bg-white/5"
               >
                 <X size={15} />
@@ -513,7 +515,7 @@ export const ChatWidget = () => {
           <motion.button
             key="fab"
             type="button"
-            onClick={() => setIsOpen(true)}
+            onClick={onToggle}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}

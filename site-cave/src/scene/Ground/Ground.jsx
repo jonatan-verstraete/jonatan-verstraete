@@ -1,4 +1,3 @@
-import { GrassBlades } from './GrassBlades';
 import { GrassShrubs } from './GrassShrubs';
 import { SoilFloor } from './SoilFloor';
 
@@ -52,7 +51,7 @@ export function Ground({
         />
       )} */}
 
-      {/* {enableShrubs && (
+      {enableShrubs && (
         <GrassShrubs
           count={shrubCount}
           groundSize={groundSize}
@@ -60,7 +59,7 @@ export function Ground({
           scaleMin={shrubScaleMin}
           scaleMax={shrubScaleMax}
         />
-      )} */}
+      )}
     </group>
   );
 }

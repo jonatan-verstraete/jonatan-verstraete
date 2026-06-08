@@ -10,6 +10,7 @@ export function GrassShrubs({
   scaleMin = 0.25,
   scaleMax = 1.65,
 }) {
+  count = 2000;
   const { scene: gltfScene } = useGLTF('/models/grass-shurbs.glb');
   const groupRef = useRef();
 
@@ -24,7 +25,7 @@ export function GrassShrubs({
       if (!obj.isMesh) return;
 
       const instanced = new InstancedMesh(obj.geometry, obj.material, count);
-      instanced.castShadow = true;
+      instanced.castShadow = false;
       instanced.receiveShadow = true;
       instanced.frustumCulled = false;
 
