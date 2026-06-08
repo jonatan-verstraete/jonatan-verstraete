@@ -1,13 +1,18 @@
 import { InfoPopover } from "@/components/InfoPopover";
 import { useIsMobile } from "@/hooks/useDevice";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { useWidgetDisclosure } from "@/hooks/useWidgetDisclosure";
 import { AnimatePresence, motion } from "framer-motion";
 import { SlidersHorizontal, X } from "lucide-react";
+import { useRef } from "react";
 import { InfoWidgetContent } from "./Content";
 
 export const InfoWidget = () => {
   const isMobile = useIsMobile();
   const { isOpen, onToggle, onClose } = useWidgetDisclosure("info");
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(containerRef, onClose, isOpen && !isMobile);
 
   return (
     <>
@@ -32,7 +37,7 @@ export const InfoWidget = () => {
         </AnimatePresence>
       )}
 
-      <div className="flex flex-col items-end gap-2">
+      <div ref={containerRef} className="relative">
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -40,7 +45,7 @@ export const InfoWidget = () => {
               className={
                 isMobile
                   ? "fixed inset-x-0 bottom-0 z-90 p-3"
-                  : "relative select-none"
+                  : "absolute bottom-[calc(100%+12px)] right-0 select-none"
               }
               initial={{
                 opacity: 0,
@@ -102,10 +107,6 @@ export const InfoWidget = () => {
                         <InfoPopover
                           title="Temperature Control"
                           items={[
-                            // [
-                            //   "About LLM temperature",
-                            //   "https://www.promptingguide.ai/introduction/settings#:~:text=Temperature",
-                            // ],
                             [
                               "Common misunderstandings about temperature",
                               "https://dev.to/hermup299/llm-predictability-vs-determinism-2idb",
@@ -117,23 +118,11 @@ export const InfoWidget = () => {
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-150"
+                      className="flex items-center justify-center w-6 h-6 rounded-lg transition-all duration-150 hover:bg-[var(--border)] hover:text-(--text)"
                       style={{
                         background: "var(--overlay-xs)",
                         border: "1px solid var(--border)",
                         color: "var(--muted)",
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.background =
-                          "var(--border)";
-                        (e.currentTarget as HTMLElement).style.color =
-                          "var(--text)";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.background =
-                          "var(--overlay-xs)";
-                        (e.currentTarget as HTMLElement).style.color =
-                          "var(--muted)";
                       }}
                     >
                       <X size={10} strokeWidth={2} />
@@ -168,13 +157,10 @@ export const InfoWidget = () => {
         </AnimatePresence>
 
         {/* Floating button */}
-        <motion.button
+        <button
           type="button"
           onClick={onToggle}
-          whileHover={{ scale: 1.07 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-          className="relative w-14 h-14 rounded-full flex items-center justify-center shadow-xl"
+          className="relative w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-[1.07] active:scale-95 transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
           style={{
             background: isOpen
               ? "color-mix(in srgb, var(--accent) 18%, transparent)"
@@ -190,18 +176,15 @@ export const InfoWidget = () => {
           }}
         >
           <SlidersHorizontal size={18} strokeWidth={1.5} />
-          <motion.span
-            className="absolute inset-0 rounded-full pointer-events-none"
-            initial={{ opacity: 0.3, scale: 1 }}
-            animate={{ opacity: 0, scale: 1.65 }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: "easeOut" }}
+          <span
+            className="absolute inset-0 rounded-full pointer-events-none animate-ping [animation-duration:2.8s]"
             style={{
               border:
                 "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
               background: "color-mix(in srgb, var(--accent) 4%, transparent)",
             }}
           />
-        </motion.button>
+        </button>
       </div>
     </>
   );

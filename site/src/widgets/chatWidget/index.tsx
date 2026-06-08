@@ -1,5 +1,6 @@
 import { InfoPopover } from "@/components/InfoPopover";
 import { useChatLLM } from "@/hooks/useChatLLM";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { useWidgetDisclosure } from "@/hooks/useWidgetDisclosure";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send, Square, TriangleAlert, X } from "lucide-react";
@@ -44,8 +45,11 @@ export const ChatWidget = () => {
   const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const elapsedTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const prevResponseRef = useRef<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const { isOpen, onToggle, onClose } = useWidgetDisclosure("chat");
+
+  useOutsideClick(containerRef, onClose, isOpen);
 
   useEffect(() => {
     if (isOpen) {
@@ -183,7 +187,7 @@ export const ChatWidget = () => {
       : null;
 
   return (
-    <div className="flex flex-col items-end gap-3">
+    <div ref={containerRef} className="relative">
       <AnimatePresence mode="popLayout">
         {isOpen && (
           <motion.div
@@ -192,7 +196,7 @@ export const ChatWidget = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="w-95 rounded-2xl overflow-hidden flex flex-col"
+            className="absolute bottom-[calc(100%+12px)] right-0 w-95 rounded-2xl overflow-hidden flex flex-col"
             style={{
               background: "var(--glass)",
               border: "1px solid var(--border)",
@@ -510,36 +514,26 @@ export const ChatWidget = () => {
         )}
       </AnimatePresence>
 
-      <motion.button
+      <button
         type="button"
         onClick={onToggle}
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.9 }}
-        transition={{ duration: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
-        className="w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-xl select-none relative"
+        className="w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-xl select-none relative hover:scale-[1.07] active:scale-95 transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
         style={{
           background:
             "linear-gradient(135deg, var(--accent) 0%, var(--c-7c4fff) 100%)",
           boxShadow:
             "0 4px 24px color-mix(in srgb, var(--accent) 35%, transparent), 0 1px 0 var(--overlay-lg) inset",
           border: "1px solid var(--overlay-md)",
-          pointerEvents: isOpen ? "none" : "auto",
         }}
       >
         🤖
         {!isPending && (
-          <motion.span
-            className="absolute inset-0 rounded-full pointer-events-none"
-            initial={{ opacity: 0.4, scale: 1 }}
-            animate={{ opacity: 0, scale: 1.6 }}
-            transition={{
-              duration: 2.2,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
+          <span
+            className="absolute inset-0 rounded-full pointer-events-none animate-ping [animation-duration:2.2s]"
             style={{
               background:
                 "linear-gradient(135deg, var(--accent) 0%, var(--c-7c4fff) 100%)",
+              opacity: 0.35,
             }}
           />
         )}
@@ -560,7 +554,7 @@ export const ChatWidget = () => {
             />
           </motion.span>
         )}
-      </motion.button>
+      </button>
     </div>
   );
 };
