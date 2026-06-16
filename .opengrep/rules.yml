@@ -1,0 +1,113 @@
+rules:
+  # --- XSS -------------------------------------------------------------------
+
+  - id: react-dangerously-set-inner-html
+    message: dangerouslySetInnerHTML with a non-literal value can cause XSS
+    severity: ERROR
+    languages: [generic]
+    pattern-regex: 'dangerouslySetInnerHTML=\{\{[^}]*[^"''\s][^}]*\}\}'
+    paths:
+      include: ["*.tsx", "*.jsx", "*.ts", "*.js"]
+    metadata:
+      category: security
+      cwe: CWE-79
+
+  - id: dom-innerhtml-assignment
+    message: Assigning to innerHTML with dynamic content can cause XSS
+    severity: ERROR
+    languages: [typescript, javascript]
+    pattern: $EL.innerHTML = $X
+    metadata:
+      category: security
+      cwe: CWE-79
+
+  # --- Eval / code injection -------------------------------------------------
+
+  - id: no-eval
+    message: eval() executes arbitrary code -- use JSON.parse or a safer alternative
+    severity: ERROR
+    languages: [typescript, javascript]
+    pattern: eval($X)
+    metadata:
+      category: security
+      cwe: CWE-95
+
+  - id: no-new-function
+    message: new Function() is equivalent to eval -- avoid dynamic code execution
+    severity: WARNING
+    languages: [typescript, javascript]
+    pattern: new Function($...ARGS)
+    metadata:
+      category: security
+      cwe: CWE-95
+
+  # --- Secrets / sensitive data ----------------------------------------------
+
+  - id: hardcoded-secret-assignment
+    message: Possible hardcoded secret -- move to environment variable
+    severity: WARNING
+    languages: [typescript, javascript]
+    patterns:
+      - pattern: 'const $KEY = "$VALUE"'
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: (?i)(secret|password|passwd|api_key|apikey|token|private_key)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: ".{8,}"
+    metadata:
+      category: security
+      cwe: CWE-798
+
+  # --- Prototype pollution ---------------------------------------------------
+
+  - id: prototype-pollution-merge
+    message: Merging user-controlled data into an object can cause prototype pollution
+    severity: WARNING
+    languages: [typescript, javascript]
+    patterns:
+      - pattern: "Object.assign({}, $USER_INPUT)"
+      - pattern: Object.assign($OBJ, $USER_INPUT)
+    metadata:
+      category: security
+      cwe: CWE-1321
+
+  # --- Optional rules (uncomment to enable) ----------------------------------
+
+  # Disallow console.log in production code:
+  # - id: no-console-log
+  #   message: Remove console.log before shipping
+  #   severity: WARNING
+  #   languages: [typescript, javascript]
+  #   pattern: console.log($...ARGS)
+  #   metadata:
+  #     category: maintainability
+
+  # Detect TODO/FIXME left in code:
+  # - id: todo-comment
+  #   message: Unresolved TODO/FIXME comment
+  #   severity: INFO
+  #   languages: [typescript, javascript]
+  #   pattern: "// TODO: $MSG"
+  #   metadata:
+  #     category: maintainability
+
+  # Flag window.location assignments (open redirect risk):
+  # - id: open-redirect
+  #   message: window.location assignment with dynamic value may allow open redirect
+  #   severity: WARNING
+  #   languages: [typescript, javascript]
+  #   pattern: window.location = $X
+  #   metadata:
+  #     category: security
+  #     cwe: CWE-601
+
+  # Flag document.write usage:
+  # - id: no-document-write
+  #   message: document.write() can enable XSS and blocks parsing
+  #   severity: ERROR
+  #   languages: [typescript, javascript]
+  #   pattern: document.write($X)
+  #   metadata:
+  #     category: security
+  #     cwe: CWE-79
