@@ -3,3 +3,5 @@
 .keep
 node_modules
 scripts/.repo-cache.json
+
+repo_descriptions.md
