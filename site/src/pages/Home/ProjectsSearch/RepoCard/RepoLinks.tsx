@@ -1,9 +1,5 @@
 import { CACHE_INVALIDATION_TIME, OWNER } from "@/config";
-import {
-  fetchLatestDmgUrl,
-  fetchPreviewUrl,
-  GithubRepo,
-} from "@/utils/fetch-repository";
+import { fetchLatestDmgUrl, GithubRepo } from "@/utils/fetch-repository";
 import { withLocalCache } from "@/utils/queryClient";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { Download, Github, GlobeIcon, LucidePackageCheck } from "lucide-react";
@@ -14,18 +10,9 @@ import npmExists from "@jayf0x/npm-exists";
 const queryOpts = { staleTime: Infinity, gcTime: Infinity };
 
 const iconCls =
-  "group flex items-center justify-center w-7 h-7 rounded border border-(--border)/50 hover:border-(--accent)/40 hover:bg-(--accent)/5 transition-all duration-150";
+  "group flex items-center justify-center w-7 h-7 rounded border border-(--border)/50 bg-(--surface)/70 hover:border-(--accent)/40 hover:bg-(--accent)/5 transition-all duration-150";
 
 export const RepoLinks = ({ repo }: { repo: GithubRepo }) => {
-  const queryPreview = useQuery<string | null>({
-    queryKey: ["repo-preview", repo.name],
-    queryFn: () =>
-      withLocalCache(`gh:preview:${repo.name}`, CACHE_INVALIDATION_TIME, () =>
-        fetchPreviewUrl(OWNER, repo.name),
-      ),
-    ...queryOpts,
-  });
-
   const queryDMG = useQuery<string | null>({
     queryKey: ["repo-dmg", repo.name],
     queryFn: () =>
@@ -46,52 +33,37 @@ export const RepoLinks = ({ repo }: { repo: GithubRepo }) => {
   });
 
   return (
-    <div className="flex flex-col items-end gap-2 shrink-0 self-stretch justify-between">
-      {/* Action links */}
-      <div className="flex items-center gap-1">
-        <AsyncIcon query={queryNpmPkg} title="npm package" iconCls="text-[#CB3837] group-hover:text-(--accent)">
-          <LucidePackageCheck size={14} />
-        </AsyncIcon>
-        <AsyncIcon query={queryDMG} title="Download .dmg" iconCls="text-(--muted)/70 group-hover:text-(--accent)">
-          <Download size={14} />
-        </AsyncIcon>
-        {repo.homepage && (
-          <a
-            href={repo.homepage}
-            target="_blank"
-            rel="noreferrer"
-            title="Website"
-            className={iconCls}
-          >
-            <span className="text-[#4A90D9] group-hover:text-(--accent) transition-colors duration-150">
-              <GlobeIcon size={14} />
-            </span>
-          </a>
-        )}
+    <div className="flex items-center gap-1 shrink-0 self-start">
+      <AsyncIcon query={queryNpmPkg} title="npm package" iconCls="text-[#CB3837] group-hover:text-(--accent)">
+        <LucidePackageCheck size={14} />
+      </AsyncIcon>
+      <AsyncIcon query={queryDMG} title="Download .dmg" iconCls="text-(--muted)/70 group-hover:text-(--accent)">
+        <Download size={14} />
+      </AsyncIcon>
+      {repo.homepage && (
         <a
-          href={repo.html_url}
+          href={repo.homepage}
           target="_blank"
           rel="noreferrer"
-          title="Repository"
+          title="Website"
           className={iconCls}
         >
-          <span className="text-(--muted)/70 group-hover:text-(--accent) transition-colors duration-150">
-            <Github size={14} />
+          <span className="text-[#4A90D9] group-hover:text-(--accent) transition-colors duration-150">
+            <GlobeIcon size={14} />
           </span>
         </a>
-      </div>
-
-      {/* Preview thumbnail */}
-      {queryPreview.data && (
-        <div
-          className="w-16 h-10 rounded-sm overflow-hidden opacity-20 group-hover:opacity-60 transition-opacity duration-400 shrink-0"
-          style={{
-            background: `url(${queryPreview.data}) no-repeat`,
-            backgroundSize: "cover",
-            backgroundPosition: "top left",
-          }}
-        />
       )}
+      <a
+        href={repo.html_url}
+        target="_blank"
+        rel="noreferrer"
+        title="Repository"
+        className={iconCls}
+      >
+        <span className="text-(--muted)/70 group-hover:text-(--accent) transition-colors duration-150">
+          <Github size={14} />
+        </span>
+      </a>
     </div>
   );
 };

@@ -1,5 +1,5 @@
+import { TagChip } from "@/components/TagChip";
 import { type FilterItem } from "@/hooks/useRepoSearch";
-import { getStackMeta } from "@/utils/stackMeta";
 
 export const FilterRow = ({
   items,
@@ -17,12 +17,12 @@ export const FilterRow = ({
   <div className="flex items-center gap-2">
     <div className="flex flex-wrap gap-1 flex-1 min-w-0">
       {items.map(({ name, count }) => (
-        <FilterChip
+        <TagChip
           key={name}
           name={name}
           count={count}
           active={filters.has(name)}
-          onToggle={() => onToggle(name)}
+          onClick={() => onToggle(name)}
         />
       ))}
     </div>
@@ -37,39 +37,3 @@ export const FilterRow = ({
     )}
   </div>
 );
-
-const FilterChip = ({
-  name,
-  count,
-  active,
-  onToggle,
-}: {
-  name: string;
-  count: number;
-  active: boolean;
-  onToggle: () => void;
-}) => {
-  const m = getStackMeta(name);
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      className={`shrink-0 inline-flex items-center gap-1 rounded border px-2 py-0.5 font-mono text-mini transition-all duration-150 ${
-        active
-          ? "border-(--accent)/60 bg-(--accent)/10 text-(--accent)"
-          : "border-(--border)/70 text-(--muted) hover:border-(--border) hover:text-(--text)"
-      }`}
-    >
-      {m.bg !== "transparent" && (
-        <span
-          className="inline-block h-1.5 w-1.5 rounded-full shrink-0"
-          style={{ background: m.bg }}
-        />
-      )}
-      {name}
-      <span className={`tabular-nums ${active ? "opacity-60" : "opacity-40"}`}>
-        {count}
-      </span>
-    </button>
-  );
-};

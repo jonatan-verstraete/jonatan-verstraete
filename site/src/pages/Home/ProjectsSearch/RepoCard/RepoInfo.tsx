@@ -1,84 +1,63 @@
-import { CACHE_INVALIDATION_TIME } from "@/config";
-import { GithubRepo, fetchRepoLanguages } from "@/utils/fetch-repository";
-import { withLocalCache } from "@/utils/queryClient";
-import { getStackMeta } from "@/utils/stackMeta";
-import { useQuery } from "@tanstack/react-query";
+import { TagChip } from "@/components/TagChip";
+import { GithubRepo } from "@/utils/fetch-repository";
 import { Archive } from "lucide-react";
 
-const queryOpts = { staleTime: CACHE_INVALIDATION_TIME, gcTime: CACHE_INVALIDATION_TIME };
-
-export const RepoInfo = ({ repo }: { repo: GithubRepo }) => {
-  const { data: languages = [] } = useQuery<string[]>({
-    queryKey: ["repo-langs", repo.name],
-    queryFn: () =>
-      withLocalCache(`gh:langs:${repo.name}`, CACHE_INVALIDATION_TIME, () =>
-        fetchRepoLanguages(repo.languages_url),
-      ),
-    ...queryOpts,
-  });
-
-  return (
-    <div className="min-w-0 flex-1 flex flex-col gap-1.5">
-      {/* Name row */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <h3 className="text-base font-semibold text-(--text) tracking-tight leading-none">
-          {repo.name}
-        </h3>
-        {repo.archived && (
-          <span className="inline-flex items-center gap-0.5 rounded border border-amber-500/30 bg-amber-500/8 px-1.5 py-px font-mono text-nano text-amber-400/90">
-            <Archive size={8} />
-            archived
-          </span>
-        )}
-        {repo.stargazers_count >= 5 && (
-          <span className="font-mono text-nano text-(--muted)/60 tabular-nums">
-            ★ {repo.stargazers_count}
-          </span>
-        )}
-      </div>
-
-      {/* Description */}
-      {repo.description && (
-        <p className="text-sm leading-relaxed text-(--overlay-a100) line-clamp-2">
-          {repo.description}
-        </p>
-      )}
-
-      {/* Footer: lang badges + topics + date */}
-      <div className="flex items-center gap-1 flex-wrap mt-0.5">
-        {languages.slice(0, 3).map((lang) => (
-          <LangBadge key={lang} name={lang} />
-        ))}
-        {repo.topics.slice(0, 3).map((t) => (
-          <TopicPill key={t} name={t} />
-        ))}
-        <span className="ml-auto font-mono text-nano text-(--muted)/50 shrink-0 tabular-nums">
-          {timeSince(repo.pushed_at)}
+export const RepoInfo = ({
+  repo,
+  languages,
+  onTagClick,
+}: {
+  repo: GithubRepo;
+  languages: string[];
+  onTagClick?: (name: string) => void;
+}) => (
+  <div className="min-w-0 flex-1 flex flex-col gap-1.5">
+    {/* Name row */}
+    <div className="flex items-center gap-2 flex-wrap">
+      <h3 className="text-base font-semibold text-(--text) tracking-tight leading-none">
+        {repo.name}
+      </h3>
+      {repo.archived && (
+        <span className="inline-flex items-center gap-0.5 rounded border border-amber-500/30 bg-amber-500/8 px-1.5 py-px font-mono text-nano text-amber-400/90">
+          <Archive size={8} />
+          archived
         </span>
-      </div>
+      )}
+      {repo.stargazers_count >= 5 && (
+        <span className="font-mono text-nano text-(--muted)/60 tabular-nums">
+          ★ {repo.stargazers_count}
+        </span>
+      )}
     </div>
-  );
-};
 
-const LangBadge = ({ name }: { name: string }) => {
-  const m = getStackMeta(name);
-  return (
-    <span
-      className="inline-block rounded font-mono text-micro font-medium px-1.5 py-px leading-5 shrink-0"
-      style={{
-        background: m.bg === "transparent" ? "var(--overlay-sm)" : m.bg,
-        color: m.color,
-      }}
-    >
-      {m.label || name}
-    </span>
-  );
-};
+    {/* Description */}
+    {repo.description && (
+      <p className="text-sm leading-relaxed text-(--overlay-a100) line-clamp-2">
+        {repo.description}
+      </p>
+    )}
 
-const TopicPill = ({ name }: { name: string }) => (
-  <span className="rounded border border-(--border)/60 px-1.5 py-px font-mono text-micro text-(--muted) leading-5">
-    {name}
-  </span>
+    {/* Footer: lang badges + topics + date */}
+    <div className="flex items-center gap-1 flex-wrap mt-0.5">
+      {languages.slice(0, 3).map((lang) => (
+        <TagChip
+          key={lang}
+          name={lang}
+          onClick={onTagClick ? () => onTagClick(lang.toLowerCase()) : undefined}
+        />
+      ))}
+      {repo.topics.slice(0, 3).map((t) => (
+        <TagChip
+          key={t}
+          name={t}
+          onClick={onTagClick ? () => onTagClick(t.toLowerCase()) : undefined}
+        />
+      ))}
+      <span className="ml-auto font-mono text-nano text-(--muted)/50 shrink-0 tabular-nums">
+        {timeSince(repo.pushed_at)}
+      </span>
+    </div>
+  </div>
 );
 
 const timeSince = (iso: string) => {

@@ -12,13 +12,16 @@ const compareFn =
   (a: GithubRepo, b: GithubRepo): number =>
     new Date(b[key] as string).getTime() - new Date(a[key] as string).getTime();
 
+type SortKey = "created_at" | "pushed_at";
+
 interface SidebarProps {
   repos: GithubRepo[];
   isLoading: boolean;
   onSelect: (name: string) => void;
+  onSort?: (key: SortKey) => void;
 }
 
-export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
+export const Sidebar = ({ repos, isLoading, onSelect, onSort }: SidebarProps) => {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -28,7 +31,10 @@ export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
     }
   }, [isLoading, isMobile]);
 
-  const sidebarContent = (closeOnSelect: (name: string) => void) =>
+  const sidebarContent = (
+    selectHandler: (name: string) => void,
+    sortHandler?: (key: SortKey) => void,
+  ) =>
     isLoading ? (
       <div className="flex flex-col gap-2 pt-5">
         {Array.from({ length: topN }).map((_, i) => (
@@ -41,13 +47,28 @@ export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
       </div>
     ) : (
       <>
-        <SidebarSection title="Recently Added" repos={repos} dateKey="created_at" onSelect={closeOnSelect} />
+        <SidebarSection
+          title="Recently Added"
+          repos={repos}
+          dateKey="created_at"
+          onSelect={selectHandler}
+          onSort={sortHandler ? () => sortHandler("created_at") : undefined}
+        />
         <div className="shrink-0 h-px bg-(--border) my-1" />
-        <SidebarSection title="Recently Updated" repos={repos} dateKey="pushed_at" onSelect={closeOnSelect} />
+        <SidebarSection
+          title="Recently Updated"
+          repos={repos}
+          dateKey="pushed_at"
+          onSelect={selectHandler}
+          onSort={sortHandler ? () => sortHandler("pushed_at") : undefined}
+        />
       </>
     );
 
   if (isMobile) {
+    const mobileSelect = (name: string) => { onSelect(name); setOpen(false); };
+    const mobileSort = onSort ? (key: SortKey) => { onSort(key); setOpen(false); } : undefined;
+
     return (
       <>
         <button
@@ -85,7 +106,7 @@ export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
                 >
                   <ChevronLeft size={18} />
                 </button>
-                {sidebarContent((name) => { onSelect(name); setOpen(false); })}
+                {sidebarContent(mobileSelect, mobileSort)}
               </motion.div>
             </>
           )}
@@ -108,7 +129,7 @@ export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
             style={{ minWidth: 0 }}
           >
             <div className="flex flex-col h-full min-h-0 pr-3 gap-1">
-              {sidebarContent(onSelect)}
+              {sidebarContent(onSelect, onSort)}
             </div>
           </motion.div>
         )}
@@ -131,19 +152,31 @@ const SidebarSection = ({
   repos,
   dateKey,
   onSelect,
+  onSort,
 }: {
   title: string;
   repos: GithubRepo[];
-  dateKey: "created_at" | "pushed_at";
+  dateKey: SortKey;
   onSelect: (name: string) => void;
+  onSort?: () => void;
 }) => {
   const projects = repos.slice().sort(compareFn(dateKey)).slice(0, topN);
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <span className="mb-1.5 shrink-0 font-mono text-nano uppercase tracking-widest text-(--accent)">
-        {title}
-      </span>
+      {onSort ? (
+        <button
+          type="button"
+          onClick={onSort}
+          className="mb-1.5 shrink-0 text-left font-mono text-nano uppercase tracking-widest text-(--accent) hover:text-(--text) transition-colors duration-150"
+        >
+          {title}
+        </button>
+      ) : (
+        <span className="mb-1.5 shrink-0 font-mono text-nano uppercase tracking-widest text-(--accent)">
+          {title}
+        </span>
+      )}
       <div className="relative flex-1 min-h-0">
         <div className="absolute inset-0 overflow-y-auto overflow-x-hidden space-y-px [&::-webkit-scrollbar]:hidden pb-5">
           {projects.map((repo) => (
