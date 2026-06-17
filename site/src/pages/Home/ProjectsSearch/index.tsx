@@ -4,8 +4,8 @@ import { fetchUserRepos, type GithubRepo } from "@/utils/fetch-repository";
 import { withLocalCache } from "@/utils/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import { PackageSearch, Search, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Clock, List, PackageSearch, Search, Sparkles, X } from "lucide-react";
+import { ElementType, useEffect, useRef, useState } from "react";
 import { FilterRow } from "./FilterRow";
 import { RepoCard } from "./RepoCard";
 import { Sidebar } from "./Sidebar";
@@ -13,7 +13,7 @@ import { Sidebar } from "./Sidebar";
 const spring = { type: "spring" as const, stiffness: 500, damping: 40 };
 const springGentle = { type: "spring" as const, stiffness: 320, damping: 32 };
 
-type SortKey = "created_at" | "pushed_at";
+type SortKey = "created_at" | "pushed_at" | "name";
 
 export const ProjectSection = () => {
   const [query, setQuery] = useState("");
@@ -39,12 +39,10 @@ export const ProjectSection = () => {
 
   const displayResults =
     sort && !hasInput
-      ? repos
-          .slice()
-          .sort(
-            (a, b) =>
-              new Date(b[sort]).getTime() - new Date(a[sort]).getTime(),
-          )
+      ? repos.slice().sort((a, b) => {
+          if (sort === "name") return a.name.localeCompare(b.name);
+          return new Date(b[sort]).getTime() - new Date(a[sort]).getTime();
+        })
       : results;
 
   const toggleFilter = (value: string) => {
@@ -176,7 +174,7 @@ export const ProjectSection = () => {
             )}
           </AnimatePresence>
 
-          {/* Active query + filter chips — centered */}
+          {/* Active chips */}
           <AnimatePresence>
             {hasInput && (
               <motion.div
@@ -188,27 +186,22 @@ export const ProjectSection = () => {
               >
                 <div className="flex flex-wrap items-center justify-center gap-2">
                   {hasQuery && (
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-micro text-(--muted) shrink-0">
-                        query
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setQuery("");
-                          inputRef.current?.focus();
-                        }}
-                        className="group inline-flex items-center gap-1 rounded border border-(--border)/70 bg-(--surface) px-2 py-0.5 font-mono text-mini text-(--text) hover:border-(--accent)/50 transition-colors duration-100"
-                      >
-                        <span className="text-(--muted)/50">"</span>
-                        {query.trim()}
-                        <span className="text-(--muted)/50">"</span>
-                        <X
-                          size={9}
-                          className="ml-0.5 opacity-40 group-hover:opacity-80 transition-opacity"
-                        />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setQuery("");
+                        inputRef.current?.focus();
+                      }}
+                      className="group inline-flex items-center gap-1 rounded border border-(--border)/70 bg-(--surface) px-2 py-0.5 font-mono text-mini text-(--text) hover:border-(--accent)/50 transition-colors duration-100"
+                    >
+                      <span className="text-(--muted)/50">"</span>
+                      {query.trim()}
+                      <span className="text-(--muted)/50">"</span>
+                      <X
+                        size={9}
+                        className="ml-0.5 opacity-40 group-hover:opacity-80 transition-opacity"
+                      />
+                    </button>
                   )}
                   {[...filters].map((f) => (
                     <button
@@ -237,14 +230,14 @@ export const ProjectSection = () => {
               <AnimatePresence mode="popLayout" initial={false}>
                 {!hasInput && !sort && (
                   <motion.div
-                    key="empty-default"
+                    key="presets"
                     layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={springGentle}
                   >
-                    <EmptyDefault />
+                    <PresetCards onSelect={setSort} />
                   </motion.div>
                 )}
 
@@ -286,15 +279,31 @@ export const ProjectSection = () => {
   );
 };
 
-const EmptyDefault = () => (
-  <div className="flex flex-col items-center justify-center py-16 gap-3 text-(--muted)">
-    <Search size={48} className="opacity-20" />
-    <div className="text-center">
-      <p className="font-mono text-sm">Search your projects</p>
-      <p className="font-mono text-micro opacity-60 mt-1">
-        Type a name, description, or pick a filter above
-      </p>
-    </div>
+const PRESETS: { key: SortKey; label: string; sub: string; Icon: ElementType }[] = [
+  { key: "pushed_at", label: "Recently Added", sub: "Last active first", Icon: Clock },
+  { key: "created_at", label: "Recently Created", sub: "Newest repos first", Icon: Sparkles },
+  { key: "name", label: "All", sub: "A → Z", Icon: List },
+];
+
+const PresetCards = ({ onSelect }: { onSelect: (key: SortKey) => void }) => (
+  <div className="grid grid-cols-3 gap-3 pt-2">
+    {PRESETS.map(({ key, label, sub, Icon }) => (
+      <button
+        key={key}
+        type="button"
+        onClick={() => onSelect(key)}
+        className="group flex flex-col gap-3 rounded-lg border border-(--border)/60 bg-(--surface)/60 px-4 py-4 text-left transition-all duration-150 hover:border-(--accent)/50 hover:bg-(--surface-2)/80 hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(0,0,0,0.3)]"
+      >
+        <Icon
+          size={18}
+          className="text-(--muted)/50 group-hover:text-(--accent) transition-colors duration-150"
+        />
+        <div>
+          <p className="font-mono text-mini font-medium text-(--text)">{label}</p>
+          <p className="font-mono text-micro text-(--muted)/60 mt-0.5">{sub}</p>
+        </div>
+      </button>
+    ))}
   </div>
 );
 
