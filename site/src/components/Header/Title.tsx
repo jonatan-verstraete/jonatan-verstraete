@@ -32,14 +32,14 @@ export const Title = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           {!isMobile && (
-            <div className="lg:text-4xl sm:text-xl font-black tracking-tighter text-(--text)">
+            <div className="lg:text-4xl sm:text-xl font-black tracking-tighter text-text">
               <TextWithSecret text="Jonatan" secret="JayF0x" />
             </div>
           )}
         </motion.div>
 
         <motion.div
-          className="font-mono text-sm text-(--muted) md:text-base"
+          className="font-mono text-sm text-muted md:text-base"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}

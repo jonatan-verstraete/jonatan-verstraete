@@ -5,7 +5,7 @@ import { withLocalCache } from "@/utils/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FilterRow } from "./FilterRow";
 import { RepoCard } from "./RepoCard";
 import { Sidebar } from "./Sidebar";
@@ -48,6 +48,17 @@ export const ProjectSection = () => {
     inputRef.current?.focus();
   };
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   const hasQuery = query.trim().length > 0;
   const hasActiveFilters = filters.size > 0;
   const hasInput = hasQuery || hasActiveFilters;
@@ -56,7 +67,7 @@ export const ProjectSection = () => {
     <section className="flex flex-col flex-1 min-h-0 px-6 py-4">
       <div className="mx-auto max-w-5xl flex flex-row min-h-0 gap-0 size-full">
         <Sidebar repos={repos} onSelect={setQuery} isLoading={isLoading} />
-        <div className="flex-1 min-w-0 flex flex-col min-h-0 gap-4 pl-4">
+        <div className="flex-1 min-w-0 flex flex-col min-h-0 gap-4 md:pl-4">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={springGentle} className="relative">
             <Search size={15} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-(--muted)" />
             <input
@@ -65,11 +76,12 @@ export const ProjectSection = () => {
               placeholder="Search projects by name, keyword, stack…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-xl border border-(--border) bg-(--surface) py-3 pl-10 pr-10 text-sm text-(--text) placeholder:text-(--muted) outline-none transition-colors duration-150 focus:border-(--accent)"
+              className="w-full rounded-xl border border-(--border) bg-(--surface) py-3 pl-10 pr-10 text-sm text-(--text) placeholder:text-(--muted) outline-none transition-all duration-150 focus:border-(--accent) focus:shadow-[0_0_0_3px_rgba(79,124,255,0.1)]"
             />
             <AnimatePresence>
-              {hasQuery && (
+              {hasQuery ? (
                 <motion.div
+                  key="clear"
                   initial={{ opacity: 0, scale: 0.7 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.7 }}
@@ -84,6 +96,17 @@ export const ProjectSection = () => {
                   >
                     <X size={13} />
                   </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="slash-hint"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="pointer-events-none absolute right-3 flex items-center top-0 h-full"
+                >
+                  <kbd className="font-mono text-[10px] border border-(--border) rounded px-1 py-0.5 text-(--muted) leading-none">/</kbd>
                 </motion.div>
               )}
             </AnimatePresence>

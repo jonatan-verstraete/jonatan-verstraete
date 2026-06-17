@@ -29,7 +29,7 @@ export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
   }, [isLoading]);
 
   return (
-    <div className="relative flex shrink-0 self-stretch">
+    <div className="relative hidden md:flex shrink-0 self-stretch">
       <AnimatePresence>
         {open && (
           <motion.div
@@ -156,7 +156,7 @@ const SidebarItem = ({
 }) => (
   <button
     type="button"
-    className="group flex items-center justify-between w-full gap-1 rounded-md px-1.5 py-[3px] transition-all origin-left duration-100 text-(--muted) hover:bg-(--surface) hover:scale-y-125  hover:text-(--accent)"
+    className="group flex items-center justify-between w-full gap-1 rounded-md px-1.5 py-[3px] transition-all duration-100 text-(--muted) hover:bg-(--surface) hover:translate-x-0.5 hover:text-(--accent)"
     onClick={onClick}
   >
     <div className="min-w-0 flex-1 truncate text-left font-mono text-[11px]">

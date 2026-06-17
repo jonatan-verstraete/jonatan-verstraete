@@ -95,6 +95,7 @@ export const Background = () => {
 
       <div className="blob absolute -left-40 -top-40 h-125 w-125 rounded-full bg-linear-to-br from-accent to-(--c-8b5cf6) opacity-[0.1] blur-3xl" />
       <div className="blob absolute -bottom-40 -right-40 h-105 w-105 rounded-full bg-linear-to-tr from-accent to-(--c-8b5cf6) opacity-[0.1] blur-3xl [animation-delay:3s]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.055)_1px,transparent_2px)] bg-size-[28px_28px]" />
     </div>
   );
 };

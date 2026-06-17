@@ -58,7 +58,7 @@ export const RepoLinks = ({ repo }: { repo: GithubRepo }) => {
         <div className="mt-1 h-14 w-24 animate-pulse rounded-lg bg-border" />
       ) : queryPreview.data ? (
         <div
-          className="w-62.5 h-37.5 transition-opacity group-hover:opacity-100 opacity-8 rounded-md"
+          className="w-62.5 h-37.5 transition-opacity duration-300 group-hover:opacity-100 opacity-20 rounded-md"
           style={{
             background: `url(${queryPreview.data}) no-repeat`,
             backgroundSize: "140% auto",
