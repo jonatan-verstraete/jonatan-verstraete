@@ -15,7 +15,7 @@ export const FilterRow = ({
   onClearFilters?: () => void;
 }) => (
   <div className="flex items-center gap-2">
-    <div className="flex flex-wrap gap-1 flex-1 min-w-0">
+    <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
       {items.map(({ name, count }) => (
         <TagChip
           key={name}

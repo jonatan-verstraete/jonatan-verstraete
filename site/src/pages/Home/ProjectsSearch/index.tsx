@@ -230,7 +230,7 @@ export const ProjectSection = () => {
           </AnimatePresence>
 
           {/* Results */}
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-1.5 pr-0.5 pt-0.5">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pr-0.5 pt-0.5">
             {isLoading ? (
               <LoadingSkeleton />
             ) : (

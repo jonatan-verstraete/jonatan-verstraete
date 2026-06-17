@@ -1,6 +1,7 @@
-import { allPageNames, OWNER } from "@/config";
+import { allPageNames } from "@/config";
 import { currentPageAtom } from "@/store/generalStore";
 import { useAtomValue, useSetAtom } from "jotai";
+import { Avatar } from "./Avatar";
 import { Title } from "./Title";
 
 export const Header = () => {
@@ -9,14 +10,7 @@ export const Header = () => {
 
   return (
     <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 border-b border-(--border)/50 shrink-0">
-      <a href={`https://github.com/${OWNER}`} target="_blank" rel="noreferrer" className="shrink-0 block">
-        <img
-          src="https://avatars.githubusercontent.com/u/104129830?v=4&size=56"
-          alt="avatar"
-          className="w-11 h-11 rounded-full border border-white/20 object-cover"
-          style={{ filter: "drop-shadow(0 0 10px rgba(79,124,255,0.3))" }}
-        />
-      </a>
+      <Avatar />
 
       <div className="min-w-0 overflow-hidden flex items-center justify-center">
         <Title />
@@ -30,8 +24,8 @@ export const Header = () => {
             onClick={() => setPage(label)}
             className={`font-mono text-sm uppercase tracking-[0.06em] transition-colors duration-150 ${
               label === currentPage
-                ? "text-(--accent)"
-                : "text-(--muted) hover:text-(--text)"
+                ? "text-accent"
+                : "text-muted hover:text-text"
             }`}
           >
             {label}

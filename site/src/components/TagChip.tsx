@@ -9,7 +9,7 @@ interface TagChipProps {
 
 export const TagChip = ({ name, active, count, onClick }: TagChipProps) => {
   const m = getStackMeta(name);
-  const cls = `shrink-0 inline-flex items-center gap-1 rounded border px-1.5 py-px font-mono text-micro leading-5 transition-all duration-150 ${
+  const cls = `shrink-0 inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-mono text-micro leading-5 transition-all duration-150 ${
     active
       ? "border-(--accent)/60 bg-(--accent)/10 text-(--accent)"
       : onClick

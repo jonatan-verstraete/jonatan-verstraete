@@ -39,7 +39,6 @@ export const RepoCard = ({
     .map((l) => getStackMeta(l).bg)
     .filter((bg) => bg !== "transparent");
 
-  // fallback to primary language if no detected lang colors
   if (langColors.length === 0 && repo.language) {
     const fb = getStackMeta(repo.language).bg;
     if (fb !== "transparent") langColors.push(fb);
@@ -50,18 +49,20 @@ export const RepoCard = ({
       ? `linear-gradient(to bottom, ${[...langColors, "transparent"].join(", ")})`
       : null;
 
+  // cover+cover guarantees the image always fills the full card height,
+  // so the horizontal gradient overlay never misaligns vertically.
   const bgStyle = previewUrl
     ? {
-        backgroundImage: `linear-gradient(to right, var(--surface) 30%, transparent 70%), url(${previewUrl})`,
-        backgroundPosition: "center right, center right",
-        backgroundSize: "cover, 70%",
+        backgroundImage: `linear-gradient(to right, var(--surface) 35%, transparent 65%), url(${previewUrl})`,
+        backgroundSize: "cover, cover",
+        backgroundPosition: "center, center right",
         backgroundRepeat: "no-repeat, no-repeat",
       }
     : undefined;
 
   return (
     <article
-      className="group relative flex items-start gap-3 rounded-lg border border-(--border)/80 bg-(--surface)/90 overflow-hidden px-4 py-3 transition-all duration-200 hover:border-(--border) hover:bg-(--surface-2)/80 hover:-translate-y-px hover:shadow-[0_6px_24px_rgba(0,0,0,0.4)]"
+      className="group/card relative flex items-start gap-3 rounded-lg border border-(--border)/80 bg-(--surface)/90 overflow-hidden px-4 py-4 transition-all duration-200 hover:border-(--border) hover:bg-(--surface-2)/80 hover:-translate-y-px hover:shadow-[0_6px_24px_rgba(0,0,0,0.4)]"
       style={bgStyle}
     >
       {gradientStyle && (
