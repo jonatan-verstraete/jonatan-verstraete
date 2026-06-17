@@ -38,7 +38,7 @@ export const Title = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.22 }}
-        className="font-mono text-xs text-(--muted) flex items-center gap-1"
+        className="font-mono text-sm text-(--muted) flex items-center gap-1"
       >
         <TypeAnimation
           sequence={terminalLines}

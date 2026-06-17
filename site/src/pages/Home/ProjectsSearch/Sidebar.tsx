@@ -196,7 +196,7 @@ const SidebarItem = ({
     className="group flex items-center justify-between w-full gap-1 rounded-md px-1.5 py-[3px] transition-all duration-100 text-(--muted) hover:bg-(--surface) hover:translate-x-0.5 hover:text-(--accent)"
     onClick={onClick}
   >
-    <div className="min-w-0 flex-1 truncate text-left font-mono text-micro">
+    <div className="min-w-0 flex-1 truncate text-left font-mono text-mini">
       {repo.name}
     </div>
     <div className="shrink-0 font-mono text-nano text-(--muted)/50 tabular-nums">

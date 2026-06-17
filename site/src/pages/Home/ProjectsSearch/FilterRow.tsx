@@ -30,7 +30,7 @@ export const FilterRow = ({
       <button
         type="button"
         onClick={onClearFilters}
-        className="shrink-0 font-mono text-nano text-(--muted)/60 hover:text-(--accent) transition-colors"
+        className="shrink-0 font-mono text-micro text-(--muted) hover:text-(--accent) transition-colors"
       >
         clear
       </button>
@@ -54,7 +54,7 @@ const FilterChip = ({
     <button
       type="button"
       onClick={onToggle}
-      className={`shrink-0 inline-flex items-center gap-1 rounded border px-2 py-0.5 font-mono text-nano transition-all duration-150 ${
+      className={`shrink-0 inline-flex items-center gap-1 rounded border px-2 py-0.5 font-mono text-mini transition-all duration-150 ${
         active
           ? "border-(--accent)/60 bg-(--accent)/10 text-(--accent)"
           : "border-(--border)/70 text-(--muted) hover:border-(--border) hover:text-(--text)"

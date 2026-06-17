@@ -28,7 +28,7 @@ export const Header = () => {
             key={`page-${label}`}
             type="button"
             onClick={() => setPage(label)}
-            className={`font-mono text-mini uppercase tracking-[0.06em] transition-colors duration-150 ${
+            className={`font-mono text-sm uppercase tracking-[0.06em] transition-colors duration-150 ${
               label === currentPage
                 ? "text-(--accent)"
                 : "text-(--muted) hover:text-(--text)"

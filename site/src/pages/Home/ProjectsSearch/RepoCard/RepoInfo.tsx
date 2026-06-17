@@ -21,7 +21,7 @@ export const RepoInfo = ({ repo }: { repo: GithubRepo }) => {
     <div className="min-w-0 flex-1 flex flex-col gap-1.5">
       {/* Name row */}
       <div className="flex items-center gap-2 flex-wrap">
-        <h3 className="text-sm font-semibold text-(--text) tracking-tight leading-none">
+        <h3 className="text-base font-semibold text-(--text) tracking-tight leading-none">
           {repo.name}
         </h3>
         {repo.archived && (
@@ -39,7 +39,7 @@ export const RepoInfo = ({ repo }: { repo: GithubRepo }) => {
 
       {/* Description */}
       {repo.description && (
-        <p className="text-xs leading-relaxed text-(--muted) line-clamp-2">
+        <p className="text-sm leading-relaxed text-(--overlay-a100) line-clamp-2">
           {repo.description}
         </p>
       )}
@@ -64,7 +64,7 @@ const LangBadge = ({ name }: { name: string }) => {
   const m = getStackMeta(name);
   return (
     <span
-      className="inline-block rounded font-mono text-nano font-medium px-1.5 py-px leading-5 shrink-0"
+      className="inline-block rounded font-mono text-micro font-medium px-1.5 py-px leading-5 shrink-0"
       style={{
         background: m.bg === "transparent" ? "var(--overlay-sm)" : m.bg,
         color: m.color,
@@ -76,7 +76,7 @@ const LangBadge = ({ name }: { name: string }) => {
 };
 
 const TopicPill = ({ name }: { name: string }) => (
-  <span className="rounded border border-(--border)/60 px-1.5 py-px font-mono text-nano text-(--muted)/70 leading-5">
+  <span className="rounded border border-(--border)/60 px-1.5 py-px font-mono text-micro text-(--muted) leading-5">
     {name}
   </span>
 );

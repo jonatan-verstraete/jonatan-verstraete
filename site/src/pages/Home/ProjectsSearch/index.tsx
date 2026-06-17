@@ -85,7 +85,7 @@ export const ProjectSection = () => {
               placeholder="Search projects…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-lg border border-(--border)/70 bg-(--surface) py-2.5 pl-9 pr-24 text-sm text-(--text) placeholder:text-(--muted) outline-none transition-all duration-150 focus:border-(--accent)/60 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.08)]"
+              className="w-full rounded-lg border border-(--border)/70 bg-(--surface) py-2.5 pl-9 pr-24 text-sm text-(--text) placeholder:text-(--overlay-a100) outline-none transition-all duration-150 focus:border-(--accent)/60 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.08)]"
             />
             <div className="absolute right-3 top-0 h-full flex items-center gap-2">
               <AnimatePresence mode="popLayout">
@@ -98,7 +98,7 @@ export const ProjectSection = () => {
                     transition={{ duration: 0.12 }}
                     className="flex items-center gap-2"
                   >
-                    <span className="font-mono text-nano text-(--muted)/60 tabular-nums">
+                    <span className="font-mono text-micro text-(--muted) tabular-nums">
                       {results.length}
                     </span>
                     <button
@@ -139,11 +139,11 @@ export const ProjectSection = () => {
                 className="overflow-hidden"
               >
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-nano text-(--muted)/50 shrink-0">query</span>
+                  <span className="font-mono text-micro text-(--muted) shrink-0">query</span>
                   <button
                     type="button"
                     onClick={() => { setQuery(""); inputRef.current?.focus(); }}
-                    className="group inline-flex items-center gap-1 rounded border border-(--border)/70 bg-(--surface) px-2 py-0.5 font-mono text-nano text-(--text) hover:border-(--accent)/50 transition-colors duration-100"
+                    className="group inline-flex items-center gap-1 rounded border border-(--border)/70 bg-(--surface) px-2 py-0.5 font-mono text-mini text-(--text) hover:border-(--accent)/50 transition-colors duration-100"
                   >
                     <span className="text-(--muted)/50">"</span>
                     {query.trim()}
@@ -192,11 +192,11 @@ export const ProjectSection = () => {
                     transition={springGentle}
                     className="flex flex-col items-center justify-center py-16 gap-2"
                   >
-                    <span className="font-mono text-xs text-(--muted)/50">no matches</span>
+                    <span className="font-mono text-sm text-(--muted)">no matches</span>
                     <button
                       type="button"
                       onClick={clearAll}
-                      className="font-mono text-nano text-(--muted)/40 hover:text-(--accent)/60 transition-colors"
+                      className="font-mono text-micro text-(--muted) hover:text-(--accent) transition-colors"
                     >
                       clear filters
                     </button>
