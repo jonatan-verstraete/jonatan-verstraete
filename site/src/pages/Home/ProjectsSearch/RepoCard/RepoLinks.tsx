@@ -102,9 +102,7 @@ const AsyncIcon = ({
 }>) => {
   const { data, isLoading } = query;
   if (isLoading)
-    return (
-      <div className="h-6 w-6 animate-pulse rounded border border-(--border)/30 bg-(--surface)/40" />
-    );
+    return <div className="h-6 w-6 animate-pulse rounded border border-(--border)/40 bg-(--surface)/60" />;
   if (!data) return null;
   return (
     <a

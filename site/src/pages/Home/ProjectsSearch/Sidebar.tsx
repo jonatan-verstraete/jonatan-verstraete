@@ -141,11 +141,11 @@ const SidebarSection = ({
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <span className="mb-1.5 shrink-0 font-mono text-[10px] uppercase tracking-widest text-(--accent)">
+      <span className="mb-1.5 shrink-0 font-mono text-nano uppercase tracking-widest text-(--accent)">
         {title}
       </span>
       <div className="relative flex-1 min-h-0">
-        <div className="absolute inset-0 overflow-y-auto space-y-px [&::-webkit-scrollbar]:hidden pb-5">
+        <div className="absolute inset-0 overflow-y-auto overflow-x-hidden space-y-px [&::-webkit-scrollbar]:hidden pb-5">
           {projects.map((repo) => (
             <SidebarItem
               key={`sidebar-item-${repo.id}`}
@@ -196,10 +196,10 @@ const SidebarItem = ({
     className="group flex items-center justify-between w-full gap-1 rounded-md px-1.5 py-[3px] transition-all duration-100 text-(--muted) hover:bg-(--surface) hover:translate-x-0.5 hover:text-(--accent)"
     onClick={onClick}
   >
-    <div className="min-w-0 flex-1 truncate text-left font-mono text-[11px]">
+    <div className="min-w-0 flex-1 truncate text-left font-mono text-micro">
       {repo.name}
     </div>
-    <div className="shrink-0 font-mono text-[9px] text-(--muted)/40 tabular-nums">
+    <div className="shrink-0 font-mono text-nano text-(--muted)/50 tabular-nums">
       {fmt(date)}
     </div>
   </button>

@@ -21,14 +21,14 @@ export const Title = () => {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="flex flex-col items-center gap-0.5 overflow-hidden"
+      className="flex flex-col items-center gap-1 overflow-hidden"
     >
       {!isMobile && (
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.08 }}
-          className="text-xl font-black tracking-tight text-(--text) select-none"
+          className="text-2xl font-black tracking-tight text-(--text) select-none"
         >
           <TextWithSecret text="Jonatan" secret="JayF0x" />
         </motion.div>
@@ -38,7 +38,7 @@ export const Title = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.22 }}
-        className="font-mono text-[11px] text-(--muted) flex items-center gap-1"
+        className="font-mono text-xs text-(--muted) flex items-center gap-1"
       >
         <TypeAnimation
           sequence={terminalLines}
@@ -46,7 +46,7 @@ export const Title = () => {
           speed={68}
           repeat={Infinity}
         />
-        <span className="inline-block h-3 w-[1.5px] animate-blink bg-(--accent) align-middle" />
+        <span className="inline-block h-[0.7em] w-[1.5px] animate-blink bg-(--accent) align-middle" />
       </motion.div>
     </motion.div>
   );
@@ -61,12 +61,12 @@ export const TextWithSecret = memo(
 
     const textSlots = Array.from({ length: N }).map((_, i) => {
       const char = text[i - textStart];
-      return char === undefined ? " " : char;
+      return char === undefined ? " " : char;
     });
 
     const secretSlots = Array.from({ length: N }).map((_, i) => {
       const char = secret[i - secretStart];
-      return char === undefined ? " " : char;
+      return char === undefined ? " " : char;
     });
 
     return (

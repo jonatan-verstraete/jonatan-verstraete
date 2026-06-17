@@ -24,6 +24,34 @@ body {
   color: var(--text);
 }
 
+/* ── Responsive font-size scale ───────────────────────────────────────────── */
+:root {
+  --sz-nano:  0.5625rem;  /* 9px  */
+  --sz-micro: 0.6875rem;  /* 11px */
+  --sz-mini:  0.75rem;    /* 12px */
+  --sz-sm:    0.875rem;   /* 14px */
+  --sz-base:  1rem;       /* 16px */
+}
+
+@media (max-width: 767px) {
+  :root {
+    --sz-nano:  0.75rem;   /* 12px */
+    --sz-micro: 0.8125rem; /* 13px */
+    --sz-mini:  0.875rem;  /* 14px */
+    --sz-sm:    1rem;      /* 16px */
+    --sz-base:  1.0625rem; /* 17px */
+  }
+}
+
+/* ── Custom text utilities that respond to the vars above ─────────────────── */
+@layer utilities {
+  .text-nano  { font-size: var(--sz-nano);  line-height: 1.5; }
+  .text-micro { font-size: var(--sz-micro); line-height: 1.5; }
+  .text-mini  { font-size: var(--sz-mini);  line-height: 1.5; }
+  .text-rbase { font-size: var(--sz-base);  line-height: 1.5; }
+}
+
+/* ── Global base ──────────────────────────────────────────────────────────── */
 :root {
   /* Backgrounds */
   --bg: #060608;

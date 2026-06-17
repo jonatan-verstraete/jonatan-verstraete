@@ -8,12 +8,12 @@ export const Header = () => {
   const setPage = useSetAtom(currentPageAtom);
 
   return (
-    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-5 py-3 border-b border-(--border)/40 shrink-0">
+    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-5 py-4 border-b border-(--border)/50 shrink-0">
       <a href={`https://github.com/${OWNER}`} target="_blank" rel="noreferrer" className="shrink-0 block">
         <img
           src="https://avatars.githubusercontent.com/u/104129830?v=4&size=56"
           alt="avatar"
-          className="w-10 h-10 rounded-full border border-white/15 object-cover"
+          className="w-11 h-11 rounded-full border border-white/20 object-cover"
           style={{ filter: "drop-shadow(0 0 10px rgba(79,124,255,0.3))" }}
         />
       </a>
@@ -28,7 +28,7 @@ export const Header = () => {
             key={`page-${label}`}
             type="button"
             onClick={() => setPage(label)}
-            className={`font-mono text-[11px] tracking-[0.08em] uppercase transition-colors duration-150 ${
+            className={`font-mono text-mini uppercase tracking-[0.06em] transition-colors duration-150 ${
               label === currentPage
                 ? "text-(--accent)"
                 : "text-(--muted) hover:text-(--text)"

@@ -30,7 +30,7 @@ export const FilterRow = ({
       <button
         type="button"
         onClick={onClearFilters}
-        className="shrink-0 font-mono text-[10px] text-(--muted)/40 hover:text-(--accent)/70 transition-colors"
+        className="shrink-0 font-mono text-nano text-(--muted)/60 hover:text-(--accent) transition-colors"
       >
         clear
       </button>
@@ -54,10 +54,10 @@ const FilterChip = ({
     <button
       type="button"
       onClick={onToggle}
-      className={`shrink-0 inline-flex items-center gap-1 rounded border px-2 py-0.5 font-mono text-[10px] transition-all duration-150 ${
+      className={`shrink-0 inline-flex items-center gap-1 rounded border px-2 py-0.5 font-mono text-nano transition-all duration-150 ${
         active
           ? "border-(--accent)/60 bg-(--accent)/10 text-(--accent)"
-          : "border-(--border)/50 text-(--muted)/70 hover:border-(--border) hover:text-(--text)/80"
+          : "border-(--border)/70 text-(--muted) hover:border-(--border) hover:text-(--text)"
       }`}
     >
       {m.bg !== "transparent" && (
@@ -67,7 +67,7 @@ const FilterChip = ({
         />
       )}
       {name}
-      <span className={`tabular-nums ${active ? "opacity-60" : "opacity-30"}`}>
+      <span className={`tabular-nums ${active ? "opacity-60" : "opacity-40"}`}>
         {count}
       </span>
     </button>

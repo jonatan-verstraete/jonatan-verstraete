@@ -47,9 +47,7 @@ export const ProjectSection = () => {
     const handler = (e: KeyboardEvent) => {
       if (
         e.key === "/" &&
-        !["INPUT", "TEXTAREA"].includes(
-          (e.target as HTMLElement).tagName,
-        )
+        !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)
       ) {
         e.preventDefault();
         inputRef.current?.focus();
@@ -78,7 +76,7 @@ export const ProjectSection = () => {
             className="relative"
           >
             <Search
-              size={13}
+              size={14}
               className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-(--muted)"
             />
             <input
@@ -87,7 +85,7 @@ export const ProjectSection = () => {
               placeholder="Search projects…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-lg border border-(--border)/60 bg-(--surface)/80 py-2.5 pl-9 pr-24 text-sm text-(--text) placeholder:text-(--muted)/50 outline-none transition-all duration-150 focus:border-(--accent)/50 focus:bg-(--surface) focus:shadow-[0_0_0_3px_rgba(79,124,255,0.08)]"
+              className="w-full rounded-lg border border-(--border)/70 bg-(--surface) py-2.5 pl-9 pr-24 text-sm text-(--text) placeholder:text-(--muted) outline-none transition-all duration-150 focus:border-(--accent)/60 focus:shadow-[0_0_0_3px_rgba(79,124,255,0.08)]"
             />
             <div className="absolute right-3 top-0 h-full flex items-center gap-2">
               <AnimatePresence mode="popLayout">
@@ -100,21 +98,17 @@ export const ProjectSection = () => {
                     transition={{ duration: 0.12 }}
                     className="flex items-center gap-2"
                   >
-                    {hasInput && (
-                      <span className="font-mono text-[10px] text-(--muted)/50 tabular-nums">
-                        {results.length}
-                      </span>
-                    )}
-                    {(hasQuery || hasActiveFilters) && (
-                      <button
-                        type="button"
-                        aria-label="Clear all"
-                        onClick={clearAll}
-                        className="text-(--muted) hover:text-(--accent) transition-colors duration-100 p-0.5 rounded"
-                      >
-                        <X size={12} />
-                      </button>
-                    )}
+                    <span className="font-mono text-nano text-(--muted)/60 tabular-nums">
+                      {results.length}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="Clear all"
+                      onClick={clearAll}
+                      className="text-(--muted) hover:text-(--accent) transition-colors duration-100 p-0.5 rounded"
+                    >
+                      <X size={13} />
+                    </button>
                   </motion.div>
                 ) : (
                   <motion.div
@@ -125,7 +119,7 @@ export const ProjectSection = () => {
                     transition={{ duration: 0.12 }}
                     className="pointer-events-none"
                   >
-                    <kbd className="font-mono text-[10px] border border-(--border) rounded px-1 py-0.5 text-(--muted)/50 leading-none">
+                    <kbd className="font-mono text-nano border border-(--border) rounded px-1 py-0.5 text-(--muted) leading-none">
                       /
                     </kbd>
                   </motion.div>
@@ -133,6 +127,33 @@ export const ProjectSection = () => {
               </AnimatePresence>
             </div>
           </motion.div>
+
+          {/* Active query chip */}
+          <AnimatePresence>
+            {hasQuery && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={springGentle}
+                className="overflow-hidden"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-nano text-(--muted)/50 shrink-0">query</span>
+                  <button
+                    type="button"
+                    onClick={() => { setQuery(""); inputRef.current?.focus(); }}
+                    className="group inline-flex items-center gap-1 rounded border border-(--border)/70 bg-(--surface) px-2 py-0.5 font-mono text-nano text-(--text) hover:border-(--accent)/50 transition-colors duration-100"
+                  >
+                    <span className="text-(--muted)/50">"</span>
+                    {query.trim()}
+                    <span className="text-(--muted)/50">"</span>
+                    <X size={9} className="ml-0.5 opacity-40 group-hover:opacity-80 transition-opacity" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Filter row */}
           <AnimatePresence>
@@ -171,13 +192,11 @@ export const ProjectSection = () => {
                     transition={springGentle}
                     className="flex flex-col items-center justify-center py-16 gap-2"
                   >
-                    <span className="font-mono text-xs text-(--muted)/40">
-                      no matches
-                    </span>
+                    <span className="font-mono text-xs text-(--muted)/50">no matches</span>
                     <button
                       type="button"
                       onClick={clearAll}
-                      className="font-mono text-[10px] text-(--muted)/30 hover:text-(--accent)/60 transition-colors"
+                      className="font-mono text-nano text-(--muted)/40 hover:text-(--accent)/60 transition-colors"
                     >
                       clear filters
                     </button>
