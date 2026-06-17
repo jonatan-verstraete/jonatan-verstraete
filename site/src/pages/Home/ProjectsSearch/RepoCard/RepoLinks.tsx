@@ -1,13 +1,10 @@
-import { CACHE_INVALIDATION_TIME, OWNER } from "@/config";
+import { OWNER } from "@/config";
 import { fetchLatestDmgUrl, GithubRepo } from "@/utils/fetch-repository";
-import { withLocalCache } from "@/utils/queryClient";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { Download, Github, GlobeIcon, LucidePackageCheck } from "lucide-react";
 import { PropsWithChildren } from "react";
 
 import npmExists from "@jayf0x/npm-exists";
-
-const queryOpts = { staleTime: Infinity, gcTime: Infinity };
 
 const iconCls =
   "group/icon flex items-center justify-center w-7 h-7 rounded border border-(--border)/50 bg-(--surface)/70 hover:border-(--accent)/40 hover:bg-(--accent)/5 transition-all duration-150";
@@ -15,23 +12,16 @@ const iconCls =
 export const RepoLinks = ({ repo }: { repo: GithubRepo }) => {
   const queryDMG = useQuery<string | null>({
     queryKey: ["repo-dmg", repo.name],
-    queryFn: () =>
-      withLocalCache(`gh:dmg:${repo.name}`, CACHE_INVALIDATION_TIME, () =>
-        fetchLatestDmgUrl(OWNER, repo.name),
-      ),
-    ...queryOpts,
+    queryFn: () => fetchLatestDmgUrl(OWNER, repo.name),
   });
 
   const queryNpmPkg = useQuery<string | false>({
     queryKey: ["npm-badge", repo.name],
     queryFn: () =>
-      withLocalCache(`npm:pkg:${repo.name}`, CACHE_INVALIDATION_TIME, () =>
-        npmExists(
-          `@${OWNER}/${repo.name.startsWith("fluid") ? repo.name + "-js" : repo.name}`,
-          { silent: false },
-        ),
+      npmExists(
+        `@${OWNER}/${repo.name.startsWith("fluid") ? repo.name + "-js" : repo.name}`,
+        { silent: false },
       ),
-    ...queryOpts,
   });
 
   return (

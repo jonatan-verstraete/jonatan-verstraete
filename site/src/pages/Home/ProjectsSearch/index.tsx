@@ -1,7 +1,6 @@
-import { CACHE_INVALIDATION_TIME, OWNER } from "@/config";
+import { OWNER } from "@/config";
 import { useRepoSearch } from "@/hooks/useRepoSearch";
 import { fetchUserRepos, type GithubRepo } from "@/utils/fetch-repository";
-import { withLocalCache } from "@/utils/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { Clock, List, PackageSearch, Search, Sparkles, X } from "lucide-react";
@@ -23,12 +22,7 @@ export const ProjectSection = () => {
 
   const { data: repos = [], isLoading } = useQuery<GithubRepo[]>({
     queryKey: ["repos", OWNER],
-    queryFn: () =>
-      withLocalCache(`gh:repos:${OWNER}`, CACHE_INVALIDATION_TIME, () =>
-        fetchUserRepos(OWNER),
-      ),
-    staleTime: CACHE_INVALIDATION_TIME,
-    gcTime: CACHE_INVALIDATION_TIME,
+    queryFn: () => fetchUserRepos(OWNER),
   });
 
   const { results, allFilters } = useRepoSearch(repos, query, filters);

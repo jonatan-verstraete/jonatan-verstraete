@@ -151,34 +151,33 @@ export const ChatWidget = () => {
   };
 
   const initMessages = useCallback(() => {
-    if (isOpen && !hasInitialized) {
-      const msgs = [
-        "Hey there 👋 Ever wanted to chat with the first Large Language model?",
-        "I'm rather an historical artifact than a helpful assistant, so beware 😄",
-      ];
+    const msgs = [
+      "Hey there 👋 Ever wanted to chat with the first Large Language model?",
+      "I'm rather an historical artifact than a helpful assistant, so beware 😄",
+    ];
 
-      msgs.forEach((text, idx) => {
-        const msg: Message = {
-          id: "init",
-          role: "assistant",
-          content: text,
-          animate: true,
-        };
+    msgs.forEach((text, idx) => {
+      const msg: Message = {
+        id: "init",
+        role: "assistant",
+        content: text,
+        animate: true,
+      };
 
-        setTimeout(
-          () => {
-            setMessages((prev) => [...prev, msg]);
-          },
-          idx * text.length * 30,
-        );
-      });
-
-      setHasInitialized(true);
-    }
-  }, [isOpen, hasInitialized]);
+      setTimeout(
+        () => {
+          setMessages((prev) => [...prev, msg]);
+        },
+        idx * text.length * 10,
+      );
+    });
+  }, []);
 
   useEffect(() => {
-    initMessages();
+    if (isOpen && !hasInitialized) {
+      initMessages();
+      setHasInitialized(true);
+    }
   }, [isOpen]);
 
   const countdownProgress =

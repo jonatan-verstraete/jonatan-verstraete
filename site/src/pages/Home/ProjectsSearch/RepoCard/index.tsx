@@ -1,12 +1,9 @@
-import { CACHE_INVALIDATION_TIME, OWNER } from "@/config";
+import { OWNER } from "@/config";
 import { fetchPreviewUrl, fetchRepoLanguages, GithubRepo } from "@/utils/fetch-repository";
-import { withLocalCache } from "@/utils/queryClient";
 import { getStackMeta } from "@/utils/stackMeta";
 import { useQuery } from "@tanstack/react-query";
 import { RepoInfo } from "./RepoInfo";
 import { RepoLinks } from "./RepoLinks";
-
-const queryOpts = { staleTime: CACHE_INVALIDATION_TIME, gcTime: CACHE_INVALIDATION_TIME };
 
 export const RepoCard = ({
   repo,
@@ -17,21 +14,12 @@ export const RepoCard = ({
 }) => {
   const { data: languages = [] } = useQuery<string[]>({
     queryKey: ["repo-langs", repo.name],
-    queryFn: () =>
-      withLocalCache(`gh:langs:${repo.name}`, CACHE_INVALIDATION_TIME, () =>
-        fetchRepoLanguages(repo.languages_url),
-      ),
-    ...queryOpts,
+    queryFn: () => fetchRepoLanguages(repo.languages_url),
   });
 
   const { data: previewUrl } = useQuery<string | null>({
     queryKey: ["repo-preview", repo.name],
-    queryFn: () =>
-      withLocalCache(`gh:preview:${repo.name}`, CACHE_INVALIDATION_TIME, () =>
-        fetchPreviewUrl(OWNER, repo.name),
-      ),
-    staleTime: Infinity,
-    gcTime: Infinity,
+    queryFn: () => fetchPreviewUrl(OWNER, repo.name),
   });
 
   const accentColor = (() => {
