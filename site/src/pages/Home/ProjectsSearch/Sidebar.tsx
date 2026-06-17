@@ -155,7 +155,7 @@ const SidebarSection = ({
             />
           ))}
         </div>
-        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-(--bg) to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-black/25 to-transparent" />
       </div>
     </div>
   );

@@ -1,39 +1,51 @@
+import { type FilterItem } from "@/hooks/useRepoSearch";
 import { getStackMeta } from "@/utils/stackMeta";
 
 export const FilterRow = ({
-  label,
   items,
   filters,
   onToggle,
+  hasActiveFilters,
+  onClearFilters,
 }: {
-  label: string;
-  items: string[];
+  items: FilterItem[];
   filters: Set<string>;
   onToggle: (v: string) => void;
+  hasActiveFilters?: boolean;
+  onClearFilters?: () => void;
 }) => (
-  <div className="flex flex-col gap-1">
-    <span className="font-mono text-[10px] uppercase tracking-widest text-(--muted)">
-      {label}
-    </span>
-    <div className="flex gap-1.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
-      {items.map((name) => (
-        <FilterItem
+  <div className="flex items-center gap-2">
+    <div className="flex flex-wrap gap-1 flex-1 min-w-0">
+      {items.map(({ name, count }) => (
+        <FilterChip
           key={name}
           name={name}
+          count={count}
           active={filters.has(name)}
           onToggle={() => onToggle(name)}
         />
       ))}
     </div>
+    {hasActiveFilters && onClearFilters && (
+      <button
+        type="button"
+        onClick={onClearFilters}
+        className="shrink-0 font-mono text-[10px] text-(--muted)/40 hover:text-(--accent)/70 transition-colors"
+      >
+        clear
+      </button>
+    )}
   </div>
 );
 
-const FilterItem = ({
+const FilterChip = ({
   name,
+  count,
   active,
   onToggle,
 }: {
   name: string;
+  count: number;
   active: boolean;
   onToggle: () => void;
 }) => {
@@ -42,19 +54,22 @@ const FilterItem = ({
     <button
       type="button"
       onClick={onToggle}
-      className={`shrink-0 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-xs transition-all duration-150 ${
+      className={`shrink-0 inline-flex items-center gap-1 rounded border px-2 py-0.5 font-mono text-[10px] transition-all duration-150 ${
         active
-          ? "border-(--accent) bg-(--accent)/15 text-(--accent)"
-          : "border-(--border) text-(--muted) hover:border-(--accent)/50 hover:text-(--text) hover:bg-(--surface)"
+          ? "border-(--accent)/60 bg-(--accent)/10 text-(--accent)"
+          : "border-(--border)/50 text-(--muted)/70 hover:border-(--border) hover:text-(--text)/80"
       }`}
     >
       {m.bg !== "transparent" && (
         <span
-          className="inline-block h-2 w-2 rounded-sm shrink-0"
+          className="inline-block h-1.5 w-1.5 rounded-full shrink-0"
           style={{ background: m.bg }}
         />
       )}
       {name}
+      <span className={`tabular-nums ${active ? "opacity-60" : "opacity-30"}`}>
+        {count}
+      </span>
     </button>
   );
 };

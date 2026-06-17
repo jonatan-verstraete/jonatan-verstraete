@@ -389,13 +389,12 @@ body {
 
 /* scrollbar */
 * {
-  scrollbar-color: rgba(255, 255, 255, 0.668) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
   scrollbar-width: thin;
 }
 
-/* Chrome,Edge, Safari */
 *::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 
 *::-webkit-scrollbar-track {
@@ -403,8 +402,12 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.668);
-  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /** Style HTML title - no need for custom popovers...  */
@@ -507,6 +510,15 @@ h1 {
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@theme inline {
+  --animate-blink: blink 1s step-end infinite;
 }
 
 

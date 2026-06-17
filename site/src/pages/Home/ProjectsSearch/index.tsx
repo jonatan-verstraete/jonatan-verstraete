@@ -20,12 +20,15 @@ export const ProjectSection = () => {
 
   const { data: repos = [], isLoading } = useQuery<GithubRepo[]>({
     queryKey: ["repos", OWNER],
-    queryFn: () => withLocalCache(`gh:repos:${OWNER}`, CACHE_INVALIDATION_TIME, () => fetchUserRepos(OWNER)),
+    queryFn: () =>
+      withLocalCache(`gh:repos:${OWNER}`, CACHE_INVALIDATION_TIME, () =>
+        fetchUserRepos(OWNER),
+      ),
     staleTime: CACHE_INVALIDATION_TIME,
     gcTime: CACHE_INVALIDATION_TIME,
   });
 
-  const { results, allStacks, allTopics } = useRepoSearch(repos, query, filters);
+  const { results, allFilters } = useRepoSearch(repos, query, filters);
 
   const toggleFilter = (value: string) =>
     setFilters((prev) => {
@@ -33,14 +36,6 @@ export const ProjectSection = () => {
       next.has(value) ? next.delete(value) : next.add(value);
       return next;
     });
-
-  const removeFilter = (value: string) => {
-    setFilters((prev) => {
-      const next = new Set(prev);
-      next.delete(value);
-      return next;
-    });
-  };
 
   const clearAll = () => {
     setQuery("");
@@ -50,7 +45,12 @@ export const ProjectSection = () => {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
+      if (
+        e.key === "/" &&
+        !["INPUT", "TEXTAREA"].includes(
+          (e.target as HTMLElement).tagName,
+        )
+      ) {
         e.preventDefault();
         inputRef.current?.focus();
       }
@@ -64,156 +64,134 @@ export const ProjectSection = () => {
   const hasInput = hasQuery || hasActiveFilters;
 
   return (
-    <section className="flex flex-col flex-1 min-h-0 px-6 py-4">
+    <section className="flex flex-col flex-1 min-h-0 px-5 py-4">
       <div className="mx-auto max-w-5xl flex flex-row min-h-0 gap-0 size-full">
         <Sidebar repos={repos} onSelect={setQuery} isLoading={isLoading} />
-        <div className="flex-1 min-w-0 flex flex-col min-h-0 gap-4 md:pl-4">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={springGentle} className="relative">
-            <Search size={15} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-(--muted)" />
+
+        <div className="flex-1 min-w-0 flex flex-col min-h-0 gap-3 md:pl-4">
+
+          {/* Search bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={springGentle}
+            className="relative"
+          >
+            <Search
+              size={13}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-(--muted)"
+            />
             <input
               ref={inputRef}
               type="text"
-              placeholder="Search projects by name, keyword, stack…"
+              placeholder="Search projects…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-xl border border-(--border) bg-(--surface) py-3 pl-10 pr-10 text-sm text-(--text) placeholder:text-(--muted) outline-none transition-all duration-150 focus:border-(--accent) focus:shadow-[0_0_0_3px_rgba(79,124,255,0.1)]"
+              className="w-full rounded-lg border border-(--border)/60 bg-(--surface)/80 py-2.5 pl-9 pr-24 text-sm text-(--text) placeholder:text-(--muted)/50 outline-none transition-all duration-150 focus:border-(--accent)/50 focus:bg-(--surface) focus:shadow-[0_0_0_3px_rgba(79,124,255,0.08)]"
             />
-            <AnimatePresence>
-              {hasQuery ? (
-                <motion.div
-                  key="clear"
-                  initial={{ opacity: 0, scale: 0.7 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.7 }}
-                  transition={{ duration: 0.1 }}
-                  className="absolute right-3 flex items-center top-0 h-full"
-                >
-                  <button
-                    type="button"
-                    aria-label="Clear search"
-                    onClick={() => { setQuery(""); inputRef.current?.focus(); }}
-                    className="text-(--muted) hover:text-(--accent) transition-colors duration-100 p-0.5 rounded"
+            <div className="absolute right-3 top-0 h-full flex items-center gap-2">
+              <AnimatePresence mode="popLayout">
+                {hasInput ? (
+                  <motion.div
+                    key="meta"
+                    initial={{ opacity: 0, x: 4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 4 }}
+                    transition={{ duration: 0.12 }}
+                    className="flex items-center gap-2"
                   >
-                    <X size={13} />
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="slash-hint"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="pointer-events-none absolute right-3 flex items-center top-0 h-full"
-                >
-                  <kbd className="font-mono text-[10px] border border-(--border) rounded px-1 py-0.5 text-(--muted) leading-none">/</kbd>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    {hasInput && (
+                      <span className="font-mono text-[10px] text-(--muted)/50 tabular-nums">
+                        {results.length}
+                      </span>
+                    )}
+                    {(hasQuery || hasActiveFilters) && (
+                      <button
+                        type="button"
+                        aria-label="Clear all"
+                        onClick={clearAll}
+                        className="text-(--muted) hover:text-(--accent) transition-colors duration-100 p-0.5 rounded"
+                      >
+                        <X size={12} />
+                      </button>
+                    )}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="hint"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.12 }}
+                    className="pointer-events-none"
+                  >
+                    <kbd className="font-mono text-[10px] border border-(--border) rounded px-1 py-0.5 text-(--muted)/50 leading-none">
+                      /
+                    </kbd>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </motion.div>
 
-          {!isLoading && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ ...springGentle, delay: 0.08 }} className="space-y-2">
-              {allStacks.length > 0 && <FilterRow label="Stack" items={allStacks} filters={filters} onToggle={toggleFilter} />}
-              {allTopics.length > 0 && <FilterRow label="Topics" items={allTopics} filters={filters} onToggle={toggleFilter} />}
-            </motion.div>
-          )}
-
-          {/* Active chips — query + filters, always visible while any are on, survives scroll */}
+          {/* Filter row */}
           <AnimatePresence>
-            {hasInput && (
+            {!isLoading && allFilters.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={springGentle}
+                transition={{ ...springGentle, delay: 0.06 }}
                 className="overflow-hidden"
               >
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-(--muted) shrink-0">active:</span>
-                  <AnimatePresence>
-                    {hasQuery && (
-                      <motion.button
-                        key="__query__"
-                        type="button"
-                        onClick={() => { setQuery(""); inputRef.current?.focus(); }}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        transition={{ duration: 0.12 }}
-                        className="group inline-flex items-center gap-1 rounded-sm border border-[#00ff88]/40 bg-[#00ff88]/5 px-2 py-0.5 font-mono text-[11px] text-[#00ff88] transition-colors duration-100 hover:border-[#00ff88]/80 hover:bg-[#00ff88]/10"
-                      >
-                        <span className="opacity-40 mr-0.5">"</span>{query.trim()}<span className="opacity-40 ml-0.5">"</span>
-                        <X size={9} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                      </motion.button>
-                    )}
-                    {[...filters].map((f) => (
-                      <motion.button
-                        key={f}
-                        type="button"
-                        onClick={() => removeFilter(f)}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        transition={{ duration: 0.12 }}
-                        className="group inline-flex items-center gap-1 rounded-sm border border-[#00ff88]/40 bg-[#00ff88]/5 px-2 py-0.5 font-mono text-[11px] text-[#00ff88] transition-colors duration-100 hover:border-[#00ff88]/80 hover:bg-[#00ff88]/10"
-                      >
-                        {f}
-                        <X size={9} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                      </motion.button>
-                    ))}
-                  </AnimatePresence>
-                  <button
-                    type="button"
-                    onClick={clearAll}
-                    className="ml-auto font-mono text-xs text-(--muted) transition-colors hover:text-(--accent)"
-                  >
-                    clear all
-                  </button>
-                </div>
+                <FilterRow
+                  items={allFilters}
+                  filters={filters}
+                  onToggle={toggleFilter}
+                  hasActiveFilters={hasActiveFilters}
+                  onClearFilters={() => setFilters(new Set())}
+                />
               </motion.div>
             )}
           </AnimatePresence>
 
-          <AnimatePresence>
-            {hasInput && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={springGentle}
-                className="overflow-hidden"
-              >
-                <span className="font-mono text-xs text-(--muted)">
-                  {results.length} {results.length === 1 ? "project" : "projects"}
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pr-1">
+          {/* Results */}
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-1.5 pr-0.5 pt-0.5">
             {isLoading ? (
               <LoadingSkeleton />
             ) : (
               <AnimatePresence mode="popLayout" initial={false}>
                 {hasInput && results.length === 0 && (
-                  <motion.p key="empty" layout initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={springGentle} className="py-10 text-center font-mono text-sm text-(--muted)">
-                    No matches.
-                  </motion.p>
+                  <motion.div
+                    key="empty"
+                    layout
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={springGentle}
+                    className="flex flex-col items-center justify-center py-16 gap-2"
+                  >
+                    <span className="font-mono text-xs text-(--muted)/40">
+                      no matches
+                    </span>
+                    <button
+                      type="button"
+                      onClick={clearAll}
+                      className="font-mono text-[10px] text-(--muted)/30 hover:text-(--accent)/60 transition-colors"
+                    >
+                      clear filters
+                    </button>
+                  </motion.div>
                 )}
 
                 {results.map((repo, i) => (
                   <motion.div
-                    key={`repo-card=${repo.id}`}
+                    key={`repo-card-${repo.id}`}
                     layout
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    initial={{ opacity: 0, y: 8, scale: 0.99 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{
-                      opacity: 0,
-                      scale: 0.97,
-                      transition: { duration: 0.12 },
-                    }}
-                    transition={{ ...spring, delay: i * 0.025 }}
+                    exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.1 } }}
+                    transition={{ ...spring, delay: i * 0.02 }}
                   >
                     <RepoCard repo={repo} />
                   </motion.div>
@@ -228,9 +206,24 @@ export const ProjectSection = () => {
 };
 
 const LoadingSkeleton = () => (
-  <div className="space-y-2">
-    {Array.from({ length: 4 }).map((_, i) => (
-      <div key={`skeleton-${i}`} className="h-24 animate-pulse rounded-xl border border-(--border) bg-(--surface)" />
+  <div className="space-y-1.5">
+    {[56, 72, 48, 64, 80].map((h, i) => (
+      <div
+        key={`skeleton-${i}`}
+        className="rounded-lg border border-(--border)/40 bg-(--surface)/60 overflow-hidden"
+        style={{ height: h }}
+      >
+        <div
+          className="h-full w-full"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)",
+            backgroundSize: "200% 100%",
+            animation: `shimmer 1.8s ease-in-out infinite`,
+            animationDelay: `${i * 0.12}s`,
+          }}
+        />
+      </div>
     ))}
   </div>
 );

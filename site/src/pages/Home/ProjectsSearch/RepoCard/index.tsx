@@ -1,12 +1,20 @@
 import { GithubRepo } from "@/utils/fetch-repository";
-import { RepoLinks } from "./RepoLinks";
+import { getStackMeta } from "@/utils/stackMeta";
 import { RepoInfo } from "./RepoInfo";
+import { RepoLinks } from "./RepoLinks";
 
 export const RepoCard = ({ repo }: { repo: GithubRepo }) => {
+  const langMeta = repo.language ? getStackMeta(repo.language) : null;
+  const accentColor =
+    langMeta && langMeta.bg !== "transparent" ? langMeta.bg : "transparent";
+
   return (
-    <div className="group flex items-start justify-between gap-4 rounded-xl border border-(--border) bg-(--surface) p-4 transition-all duration-200 hover:border-accent/60 hover:-translate-y-px hover:bg-(--surface-2) hover:shadow-[0_0_0_1px_rgba(79,124,255,0.08),0_8px_28px_rgba(79,124,255,0.1)]">
+    <article
+      className="group relative flex items-start gap-3 rounded-lg border border-(--border)/50 bg-(--surface)/85 backdrop-blur-sm px-4 py-3 border-l-2 transition-all duration-200 hover:border-(--border)/80 hover:bg-(--surface-2)/70 hover:-translate-y-px hover:shadow-[0_6px_24px_rgba(0,0,0,0.4)]"
+      style={{ borderLeftColor: accentColor }}
+    >
       <RepoInfo repo={repo} />
       <RepoLinks repo={repo} />
-    </div>
+    </article>
   );
 };

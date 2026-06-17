@@ -1,5 +1,5 @@
 import { useIsMobile } from "@/hooks/useDevice";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { memo } from "react";
 import { TypeAnimation } from "react-type-animation";
 
@@ -7,104 +7,89 @@ const terminalLines = [
   "Frontend engineer++",
   "Friction > Problem > Solution",
   "Bridging users and tech",
-  "Frontend Engineering ☕",
-  "Quality > Speed ",
+  "Quality > Speed",
   "Challenge me: www.chess.com/member/chaos_70b",
   "('b' + 'a' + + 'a' + 'a').toLowerCase()",
   "Status 418 ☕",
   "2B||!2B",
-].flatMap((l) => [l, 4000]);
+].flatMap((l) => [l, 3500]);
 
 export const Title = () => {
   const isMobile = useIsMobile();
   return (
-    <AnimatePresence mode="popLayout">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mx-auto flex justify-center max-w-3xl flex-col gap-2 w-full text-center overflow-hidden"
-      >
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="flex flex-col items-center gap-0.5 overflow-hidden"
+    >
+      {!isMobile && (
         <motion.div
-          className="w-full center"
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.5, delay: 0.08 }}
+          className="text-xl font-black tracking-tight text-(--text) select-none"
         >
-          {!isMobile && (
-            <div className="lg:text-4xl sm:text-xl font-black tracking-tighter text-text">
-              <TextWithSecret text="Jonatan" secret="JayF0x" />
-            </div>
-          )}
+          <TextWithSecret text="Jonatan" secret="JayF0x" />
         </motion.div>
+      )}
 
-        <motion.div
-          className="font-mono text-sm text-muted md:text-base"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <div className="mt-2 min-h-[2rem] text-(--accent)">
-            <TypeAnimation
-              sequence={terminalLines}
-              wrapper="span"
-              speed={65}
-              repeat={Infinity}
-            />
-            <span className="ml-1 inline-block h-4 w-[2px] animate-blink bg-(--accent) align-middle" />
-          </div>
-        </motion.div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.22 }}
+        className="font-mono text-[11px] text-(--muted) flex items-center gap-1"
+      >
+        <TypeAnimation
+          sequence={terminalLines}
+          wrapper="span"
+          speed={68}
+          repeat={Infinity}
+        />
+        <span className="inline-block h-3 w-[1.5px] animate-blink bg-(--accent) align-middle" />
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 };
 
 export const TextWithSecret = memo(
   ({ text, secret }: { text: string; secret: string }) => {
     const N = Math.max(text.length, secret.length);
-
     const textStart = Math.floor((N - text.length) / 2);
     const secretStart = Math.floor((N - secret.length) / 2);
-
-    const delays = Array.from({ length: N }).map(
-      (_, i) => i * 28 + Math.random() * 70,
-    );
+    const delays = Array.from({ length: N }).map((_, i) => i * 28 + Math.random() * 70);
 
     const textSlots = Array.from({ length: N }).map((_, i) => {
       const char = text[i - textStart];
-      return char === undefined ? "\u00A0" : char;
+      return char === undefined ? " " : char;
     });
 
     const secretSlots = Array.from({ length: N }).map((_, i) => {
       const char = secret[i - secretStart];
-      return char === undefined ? "\u00A0" : char;
+      return char === undefined ? " " : char;
     });
 
     return (
       <div className="group inline-block cursor-pointer select-none font-mono">
-        {Array.from({ length: N }).map((_, i) => {
-          return (
+        {Array.from({ length: N }).map((_, i) => (
+          <span
+            key={i}
+            className="relative inline-block pointer-events-none perspective-[700px]"
+            style={{ width: "0.7em" }}
+          >
             <span
-              key={i}
-              className="relative inline-block pointer-events-none perspective-[700px]"
-              style={{ width: "0.7em" }}
+              className="relative block transform-3d transition-transform duration-500 ease-[cubic-bezier(.2,.8,.2,1)] group-hover:transform-[rotateX(180deg)]"
+              style={{ transitionDelay: `${delays[i]}ms` }}
             >
-              <span
-                className="relative block transform-3d transition-transform duration-500 ease-[cubic-bezier(.2,.8,.2,1)] group-hover:transform-[rotateX(180deg)]"
-                style={{
-                  transitionDelay: `${delays[i]}ms`,
-                }}
-              >
-                <span className="block backface-hidden">
-                  {textSlots[i] === " " ? "\u00A0" : textSlots[i]}
-                </span>
-                <span className="absolute inset-0 block transform-[rotateX(180deg)] backface-hidden">
-                  {secretSlots[i] === " " ? "\u00A0" : secretSlots[i]}
-                </span>
+              <span className="block backface-hidden">
+                {textSlots[i] === " " ? " " : textSlots[i]}
+              </span>
+              <span className="absolute inset-0 block transform-[rotateX(180deg)] backface-hidden text-(--accent)">
+                {secretSlots[i] === " " ? " " : secretSlots[i]}
               </span>
             </span>
-          );
-        })}
+          </span>
+        ))}
       </div>
     );
   },
