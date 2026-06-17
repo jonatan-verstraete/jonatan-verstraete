@@ -23,7 +23,7 @@ export const Title = () => {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mx-auto flex justify-center max-w-3xl flex-col gap-2 w-full text-center"
+        className="mx-auto flex justify-center max-w-3xl flex-col gap-2 w-full text-center overflow-hidden"
       >
         <motion.div
           className="w-full center"

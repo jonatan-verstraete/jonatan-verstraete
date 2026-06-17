@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, PanelLeftOpen } from "lucide-react";
 import { GithubRepo } from "@/utils/fetch-repository";
+import { useIsMobile } from "@/hooks/useDevice";
 
 const spring = { type: "spring" as const, stiffness: 380, damping: 36 };
 const topN = 21;
@@ -19,14 +20,79 @@ interface SidebarProps {
 
 export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
   const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!isLoading && !open) {
-      setTimeout(() => {
-        setOpen(true);
-      }, 500);
+    if (!isLoading && !open && !isMobile) {
+      setTimeout(() => setOpen(true), 500);
     }
-  }, [isLoading]);
+  }, [isLoading, isMobile]);
+
+  const sidebarContent = (closeOnSelect: (name: string) => void) =>
+    isLoading ? (
+      <div className="flex flex-col gap-2 pt-5">
+        {Array.from({ length: topN }).map((_, i) => (
+          <div
+            key={`skeleton-${i}`}
+            className="mx-1 w-full h-5 animate-pulse rounded bg-white/20"
+            style={{ opacity: 1 - i * 0.12, animationDelay: String(i * 1000) }}
+          />
+        ))}
+      </div>
+    ) : (
+      <>
+        <SidebarSection title="Recently Added" repos={repos} dateKey="created_at" onSelect={closeOnSelect} />
+        <div className="shrink-0 h-px bg-(--border) my-1" />
+        <SidebarSection title="Recently Updated" repos={repos} dateKey="pushed_at" onSelect={closeOnSelect} />
+      </>
+    );
+
+  if (isMobile) {
+    return (
+      <>
+        <button
+          type="button"
+          aria-label="Recent projects"
+          onClick={() => setOpen(true)}
+          className="fixed left-3 top-[7rem] z-30 flex h-8 w-8 items-center justify-center rounded-full border border-(--border) bg-(--surface)/90 backdrop-blur text-(--muted) hover:text-(--accent) shadow-lg transition-colors"
+        >
+          <PanelLeftOpen size={14} />
+        </button>
+
+        <AnimatePresence>
+          {open && (
+            <>
+              <motion.div
+                key="bd"
+                className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setOpen(false)}
+              />
+              <motion.div
+                key="drawer"
+                className="fixed left-0 top-0 bottom-0 z-50 w-64 bg-(--bg) border-r border-(--border) flex flex-col pt-4 pb-6 px-3 gap-1"
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={spring}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="self-end mb-2 p-1 text-(--muted) hover:text-(--accent) transition-colors"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                {sidebarContent((name) => { onSelect(name); setOpen(false); })}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
 
   return (
     <div className="relative hidden md:flex shrink-0 self-stretch">
@@ -42,36 +108,7 @@ export const Sidebar = ({ repos, isLoading, onSelect }: SidebarProps) => {
             style={{ minWidth: 0 }}
           >
             <div className="flex flex-col h-full min-h-0 pr-3 gap-1">
-              {isLoading ? (
-                <div className="flex flex-col gap-2 pt-5">
-                  {Array.from({ length: topN }).map((_, i) => (
-                    <div
-                      key={`skeleton-${i}`}
-                      className="mx-1 w-full h-5 animate-pulse rounded bg-white/20"
-                      style={{
-                        opacity: 1 - i * 0.12,
-                        animationDelay: String(i * 1000),
-                      }}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <>
-                  <SidebarSection
-                    title="Recently Added"
-                    repos={repos}
-                    dateKey="created_at"
-                    onSelect={onSelect}
-                  />
-                  <div className="shrink-0 h-px bg-(--border) my-1" />
-                  <SidebarSection
-                    title="Recently Updated"
-                    repos={repos}
-                    dateKey="pushed_at"
-                    onSelect={onSelect}
-                  />
-                </>
-              )}
+              {sidebarContent(onSelect)}
             </div>
           </motion.div>
         )}

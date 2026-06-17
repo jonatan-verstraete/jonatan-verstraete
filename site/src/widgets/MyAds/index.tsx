@@ -88,7 +88,7 @@ export const MyAds = () => {
     return shuffled.slice(0, 4).map((Ad, i) => ({ Ad, v: i }));
   });
 
-  const activeCount = isMobile ? 3 : 4;
+  const activeCount = isMobile ? 1 : 4;
 
   const rotateSlot = useCallback((slotIdx: number) => {
     setSlots((prev) => {
@@ -108,18 +108,16 @@ export const MyAds = () => {
 
   if (!showAds) return null;
 
+  const MobileAd = slots[0].Ad;
+
   return (
-    <div className="fixed size-full inset-0 z-10">
+    <div className="fixed size-full inset-0 z-30">
       {isMobile ? (
         <div
-          className="fixed bottom-0 left-0 right-0 z-20 flex overflow-hidden"
+          className="fixed bottom-0 left-0 right-0 z-30 overflow-hidden"
           style={{ height: "25vh" }}
         >
-          {slots.slice(0, 3).map((slot, i) => (
-            <div key={i} className="relative flex-1 overflow-hidden">
-              <slot.Ad />
-            </div>
-          ))}
+          <MobileAd />
         </div>
       ) : (
         <div className="relative size-full">

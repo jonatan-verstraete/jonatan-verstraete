@@ -1,4 +1,6 @@
 import axios from "axios";
+import { CACHE_INVALIDATION_TIME } from "@/config";
+import { withLocalCache } from "@/utils/queryClient";
 
 const GITHUB_API = "https://api.github.com";
 const HEADERS = {
@@ -64,12 +66,25 @@ export async function fetchPreviewUrl(owner: string, repo: string): Promise<stri
 }
 
 export async function fetchNpmUrl(owner: string, repoName: string): Promise<string | null> {
-  try {
-    await axios.get(`${GITHUB_API}/users/${encodeURIComponent(owner)}/packages/npm/${encodeURIComponent(repoName)}`, { headers: HEADERS });
-    return `https://github.com/users/${owner}/packages/npm/package/${repoName}`;
-  } catch {
+  return withLocalCache(`npm:${owner}:${repoName}`, CACHE_INVALIDATION_TIME, async () => {
+    // 1. GitHub Packages (catches org-scoped @jayf0x packages)
+    try {
+      await axios.get(`${GITHUB_API}/users/${encodeURIComponent(owner)}/packages/npm/${encodeURIComponent(repoName)}`, { headers: HEADERS });
+      return `https://github.com/users/${owner}/packages/npm/package/${repoName}`;
+    } catch {}
+
+    // 2. npm registry — check maintainer list for packages published outside the org
+    try {
+      const { data } = await axios.get<{ maintainers?: { name: string }[] }>(
+        `https://registry.npmjs.org/${encodeURIComponent(repoName)}/latest`,
+      );
+      if (data.maintainers?.some((m) => m.name === owner)) {
+        return `https://www.npmjs.com/package/${repoName}`;
+      }
+    } catch {}
+
     return null;
-  }
+  });
 }
 
 export async function fetchLatestDmgUrl(owner: string, repo: string): Promise<string | null> {
