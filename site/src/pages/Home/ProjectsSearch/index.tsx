@@ -128,33 +128,6 @@ export const ProjectSection = () => {
             </div>
           </motion.div>
 
-          {/* Active query chip */}
-          <AnimatePresence>
-            {hasQuery && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={springGentle}
-                className="overflow-hidden"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-micro text-(--muted) shrink-0">query</span>
-                  <button
-                    type="button"
-                    onClick={() => { setQuery(""); inputRef.current?.focus(); }}
-                    className="group inline-flex items-center gap-1 rounded border border-(--border)/70 bg-(--surface) px-2 py-0.5 font-mono text-mini text-(--text) hover:border-(--accent)/50 transition-colors duration-100"
-                  >
-                    <span className="text-(--muted)/50">"</span>
-                    {query.trim()}
-                    <span className="text-(--muted)/50">"</span>
-                    <X size={9} className="ml-0.5 opacity-40 group-hover:opacity-80 transition-opacity" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
           {/* Filter row */}
           <AnimatePresence>
             {!isLoading && allFilters.length > 0 && (
@@ -172,6 +145,48 @@ export const ProjectSection = () => {
                   hasActiveFilters={hasActiveFilters}
                   onClearFilters={() => setFilters(new Set())}
                 />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Active query + filter chips — centered */}
+          <AnimatePresence>
+            {hasInput && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={springGentle}
+                className="overflow-hidden"
+              >
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {hasQuery && (
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-micro text-(--muted) shrink-0">query</span>
+                      <button
+                        type="button"
+                        onClick={() => { setQuery(""); inputRef.current?.focus(); }}
+                        className="group inline-flex items-center gap-1 rounded border border-(--border)/70 bg-(--surface) px-2 py-0.5 font-mono text-mini text-(--text) hover:border-(--accent)/50 transition-colors duration-100"
+                      >
+                        <span className="text-(--muted)/50">"</span>
+                        {query.trim()}
+                        <span className="text-(--muted)/50">"</span>
+                        <X size={9} className="ml-0.5 opacity-40 group-hover:opacity-80 transition-opacity" />
+                      </button>
+                    </div>
+                  )}
+                  {[...filters].map((f) => (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => toggleFilter(f)}
+                      className="group inline-flex items-center gap-1 rounded border border-(--accent)/60 bg-(--accent)/10 px-2 py-0.5 font-mono text-mini text-(--accent) hover:border-(--accent)/80 transition-colors duration-100"
+                    >
+                      {f}
+                      <X size={9} className="ml-0.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+                    </button>
+                  ))}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

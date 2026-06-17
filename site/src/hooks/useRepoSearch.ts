@@ -23,8 +23,14 @@ export function useRepoSearch(
   const allFilters = useMemo((): FilterItem[] => {
     const counts = new Map<string, number>();
     for (const repo of repos) {
-      if (repo.language) counts.set(repo.language, (counts.get(repo.language) ?? 0) + 1);
-      for (const t of repo.topics) counts.set(t, (counts.get(t) ?? 0) + 1);
+      if (repo.language) {
+        const k = repo.language.toLowerCase();
+        counts.set(k, (counts.get(k) ?? 0) + 1);
+      }
+      for (const t of repo.topics) {
+        const k = t.toLowerCase();
+        counts.set(k, (counts.get(k) ?? 0) + 1);
+      }
     }
     return [...counts.entries()]
       .sort((a, b) => b[1] - a[1])
@@ -41,7 +47,9 @@ export function useRepoSearch(
       const queryMatch = hasQuery ? matches(repo, query.trim()) : true;
       const filterMatch = hasFilters
         ? [...filters].some(
-            (f) => repo.language === f || repo.topics.includes(f),
+            (f) =>
+              repo.language?.toLowerCase() === f ||
+              repo.topics.some((t) => t.toLowerCase() === f),
           )
         : true;
       return queryMatch && filterMatch;
