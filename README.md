@@ -14,19 +14,6 @@
 - Diagnosed and resolved critical localization failures after global Keycloak upgrade by implementing scalable language and dialect support and automating translation workflows.
 - Daily tasks included: feature design, releasing (Azure), cross team feature ideation, writing documentation, component performance measuring, i18n/i11y, testing... etc.
 
-<br/>
-
-**Podcast Tooling & Production** @BLANC (Jan 2022 - May 2026)
-- Maintained website, social media and handled editing workflows.
-- Explored AI-assisted automation to reduce manual editing effort.
-
-<br/>
-
-**Indie Game Developer** @Curve Fever (April 2026 - present)
-- Game development and prep
-- Steam release
-- Playing since highschool, now going pro (Steven Pressfield)
-
 
 
 ---
@@ -38,14 +25,19 @@
 <p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into a optional quick review.</p>
 </td>
 <td width="50%" valign="top">
-  <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
+  <a href="https://github.com/jayf0x/pod-tooling"><b>Podcast tooling</b></a>
 
-<p style="font-size: 0.85em; margin-top: 4px;">WebGPU-first fluid simulation library with Navier-Stokes solver. Supports text and image React components. Runs in Web Worker via OffscreenCanvas for optimal performance.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">Maintained website, social media, building AI-assisted automation to reduce manual editing effort.</p>
 </td></tr><tr>
 <td width="50%" valign="top">
-  <a href="https://github.com/jayf0x/PIIPAYA"><b>PIIPAYA</b></a>
+  <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
 
-<p style="font-size: 0.85em; margin-top: 4px;">Local macOS PII redaction app with narrative coherence so text stays coherent for LLM analysis or human review. With easy file-drop > convert > download workflow.</p>
+<p style="font-size: 0.85em; margin-top: 4px;">React library for interactive fluid effects on text and images — water, ink, glass, aurora. Runs off the main thread, works in all modern browsers.</p>
+</td>
+<td width="50%" valign="top">
+  <a href="https://github.com/jayf0x/impulz"><b>impulz</b></a>
+
+<p style="font-size: 0.85em; margin-top: 4px;">Zero-dependency browser performance monitors for visibility, FPS, and idle signals — tree-shakeable and built for animation-heavy apps.</p>
 </td></tr>
 </table>
 
