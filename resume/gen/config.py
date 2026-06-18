@@ -30,7 +30,7 @@ RESUME_HTML_PATH = resumeRoot / "index.html"
 
 MODEL = "qwen3.5:9b"
 GITHUB_USER = "jayf0x"
-TARGET_PROJECTS = 4
+TARGET_PROJECTS = 3
 
 # just makign sure all paths actually exist
 for name, value in list(globals().items()):

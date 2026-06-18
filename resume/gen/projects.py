@@ -5,14 +5,17 @@ from ollama import chat
 
 PICK_PROMPT = """You are a resume assistant. Given a list of GitHub repositories, pick the top {n} to highlight on a frontend/fullstack engineer resume.
 
-Prefer repositories that:
-- Show technical depth (complex rendering, algorithms, system design)
-- Are original tools/apps (not forks, boilerplate, or exercises)
-- Have a clear, non-trivial problem they solve. Not just a fun util.
-- Are relevant to software engineering
-- no bullshit
+This engineer's differentiators are creative rendering (WebGL, 3D, canvas), browser performance engineering, and original developer tooling.
 
-These are already selected:
+Prefer repositories that:
+- Show technical depth (complex rendering, algorithms, system design, browser internals)
+- Are original tools/apps — not forks, boilerplate, exercises, or personal utilities
+- Have a clear, non-trivial problem they solve — not CLI one-liners, not macOS tray apps, not niche personal scripts
+- Are relevant to software engineering (libraries, dev tools, visualizations, fullstack apps)
+- Have community signal (stars > 0 weighs in favour)
+- Pick variety — do not pick two browser libraries, two 3D demos, or two CLI tools
+
+These are already on the resume (do not pick these):
 {already_picked}
 
 All repositories:
@@ -25,19 +28,30 @@ Pick exactly {n}. Use the exact repo names from the list."""
 
 
 def get_existing_projects(html_path: Path) -> list[str]:
-    """Returns display names of uncommented project entries."""
+    """Returns repo names (from href) of uncommented project entries."""
     soup = BeautifulSoup(html_path.read_text(encoding="utf-8"), "html.parser")
-    return [el.get_text(strip=True) for el in soup.find_all(class_="project-name")]
+    names = []
+    for el in soup.find_all(class_="project-name"):
+        a = el.find("a", href=True)
+        if a:
+            names.append(a["href"].rstrip("/").split("/")[-1])
+    return names
 
 
 def fetch_public_repos(github_user: str) -> list[dict]:
     result = subprocess.run(
-        ["gh", "repo", "list", github_user, "--visibility=public", "--json", "name,description,url", "--limit", "100"],
+        ["gh", "repo", "list", github_user, "--visibility=public", "--json", "name,description,url,primaryLanguage,stargazerCount", "--limit", "100"],
         capture_output=True, text=True, check=True
     )
     repos = json.loads(result.stdout)
     return [
-        {"name": r["name"], "description": r.get("description") or "", "link": r["url"]}
+        {
+            "name": r["name"],
+            "description": r.get("description") or "",
+            "link": r["url"],
+            "language": (r.get("primaryLanguage") or {}).get("name") or "",
+            "stars": r.get("stargazerCount", 0),
+        }
         for r in repos
     ]
 
@@ -46,7 +60,7 @@ def pick_top_projects(repos: list[dict], n: int, model: str, exclude: set[str] =
     already_picked = ", ".join(list(exclude))
     candidates = [r for r in repos if r["name"] not in exclude]
     repos_json = json.dumps(
-        [{"name": r["name"], "description": r["description"]} for r in candidates],
+        [{"name": r["name"], "description": r["description"], "language": r.get("language", ""), "stars": r.get("stars", 0)} for r in candidates],
         indent=2
     )
     response = chat(
