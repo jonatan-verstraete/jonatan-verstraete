@@ -65,7 +65,7 @@ const FloatingPanel = ({
 
   return (
     <div
-      className="ad-float fixed z-20 rounded-lg overflow-hidden shadow-2xl"
+      className="ad-float fixed z-20 rounded-lg overflow-hidden shadow-2xl pointer-events-auto"
       style={{
         background: "var(--c-22c55e-a19)",
         animationDelay: `${seed.toFixed(1)}s`,
@@ -111,10 +111,10 @@ export const MyAds = () => {
   const MobileAd = slots[0].Ad;
 
   return (
-    <div className="fixed size-full inset-0 z-30">
+    <div className="fixed size-full inset-0 z-30 pointer-events-none">
       {isMobile ? (
         <div
-          className="fixed bottom-0 left-0 right-0 z-30 overflow-hidden"
+          className="fixed bottom-0 left-0 right-0 z-30 overflow-hidden pointer-events-auto"
           style={{ height: "25vh" }}
         >
           <MobileAd />

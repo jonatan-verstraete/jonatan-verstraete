@@ -21,15 +21,25 @@ interface SidebarProps {
   onSort?: (key: SortKey) => void;
 }
 
+const LARGE_BREAKPOINT = 1280;
+
 export const Sidebar = ({ repos, isLoading, onSelect, onSort }: SidebarProps) => {
   const [open, setOpen] = useState(false);
+  const [isLarge, setIsLarge] = useState(() => window.innerWidth >= LARGE_BREAKPOINT);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!isLoading && !open && !isMobile) {
+    const mql = window.matchMedia(`(min-width: ${LARGE_BREAKPOINT}px)`);
+    const onChange = () => setIsLarge(mql.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading && !open && !isMobile && !isLarge) {
       setTimeout(() => setOpen(true), 500);
     }
-  }, [isLoading, isMobile]);
+  }, [isLoading, isMobile, isLarge]);
 
   const sidebarContent = (
     selectHandler: (name: string) => void,
@@ -48,19 +58,19 @@ export const Sidebar = ({ repos, isLoading, onSelect, onSort }: SidebarProps) =>
     ) : (
       <>
         <SidebarSection
-          title="Recently Added"
-          repos={repos}
-          dateKey="created_at"
-          onSelect={selectHandler}
-          onSort={sortHandler ? () => sortHandler("created_at") : undefined}
-        />
-        <div className="shrink-0 h-px bg-(--border) my-1" />
-        <SidebarSection
           title="Recently Updated"
           repos={repos}
           dateKey="pushed_at"
           onSelect={selectHandler}
           onSort={sortHandler ? () => sortHandler("pushed_at") : undefined}
+        />
+        <div className="shrink-0 h-px bg-(--border) my-1" />
+        <SidebarSection
+          title="Recently Created"
+          repos={repos}
+          dateKey="created_at"
+          onSelect={selectHandler}
+          onSort={sortHandler ? () => sortHandler("created_at") : undefined}
         />
       </>
     );
@@ -115,34 +125,46 @@ export const Sidebar = ({ repos, isLoading, onSelect, onSort }: SidebarProps) =>
     );
   }
 
+  const sidebarPanel = (
+    <div className="flex flex-col h-full min-h-0 pr-3 gap-1">
+      {sidebarContent(onSelect, onSort)}
+    </div>
+  );
+
   return (
     <div className="relative hidden md:flex shrink-0 self-stretch">
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            key="sidebar"
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 210, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            transition={spring}
-            className="flex flex-col min-h-0 overflow-hidden"
-            style={{ minWidth: 0 }}
-          >
-            <div className="flex flex-col h-full min-h-0 pr-3 gap-1">
-              {sidebarContent(onSelect, onSort)}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="relative flex flex-col justify-start pt-3">
-        <div
-          onClick={() => setOpen((v) => !v)}
-          className="cursor-pointer transition-all hover:scale-150 flex h-6 w-4 items-center justify-center rounded-r-md border border-l-0 border-(--border) bg-(--surface) text-(--muted) hover:text-(--accent)"
-        >
-          {open ? <ChevronLeft size={10} /> : <PanelLeftOpen size={20} />}
+      {isLarge ? (
+        <div className="flex flex-col min-h-0 overflow-hidden" style={{ width: 210 }}>
+          {sidebarPanel}
         </div>
-      </div>
+      ) : (
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              key="sidebar"
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 210, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={spring}
+              className="flex flex-col min-h-0 overflow-hidden"
+              style={{ minWidth: 0 }}
+            >
+              {sidebarPanel}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
+
+      {!isLarge && (
+        <div className="relative flex flex-col justify-start pt-3">
+          <div
+            onClick={() => setOpen((v) => !v)}
+            className="cursor-pointer transition-all hover:scale-150 flex h-6 w-4 items-center justify-center rounded-r-md border border-l-0 border-(--border) bg-(--surface) text-(--muted) hover:text-(--accent)"
+          >
+            {open ? <ChevronLeft size={10} /> : <PanelLeftOpen size={20} />}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

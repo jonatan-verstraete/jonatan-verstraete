@@ -43,6 +43,7 @@ export const ProjectSection = () => {
     setSort(null);
     setFilters((prev) => {
       const next = new Set(prev);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       next.has(value) ? next.delete(value) : next.add(value);
       return next;
     });
@@ -273,9 +274,24 @@ export const ProjectSection = () => {
   );
 };
 
-const PRESETS: { key: SortKey; label: string; sub: string; Icon: ElementType }[] = [
-  { key: "pushed_at", label: "Recently Added", sub: "Last active first", Icon: Clock },
-  { key: "created_at", label: "Recently Created", sub: "Newest repos first", Icon: Sparkles },
+const PRESETS: {
+  key: SortKey;
+  label: string;
+  sub: string;
+  Icon: ElementType;
+}[] = [
+  {
+    key: "pushed_at",
+    label: "Recent Activity",
+    sub: "Last active first",
+    Icon: Clock,
+  },
+  {
+    key: "created_at",
+    label: "New",
+    sub: "Newest repos first",
+    Icon: Sparkles,
+  },
   { key: "name", label: "All", sub: "A → Z", Icon: List },
 ];
 
@@ -293,7 +309,9 @@ const PresetCards = ({ onSelect }: { onSelect: (key: SortKey) => void }) => (
           className="text-(--muted)/50 group-hover:text-(--accent) transition-colors duration-150"
         />
         <div>
-          <p className="font-mono text-mini font-medium text-(--text)">{label}</p>
+          <p className="font-mono text-mini font-medium text-(--text)">
+            {label}
+          </p>
           <p className="font-mono text-micro text-(--muted)/60 mt-0.5">{sub}</p>
         </div>
       </button>

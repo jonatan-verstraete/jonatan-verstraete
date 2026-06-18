@@ -1,5 +1,9 @@
 import { OWNER } from "@/config";
-import { fetchPreviewUrl, fetchRepoLanguages, GithubRepo } from "@/utils/fetch-repository";
+import {
+  fetchPreviewUrl,
+  fetchRepoLanguages,
+  type GithubRepo,
+} from "@/utils/fetch-repository";
 import { getStackMeta } from "@/utils/stackMeta";
 import { useQuery } from "@tanstack/react-query";
 import { RepoInfo } from "./RepoInfo";
