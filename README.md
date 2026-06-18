@@ -33,11 +33,6 @@
   <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
 
 <p style="font-size: 0.85em; margin-top: 4px;">React library for interactive fluid effects on text and images — water, ink, glass, aurora. Runs off the main thread, works in all modern browsers.</p>
-</td>
-<td width="50%" valign="top">
-  <a href="https://github.com/jayf0x/impulz"><b>impulz</b></a>
-
-<p style="font-size: 0.85em; margin-top: 4px;">Zero-dependency browser performance monitors for visibility, FPS, and idle signals — tree-shakeable and built for animation-heavy apps.</p>
 </td></tr>
 </table>
 

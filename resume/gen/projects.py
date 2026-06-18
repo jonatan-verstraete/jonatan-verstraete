@@ -12,8 +12,8 @@ Prefer repositories that:
 - Are original tools/apps — not forks, boilerplate, exercises, or personal utilities
 - Have a clear, non-trivial problem they solve — not CLI one-liners, not macOS tray apps, not niche personal scripts
 - Are relevant to software engineering (libraries, dev tools, visualizations, fullstack apps)
-- Have community signal (stars > 0 weighs in favour)
-- Pick variety — do not pick two browser libraries, two 3D demos, or two CLI tools
+- Picks should be varied across types — spread across different categories (e.g. not all browser libraries, not all 3D demos)
+- no WIP
 
 These are already on the resume (do not pick these):
 {already_picked}
@@ -40,7 +40,7 @@ def get_existing_projects(html_path: Path) -> list[str]:
 
 def fetch_public_repos(github_user: str) -> list[dict]:
     result = subprocess.run(
-        ["gh", "repo", "list", github_user, "--visibility=public", "--json", "name,description,url,primaryLanguage,stargazerCount", "--limit", "100"],
+        ["gh", "repo", "list", github_user, "--visibility=public", "--json", "name,description,url,primaryLanguage", "--limit", "100"],
         capture_output=True, text=True, check=True
     )
     repos = json.loads(result.stdout)
@@ -50,7 +50,6 @@ def fetch_public_repos(github_user: str) -> list[dict]:
             "description": r.get("description") or "",
             "link": r["url"],
             "language": (r.get("primaryLanguage") or {}).get("name") or "",
-            "stars": r.get("stargazerCount", 0),
         }
         for r in repos
     ]
@@ -60,7 +59,7 @@ def pick_top_projects(repos: list[dict], n: int, model: str, exclude: set[str] =
     already_picked = ", ".join(list(exclude))
     candidates = [r for r in repos if r["name"] not in exclude]
     repos_json = json.dumps(
-        [{"name": r["name"], "description": r["description"], "language": r.get("language", ""), "stars": r.get("stars", 0)} for r in candidates],
+        [{"name": r["name"], "description": r["description"], "language": r.get("language", "")} for r in candidates],
         indent=2
     )
     response = chat(
@@ -68,7 +67,7 @@ def pick_top_projects(repos: list[dict], n: int, model: str, exclude: set[str] =
         messages=[{"role": "user", "content": PICK_PROMPT.format(n=n, repos_json=repos_json, already_picked=already_picked)}],
         format="json",
         think=False,
-        options={"temperature": 0.1, "seed": 42}
+        options={"temperature": 0.8, "seed": 42}
     )
     data = json.loads(response.message.content)
     picks = data.get("picks", [])
