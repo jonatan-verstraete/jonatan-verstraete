@@ -8,11 +8,17 @@ PICK_PROMPT = """You are a resume assistant. Given a list of GitHub repositories
 Prefer repositories that:
 - Show technical depth (complex rendering, algorithms, system design)
 - Are original tools/apps (not forks, boilerplate, or exercises)
-- Have a clear, non-trivial problem they solve
-- Are relevant to frontend, UI, or fullstack engineering
+- Have a clear, non-trivial problem they solve. Not just a fun util.
+- Are relevant to software engineering
+- no bullshit
 
-Repositories:
+These are already selected:
+{already_picked}
+
+All repositories:
+```json
 {repos_json}
+```
 
 Output ONLY valid JSON: {{"picks": ["name1", "name2", ...]}}
 Pick exactly {n}. Use the exact repo names from the list."""
@@ -37,6 +43,7 @@ def fetch_public_repos(github_user: str) -> list[dict]:
 
 
 def pick_top_projects(repos: list[dict], n: int, model: str, exclude: set[str] = set()) -> list[dict]:
+    already_picked = ", ".join(list(exclude))
     candidates = [r for r in repos if r["name"] not in exclude]
     repos_json = json.dumps(
         [{"name": r["name"], "description": r["description"]} for r in candidates],
@@ -44,7 +51,7 @@ def pick_top_projects(repos: list[dict], n: int, model: str, exclude: set[str] =
     )
     response = chat(
         model=model,
-        messages=[{"role": "user", "content": PICK_PROMPT.format(n=n, repos_json=repos_json)}],
+        messages=[{"role": "user", "content": PICK_PROMPT.format(n=n, repos_json=repos_json, already_picked=already_picked)}],
         format="json",
         think=False,
         options={"temperature": 0.1, "seed": 42}
