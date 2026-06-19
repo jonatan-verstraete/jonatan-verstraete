@@ -1,4 +1,5 @@
 import { devLog } from "@/utils/logger";
+import axios from "axios";
 import { QueryClient } from "@tanstack/react-query";
 
 const CACHE_KEY = "__portfolio_qc__";
@@ -9,7 +10,8 @@ export const queryClient = new QueryClient({
     queries: {
       staleTime: TTL,
       gcTime: TTL,
-      retry: 1,
+      retry: (failureCount, error) =>
+        failureCount < 1 && !(axios.isAxiosError(error) && (error.response?.status ?? 0) < 500),
       refetchOnWindowFocus: false,
     },
   },

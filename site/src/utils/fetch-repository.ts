@@ -46,12 +46,6 @@ export async function fetchUserRepos(owner: string): Promise<GithubRepo[]> {
   return response.data.filter((r) => !r.fork && r.size > 0);
 }
 
-export async function fetchRepoLanguages(languagesUrl: string): Promise<string[]> {
-  const response = await axios.get<Record<string, number>>(languagesUrl, {
-    headers: HEADERS,
-  });
-  return Object.keys(response.data);
-}
 
 export async function fetchPreviewUrl(owner: string, repo: string): Promise<string | null> {
   const url = `https://raw.githubusercontent.com/${owner}/${repo}/main/assets/preview.png`;
@@ -63,6 +57,12 @@ export async function fetchPreviewUrl(owner: string, repo: string): Promise<stri
   }
 }
 
+
+export async function fetchNpmPackages(owner: string): Promise<Record<string, string>> {
+  const url = `https://registry.npmjs.org/-/v1/search?text=author:${encodeURIComponent(owner)}&size=100`;
+  const res = await axios.get<{ objects: { package: { name: string; links: { npm: string } } }[] }>(url);
+  return Object.fromEntries(res.data.objects.map(({ package: p }) => [p.name, p.links.npm]));
+}
 
 export async function fetchLatestDmgUrl(owner: string, repo: string): Promise<string | null> {
   try {

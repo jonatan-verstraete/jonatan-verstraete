@@ -4,33 +4,28 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { Download, Github, GlobeIcon, LucidePackageCheck } from "lucide-react";
 import { PropsWithChildren } from "react";
 
-import npmExists from "@jayf0x/npm-exists";
-
 const iconCls =
   "group/icon flex items-center justify-center w-7 h-7 rounded border border-(--border)/50 bg-(--surface)/70 hover:border-(--accent)/40 hover:bg-(--accent)/5 transition-all duration-150";
 
-export const RepoLinks = ({ repo }: { repo: GithubRepo }) => {
+export const RepoLinks = ({ repo, npmUrl }: { repo: GithubRepo; npmUrl?: string }) => {
   const queryDMG = useQuery<string | null>({
     queryKey: ["repo-dmg", repo.name],
     queryFn: () => fetchLatestDmgUrl(OWNER, repo.name),
-  });
-
-  const queryNpmPkg = useQuery<string | false>({
-    queryKey: ["npm-badge", repo.name],
-    queryFn: () =>
-      npmExists(
-        `@${OWNER}/${repo.name.startsWith("fluid") ? repo.name + "-js" : repo.name}`,
-        { silent: false },
-      ),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   return (
     <div className="flex flex-col items-end justify-between self-stretch shrink-0">
       {/* Action icons */}
       <div className="flex items-center gap-1">
-        <AsyncIcon query={queryNpmPkg} title="npm package" colorCls="text-[#CB3837] group-hover/icon:text-(--accent)">
-          <LucidePackageCheck size={14} />
-        </AsyncIcon>
+        {npmUrl && (
+          <a href={npmUrl} target="_blank" rel="noreferrer" title="npm package" className={iconCls}>
+            <span className="text-[#CB3837] group-hover/icon:text-(--accent) transition-colors duration-150">
+              <LucidePackageCheck size={14} />
+            </span>
+          </a>
+        )}
         <AsyncIcon query={queryDMG} title="Download .dmg" colorCls="text-(--muted)/70 group-hover/icon:text-(--accent)">
           <Download size={14} />
         </AsyncIcon>

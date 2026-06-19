@@ -1,7 +1,6 @@
 import { OWNER } from "@/config";
 import {
   fetchPreviewUrl,
-  fetchRepoLanguages,
   type GithubRepo,
 } from "@/utils/fetch-repository";
 import { getStackMeta } from "@/utils/stackMeta";
@@ -12,14 +11,13 @@ import { RepoLinks } from "./RepoLinks";
 export const RepoCard = ({
   repo,
   onTagClick,
+  npmPackages = {},
 }: {
   repo: GithubRepo;
   onTagClick?: (name: string) => void;
+  npmPackages?: Record<string, string>;
 }) => {
-  const { data: languages = [] } = useQuery<string[]>({
-    queryKey: ["repo-langs", repo.name],
-    queryFn: () => fetchRepoLanguages(repo.languages_url),
-  });
+  const languages = repo.language ? [repo.language] : [];
 
   const { data: previewUrl } = useQuery<string | null>({
     queryKey: ["repo-preview", repo.name],
@@ -56,7 +54,7 @@ export const RepoCard = ({
       style={inlineStyle}
     >
       <RepoInfo repo={repo} languages={languages} onTagClick={onTagClick} />
-      <RepoLinks repo={repo} />
+      <RepoLinks repo={repo} npmUrl={npmPackages[`@${OWNER}/${repo.name}`] ?? npmPackages[`@${OWNER}/${repo.name}-js`]} />
     </article>
   );
 };
