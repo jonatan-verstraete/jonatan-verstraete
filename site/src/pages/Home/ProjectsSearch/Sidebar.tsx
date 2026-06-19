@@ -1,8 +1,10 @@
+import { OWNER } from "@/config";
+import { fetchUserRepos, GithubRepo } from "@/utils/fetch-repository";
+import { useIsMobile } from "@/hooks/useDevice";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, PanelLeftOpen } from "lucide-react";
-import { GithubRepo } from "@/utils/fetch-repository";
-import { useIsMobile } from "@/hooks/useDevice";
 
 const spring = { type: "spring" as const, stiffness: 380, damping: 36 };
 const topN = 21;
@@ -15,15 +17,17 @@ const compareFn =
 type SortKey = "created_at" | "pushed_at";
 
 interface SidebarProps {
-  repos: GithubRepo[];
-  isLoading: boolean;
   onSelect: (name: string) => void;
   onSort?: (key: SortKey) => void;
 }
 
 const LARGE_BREAKPOINT = 1280;
 
-export const Sidebar = ({ repos, isLoading, onSelect, onSort }: SidebarProps) => {
+export const Sidebar = ({ onSelect, onSort }: SidebarProps) => {
+  const { data: repos = [], isLoading } = useQuery<GithubRepo[]>({
+    queryKey: ["repos", OWNER],
+    queryFn: () => fetchUserRepos(OWNER),
+  });
   const [open, setOpen] = useState(false);
   const [isLarge, setIsLarge] = useState(() => window.innerWidth >= LARGE_BREAKPOINT);
   const isMobile = useIsMobile();
