@@ -287,7 +287,7 @@ const PopoverInternal = forwardRef(
     return (
       <>
         {cloneElement(children, { ref: handleRef, ...triggerProps })}
-        
+
         <PopoverPortal
           element={popoverRef.current}
           scoutElement={scoutRef.current}

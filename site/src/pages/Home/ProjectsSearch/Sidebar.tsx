@@ -29,7 +29,9 @@ export const Sidebar = ({ onSelect, onSort }: SidebarProps) => {
     queryFn: () => fetchUserRepos(OWNER),
   });
   const [open, setOpen] = useState(false);
-  const [isLarge, setIsLarge] = useState(() => window.innerWidth >= LARGE_BREAKPOINT);
+  const [isLarge, setIsLarge] = useState(
+    () => window.innerWidth >= LARGE_BREAKPOINT,
+  );
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -80,8 +82,16 @@ export const Sidebar = ({ onSelect, onSort }: SidebarProps) => {
     );
 
   if (isMobile) {
-    const mobileSelect = (name: string) => { onSelect(name); setOpen(false); };
-    const mobileSort = onSort ? (key: SortKey) => { onSort(key); setOpen(false); } : undefined;
+    const mobileSelect = (name: string) => {
+      onSelect(name);
+      setOpen(false);
+    };
+    const mobileSort = onSort
+      ? (key: SortKey) => {
+          onSort(key);
+          setOpen(false);
+        }
+      : undefined;
 
     return (
       <>
@@ -138,7 +148,10 @@ export const Sidebar = ({ onSelect, onSort }: SidebarProps) => {
   return (
     <div className="relative hidden md:flex shrink-0 self-stretch">
       {isLarge ? (
-        <div className="flex flex-col min-h-0 overflow-hidden" style={{ width: 210 }}>
+        <div
+          className="flex flex-col min-h-0 overflow-hidden"
+          style={{ width: 210 }}
+        >
           {sidebarPanel}
         </div>
       ) : (

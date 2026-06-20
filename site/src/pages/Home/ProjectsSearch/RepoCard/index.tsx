@@ -1,5 +1,9 @@
 import { OWNER } from "@/config";
-import { fetchNpmPackages, fetchPreviewUrl, type GithubRepo } from "@/utils/fetch-repository";
+import {
+  fetchNpmPackages,
+  fetchPreviewUrl,
+  type GithubRepo,
+} from "@/utils/fetch-repository";
 import { getStackMeta } from "@/utils/stackMeta";
 import { useQuery } from "@tanstack/react-query";
 import { findNpmUrl } from "../types";
@@ -46,7 +50,11 @@ export const RepoCard = ({
       className="group/card relative flex items-start gap-3 rounded-lg border border-(--border)/80 border-l-2 bg-(--surface)/90 overflow-hidden px-4 py-4 transition-all duration-200 hover:border-(--border) hover:bg-(--surface-2)/80 hover:-translate-y-px hover:shadow-[0_6px_24px_rgba(0,0,0,0.4)]"
       style={inlineStyle}
     >
-      <RepoInfo repo={repo} languages={repo.language ? [repo.language] : []} onTagClick={onTagClick} />
+      <RepoInfo
+        repo={repo}
+        languages={repo.language ? [repo.language] : []}
+        onTagClick={onTagClick}
+      />
       <RepoLinks repo={repo} npmUrl={npmUrl} />
     </article>
   );

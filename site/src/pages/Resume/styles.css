@@ -44,7 +44,10 @@
   color: var(--border-a55);
   cursor: pointer;
   backdrop-filter: blur(6px);
-  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .sim-ctrl-btn:hover {
@@ -71,7 +74,9 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
   white-space: nowrap;
 }
 

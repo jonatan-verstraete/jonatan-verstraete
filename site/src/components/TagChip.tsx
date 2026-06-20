@@ -13,8 +13,8 @@ export const TagChip = ({ name, active, count, onClick }: TagChipProps) => {
     active
       ? "border-(--accent)/60 bg-(--accent)/10 text-(--accent)"
       : onClick
-      ? "border-(--border)/70 text-(--muted) hover:border-(--border) hover:text-(--text) cursor-pointer"
-      : "border-(--border)/60 text-(--muted)"
+        ? "border-(--border)/70 text-(--muted) hover:border-(--border) hover:text-(--text) cursor-pointer"
+        : "border-(--border)/60 text-(--muted)"
   }`;
 
   const inner = (
@@ -27,7 +27,9 @@ export const TagChip = ({ name, active, count, onClick }: TagChipProps) => {
       )}
       {m.label}
       {count !== undefined && (
-        <span className={`tabular-nums ${active ? "opacity-60" : "opacity-40"}`}>
+        <span
+          className={`tabular-nums ${active ? "opacity-60" : "opacity-40"}`}
+        >
           {count}
         </span>
       )}

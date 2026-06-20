@@ -1,6 +1,10 @@
 import { OWNER } from "@/config";
 import { useRepoSearch } from "@/hooks/useRepoSearch";
-import { fetchNpmPackages, fetchUserRepos, type GithubRepo } from "@/utils/fetch-repository";
+import {
+  fetchNpmPackages,
+  fetchUserRepos,
+  type GithubRepo,
+} from "@/utils/fetch-repository";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { findNpmUrl, type SortKey } from "../types";
@@ -33,12 +37,12 @@ export function useProjectSearch() {
     sort === "npm"
       ? repos.filter((r) => findNpmUrl(npmPackages, r.name))
       : sort && !hasInput
-      ? repos.slice().sort((a, b) => {
-          if (sort === "name") return a.name.localeCompare(b.name);
-          const key = sort as "created_at" | "pushed_at";
-          return new Date(b[key]).getTime() - new Date(a[key]).getTime();
-        })
-      : results;
+        ? repos.slice().sort((a, b) => {
+            if (sort === "name") return a.name.localeCompare(b.name);
+            const key = sort as "created_at" | "pushed_at";
+            return new Date(b[key]).getTime() - new Date(a[key]).getTime();
+          })
+        : results;
 
   const setQuery = (value: string) => {
     setSort(null);
@@ -76,7 +80,10 @@ export function useProjectSearch() {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "/" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)) {
+      if (
+        e.key === "/" &&
+        !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement).tagName)
+      ) {
         e.preventDefault();
         inputRef.current?.focus();
       }
@@ -86,14 +93,21 @@ export function useProjectSearch() {
   }, []);
 
   return {
-    query, setQuery,
-    filters, toggleFilter, clearFilters,
-    sort, applySort,
+    query,
+    setQuery,
+    filters,
+    toggleFilter,
+    clearFilters,
+    sort,
+    applySort,
     inputRef,
     isLoading,
     allFilters,
     displayResults,
-    hasQuery, hasActiveFilters, hasInput,
-    clearQuery, clearAll,
+    hasQuery,
+    hasActiveFilters,
+    hasInput,
+    clearQuery,
+    clearAll,
   };
 }

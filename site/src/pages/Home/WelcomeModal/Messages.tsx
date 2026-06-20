@@ -23,7 +23,10 @@ export const MobileNotice = () => {
             }}
           >
             <span className="text-sm shrink-0 mt-px select-none">⚠</span>
-            <p className="text-[11px] leading-relaxed" style={{ color: "var(--amber-text)" }}>
+            <p
+              className="text-[11px] leading-relaxed"
+              style={{ color: "var(--amber-text)" }}
+            >
               Some interactions work best on a larger screen.
             </p>
           </div>

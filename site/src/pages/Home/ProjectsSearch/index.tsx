@@ -12,15 +12,21 @@ const springGentle = { type: "spring" as const, stiffness: 320, damping: 32 };
 
 export const ProjectSection = () => {
   const {
-    query, setQuery,
-    filters, toggleFilter,
-    sort, applySort,
+    query,
+    setQuery,
+    filters,
+    toggleFilter,
+    sort,
+    applySort,
     inputRef,
     isLoading,
     allFilters,
     displayResults,
-    hasActiveFilters, hasInput,
-    clearQuery, clearFilters, clearAll,
+    hasActiveFilters,
+    hasInput,
+    clearQuery,
+    clearFilters,
+    clearAll,
   } = useProjectSearch();
 
   return (
@@ -168,7 +174,11 @@ export const ProjectSection = () => {
                     layout
                     initial={{ opacity: 0, y: 8, scale: 0.99 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.1 } }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.98,
+                      transition: { duration: 0.1 },
+                    }}
                     transition={{ ...spring, delay: i * 0.02 }}
                   >
                     <RepoCard repo={repo} onTagClick={toggleFilter} />
@@ -210,7 +220,8 @@ const LoadingSkeleton = () => (
         <div
           className="h-full w-full"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)",
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)",
             backgroundSize: "200% 100%",
             animation: `shimmer 1.8s ease-in-out infinite`,
             animationDelay: `${i * 0.12}s`,

@@ -57,7 +57,9 @@ export const TextWithSecret = memo(
     const N = Math.max(text.length, secret.length);
     const textStart = Math.floor((N - text.length) / 2);
     const secretStart = Math.floor((N - secret.length) / 2);
-    const delays = Array.from({ length: N }).map((_, i) => i * 28 + Math.random() * 70);
+    const delays = Array.from({ length: N }).map(
+      (_, i) => i * 28 + Math.random() * 70,
+    );
 
     const textSlots = Array.from({ length: N }).map((_, i) => {
       const char = text[i - textStart];

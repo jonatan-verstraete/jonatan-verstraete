@@ -19,17 +19,17 @@
 
   background: conic-gradient(
     from var(--snake-a),
-    transparent                          0%,
-    transparent                          72%,
-    color-mix(in srgb, var(--accent)  3%, transparent) 77%,
-    var(--accent-dim)                    83%,
+    transparent 0%,
+    transparent 72%,
+    color-mix(in srgb, var(--accent) 3%, transparent) 77%,
+    var(--accent-dim) 83%,
     color-mix(in srgb, var(--accent) 32%, transparent) 88%,
     color-mix(in srgb, var(--accent) 60%, transparent) 92%,
     color-mix(in srgb, var(--accent) 82%, transparent) 95%,
     color-mix(in srgb, var(--accent) 95%, transparent) 97%,
     color-mix(in srgb, var(--accent) 50%, transparent) 98%,
-    var(--accent-glow)                   99%,
-    transparent                          100%
+    var(--accent-glow) 99%,
+    transparent 100%
   );
 
   /* Punch out the center — only the 1.5 px border ring remains visible */
@@ -44,5 +44,7 @@
 }
 
 @keyframes ip-snake {
-  to { --snake-a: 360deg; }
+  to {
+    --snake-a: 360deg;
+  }
 }

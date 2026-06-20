@@ -1,4 +1,4 @@
-import {  CheckPointTag } from "@/config";
+import { CheckPointTag } from "@/config";
 import {
   checkpointOverridesAtom,
   checkpointsAtom,

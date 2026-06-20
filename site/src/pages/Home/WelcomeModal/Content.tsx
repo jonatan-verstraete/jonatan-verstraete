@@ -31,7 +31,10 @@ export const CardContent = () => {
               <div id="gd-slider" className="flex items-start gap-3">
                 <span
                   className="shrink-0 mt-0.5 w-6 h-6 rounded-md flex items-center justify-center"
-                  style={{ background: "var(--accent-glow)", color: "var(--accent)" }}
+                  style={{
+                    background: "var(--accent-glow)",
+                    color: "var(--accent)",
+                  }}
                 >
                   <SlidersHorizontal size={13} strokeWidth={1.5} />
                 </span>

@@ -11,7 +11,8 @@ export const queryClient = new QueryClient({
       staleTime: TTL,
       gcTime: TTL,
       retry: (failureCount, error) =>
-        failureCount < 1 && !(axios.isAxiosError(error) && (error.response?.status ?? 0) < 500),
+        failureCount < 1 &&
+        !(axios.isAxiosError(error) && (error.response?.status ?? 0) < 500),
       refetchOnWindowFocus: false,
     },
   },
@@ -65,7 +66,10 @@ queryClient.getQueryCache().subscribe(() => {
       .map((q) => ({ queryKey: q.queryKey, data: q.state.data }));
     if (!entries.length) return;
     try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ entries, ts: cacheOriginTs }));
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({ entries, ts: cacheOriginTs }),
+      );
     } catch (e) {
       devLog("[cache] persist failed:", e);
     }

@@ -26,29 +26,41 @@ body {
 
 /* ── Responsive font-size scale ───────────────────────────────────────────── */
 :root {
-  --sz-nano:  0.75rem;    /* 12px — smallest readable label */
-  --sz-micro: 0.8125rem;  /* 13px — secondary metadata     */
-  --sz-mini:  0.875rem;   /* 14px — filter chips, sidebar  */
-  --sz-sm:    1rem;       /* 16px — body, descriptions     */
-  --sz-base:  1.125rem;   /* 18px — prominent text         */
+  --sz-nano: 0.75rem; /* 12px — smallest readable label */
+  --sz-micro: 0.8125rem; /* 13px — secondary metadata     */
+  --sz-mini: 0.875rem; /* 14px — filter chips, sidebar  */
+  --sz-sm: 1rem; /* 16px — body, descriptions     */
+  --sz-base: 1.125rem; /* 18px — prominent text         */
 }
 
 @media (max-width: 767px) {
   :root {
-    --sz-nano:  0.8125rem;  /* 13px */
-    --sz-micro: 0.875rem;   /* 14px */
-    --sz-mini:  0.9375rem;  /* 15px */
-    --sz-sm:    1.0625rem;  /* 17px */
-    --sz-base:  1.1875rem;  /* 19px */
+    --sz-nano: 0.8125rem; /* 13px */
+    --sz-micro: 0.875rem; /* 14px */
+    --sz-mini: 0.9375rem; /* 15px */
+    --sz-sm: 1.0625rem; /* 17px */
+    --sz-base: 1.1875rem; /* 19px */
   }
 }
 
 /* ── Custom text utilities that respond to the vars above ─────────────────── */
 @layer utilities {
-  .text-nano  { font-size: var(--sz-nano);  line-height: 1.5; }
-  .text-micro { font-size: var(--sz-micro); line-height: 1.5; }
-  .text-mini  { font-size: var(--sz-mini);  line-height: 1.5; }
-  .text-rbase { font-size: var(--sz-base);  line-height: 1.5; }
+  .text-nano {
+    font-size: var(--sz-nano);
+    line-height: 1.5;
+  }
+  .text-micro {
+    font-size: var(--sz-micro);
+    line-height: 1.5;
+  }
+  .text-mini {
+    font-size: var(--sz-mini);
+    line-height: 1.5;
+  }
+  .text-rbase {
+    font-size: var(--sz-base);
+    line-height: 1.5;
+  }
 }
 
 /* ── Global base ──────────────────────────────────────────────────────────── */
@@ -72,7 +84,7 @@ body {
   --border: rgba(255, 255, 255, 0.07);
   --overlay-xs: rgba(255, 255, 255, 0.04);
   --overlay-sm: rgba(255, 255, 255, 0.06);
-  --overlay-md: rgba(255, 255, 255, 0.10);
+  --overlay-md: rgba(255, 255, 255, 0.1);
   --overlay-lg: rgba(255, 255, 255, 0.18);
 
   /* Status */
@@ -518,7 +530,8 @@ body {
 /* fun stuff */
 
 h1 {
-  text-shadow: calc(var(--mx) * 5px) calc(var(--my) * -5px) 3px color-mix(in srgb, var(--accent) 26%, transparent);
+  text-shadow: calc(var(--mx) * 5px) calc(var(--my) * -5px) 3px
+    color-mix(in srgb, var(--accent) 26%, transparent);
 }
 
 .hue_rot {
@@ -536,18 +549,24 @@ h1 {
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 @theme inline {
   --animate-blink: blink 1s step-end infinite;
 }
-
-
-

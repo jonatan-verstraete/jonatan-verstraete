@@ -45,20 +45,90 @@ function TestPattern({ width, height }: { width: number; height: number }) {
         background: "var(--bg)",
       }}
     >
-      <div style={{ position: "absolute", top: 0, left: 0, width: half, height: half, background: "var(--c-00cc44)" }} />
-      <div style={{ position: "absolute", top: 0, right: 0, width: half, height: half, background: "var(--c-ff2200)" }} />
-      <div style={{ position: "absolute", bottom: 0, left: 0, width: half, height: half, background: "var(--c-0055ff)" }} />
-      <div style={{ position: "absolute", bottom: 0, right: 0, width: half, height: half, background: "var(--gold)" }} />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: half,
+          height: half,
+          background: "var(--c-00cc44)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: half,
+          height: half,
+          background: "var(--c-ff2200)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: half,
+          height: half,
+          background: "var(--c-0055ff)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          width: half,
+          height: half,
+          background: "var(--gold)",
+        }}
+      />
 
-      <div style={{ position: "absolute", top: half, left: 0, right: 0, height: 3, marginTop: -1, background: "white", opacity: 0.7 }} />
-      <div style={{ position: "absolute", left: half, top: 0, bottom: 0, width: 3, marginLeft: -1, background: "white", opacity: 0.7 }} />
+      <div
+        style={{
+          position: "absolute",
+          top: half,
+          left: 0,
+          right: 0,
+          height: 3,
+          marginTop: -1,
+          background: "white",
+          opacity: 0.7,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          left: half,
+          top: 0,
+          bottom: 0,
+          width: 3,
+          marginLeft: -1,
+          background: "white",
+          opacity: 0.7,
+        }}
+      />
 
       <div style={label("8px", "8px")}>TL GREEN</div>
       <div style={label("8px", "55%")}>TR RED</div>
       <div style={label("55%", "8px")}>BL BLUE</div>
       <div style={label("55%", "55%")}>BR YELLOW</div>
 
-      <div style={{ position: "absolute", top: half, left: half, width: 18, height: 18, marginTop: -9, marginLeft: -9, background: "white", borderRadius: "50%" }} />
+      <div
+        style={{
+          position: "absolute",
+          top: half,
+          left: half,
+          width: 18,
+          height: 18,
+          marginTop: -9,
+          marginLeft: -9,
+          background: "white",
+          borderRadius: "50%",
+        }}
+      />
     </div>
   );
 }
@@ -117,7 +187,8 @@ export const Info = () => {
       cursorX.set((e.clientX / window.innerWidth) * 2 - 1);
     };
     container?.addEventListener("pointermove", handlePointerMove);
-    return () => container?.removeEventListener("pointermove", handlePointerMove);
+    return () =>
+      container?.removeEventListener("pointermove", handlePointerMove);
   }, [cursorX]);
 
   useEffect(() => {
@@ -133,7 +204,10 @@ export const Info = () => {
   return (
     <div ref={containerRef} className="flex-1 relative overflow-hidden">
       {dims.w > 0 && (
-        <div ref={pageRef} style={{ width: dims.w, height: dims.h, position: "relative" }}>
+        <div
+          ref={pageRef}
+          style={{ width: dims.w, height: dims.h, position: "relative" }}
+        >
           <TestPattern width={dims.w} height={dims.h} />
         </div>
       )}

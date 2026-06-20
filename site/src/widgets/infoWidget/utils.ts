@@ -18,4 +18,3 @@ export const getNextOverRideState = (
   }
   return { ...state, [tag]: next };
 };
-

@@ -14,7 +14,7 @@ export const Resume = () => {
   const [simMode, setSimMode] = useState<SimMode>("conway");
   const [isPaused, setIsPaused] = useState(false);
 
-  const showConway = true // useCheckpointValue("Conway");
+  const showConway = true; // useCheckpointValue("Conway");
   const showRedButton = useCheckpointValue("Red Button");
 
   useEffect(() => {

@@ -46,7 +46,9 @@ export const useChatLLM = () => {
   const [response, setResponse] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const submissionRef = useRef<ReturnType<InstanceType<typeof Client>["submit"]> | null>(null);
+  const submissionRef = useRef<ReturnType<
+    InstanceType<typeof Client>["submit"]
+  > | null>(null);
 
   const init = useCallback(() => {
     if (!appPromise) {

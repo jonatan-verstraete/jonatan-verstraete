@@ -21,7 +21,10 @@ export const ActiveChips = ({
         <span className="text-(--muted)/50">"</span>
         {query.trim()}
         <span className="text-(--muted)/50">"</span>
-        <X size={9} className="ml-0.5 opacity-40 group-hover:opacity-80 transition-opacity" />
+        <X
+          size={9}
+          className="ml-0.5 opacity-40 group-hover:opacity-80 transition-opacity"
+        />
       </button>
     )}
     {Array.from(filters).map((f) => (
@@ -32,7 +35,10 @@ export const ActiveChips = ({
         className="group inline-flex items-center gap-1 rounded border border-(--accent)/60 bg-(--accent)/10 px-2 py-0.5 font-mono text-mini text-(--accent) hover:border-(--accent)/80 transition-colors duration-100"
       >
         {f}
-        <X size={9} className="ml-0.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+        <X
+          size={9}
+          className="ml-0.5 opacity-60 group-hover:opacity-100 transition-opacity"
+        />
       </button>
     ))}
   </div>

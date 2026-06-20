@@ -43,7 +43,9 @@ export const RepoInfo = ({
         <TagChip
           key={lang}
           name={lang}
-          onClick={onTagClick ? () => onTagClick(lang.toLowerCase()) : undefined}
+          onClick={
+            onTagClick ? () => onTagClick(lang.toLowerCase()) : undefined
+          }
         />
       ))}
       {repo.topics.slice(0, 3).map((t) => (
