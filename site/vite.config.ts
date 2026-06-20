@@ -1,9 +1,10 @@
+import MillionLint from "@million/lint";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => ({
-  plugins: [react()],
+  plugins: [react(), MillionLint.vite({ enabled: true })],
   base: mode === "production" ? "/jayf0x" : "/",
   build: {
     outDir: "dist",
