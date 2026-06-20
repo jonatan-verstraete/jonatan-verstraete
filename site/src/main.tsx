@@ -5,6 +5,11 @@ import { App } from "./App";
 import "./styles/index.css";
 import { hydrateCache, queryClient } from "./utils/queryClient";
 
+if (import.meta.env.DEV) {
+  const { scan } = await import("react-scan");
+  scan({ enabled: true });
+}
+
 hydrateCache();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

@@ -4,7 +4,7 @@ import path from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), MillionLint.vite({ enabled: true })],
+  plugins: [react(), MillionLint.vite({ enabled: mode !== "production" })],
   base: mode === "production" ? "/jayf0x" : "/",
   build: {
     outDir: "dist",
