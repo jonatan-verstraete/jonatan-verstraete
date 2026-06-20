@@ -11,7 +11,8 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "format": "prettier --write src",
-    "format:check": "prettier --check src"
+    "format:check": "prettier --check src",
+    "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
     "@gradio/client": "^2.2.0",
@@ -44,6 +45,8 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "postcss": "^8.5.14",
     "prettier": "^3.8.3",
+    "react-doctor": "^0.5.8",
+    "react-scan": "^0.5.7",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.2",
