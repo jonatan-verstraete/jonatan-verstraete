@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=https://jayf0x.github.io/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting…</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* spinner */
+    .loader {
+      --s: 28px;
+      --_d: calc(0.353 * var(--s));
+      width: calc(var(--s) + var(--_d));
+      aspect-ratio: 1;
+      display: grid;
+    }
+    .loader::before,
+    .loader::after {
+      content: "";
+      grid-area: 1/1;
+      clip-path: polygon(
+        var(--_d) 0, 100% 0, 100% calc(100% - var(--_d)),
+        calc(100% - var(--_d)) 100%, 0 100%, 0 var(--_d)
+      );
+      background: conic-gradient(
+        from -90deg at calc(100% - var(--_d)) var(--_d),
+        #111 135deg, #bbb 0 270deg, #666 0
+      );
+      animation: spin 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .loader::after { animation-delay: -0.9s; }
+
+    @keyframes spin {
+      0%   { transform: translate(0,    0   ) }
+      25%  { transform: translate(26px, 0   ) }
+      50%  { transform: translate(26px, 26px) }
+      75%  { transform: translate(0,    26px) }
+      100% { transform: translate(0,    0   ) }
+    }
+
+    /* label */
+    .label {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #999;
+    }
+
+    /* fallback button — hidden until JS shows it */
+    .fallback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .fallback.visible { display: flex; }
+
+    .fallback span {
+      font-size: 0.75rem;
+      color: #bbb;
+    }
+
+    .fallback a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #111;
+      text-decoration: none;
+      padding: 0.45rem 1.1rem;
+      border: 1.5px solid #222;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+      transition: background 0.15s, color 0.15s;
+    }
+    .fallback a:hover {
+      background: #111;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="center">
+    <div class="loader" aria-hidden="true"></div>
+    <p class="label">Redirecting…</p>
+    <div class="fallback" id="fallback">
+      <span>Not redirected?</span>
+      <a href="https://jayf0x.github.io/">Take me there</a>
+    </div>
+  </div>
+
+  <script>
+    window.location.replace("https://jayf0x.github.io/");
+    setTimeout(() => document.getElementById("fallback").classList.add("visible"), 500);
+  </script>
+</body>
+</html>
