@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "update": "bash ./scripts/update-resume.sh",
+    "run": "bash ./scripts/update-resume.sh -y"
+  }
+}
