@@ -25,14 +25,14 @@
 <p style="font-size: 0.85em; margin-top: 4px;">Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into a optional quick review.</p>
 </td>
 <td width="50%" valign="top">
-  <a href="https://github.com/jayf0x/pod-tooling"><b>Podcast tooling</b></a>
-
-<p style="font-size: 0.85em; margin-top: 4px;">Maintained website, social media, building AI-assisted automation to reduce manual editing effort.</p>
-</td></tr><tr>
-<td width="50%" valign="top">
   <a href="https://github.com/jayf0x/fluidity"><b>fluidity</b></a>
 
 <p style="font-size: 0.85em; margin-top: 4px;">React library for interactive fluid effects on text and images — water, ink, glass, aurora. Runs off the main thread, works in all modern browsers.</p>
+</td></tr><tr>
+<td width="50%" valign="top">
+  <a href="https://github.com/jayf0x/compress-shader-literals"><b>compress-shader-literals</b></a>
+
+<p style="font-size: 0.85em; margin-top: 4px;">Size matters — minify GLSL/WGSL shader literals at build time. One unplugin for Vite, Rollup, webpack, esbuild, Rspack, Rolldown & Farm.</p>
 </td></tr>
 </table>
 
@@ -49,7 +49,22 @@
 
 ---
 <p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github&hide_border=true&hide_title=true&area=true&bg_color=transparent" alt="contribution graph" width="80%" />
+
+<picture>
+  <source
+    media="(prefers-color-scheme: dark)"
+    srcset="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-dark"
+  />
+  <source
+    media="(prefers-color-scheme: light)"
+    srcset="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-light"
+  />
+  <img
+    alt="GitHub Activity Graph"
+    src="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-light"
+  />
+</picture>
+
 </p>
 
 <p align="center">
