@@ -53,15 +53,15 @@
 <picture>
   <source
     media="(prefers-color-scheme: dark)"
-    srcset="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-dark"
+    srcset="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-dark&hide_border=true&hide_title=true&area=true&bg_color=transparent"
   />
   <source
     media="(prefers-color-scheme: light)"
-    srcset="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-light"
+    srcset="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-light&hide_border=true&hide_title=true&area=true&bg_color=transparent"
   />
   <img
     alt="GitHub Activity Graph"
-    src="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-light"
+    src="https://github-readme-activity-graph.vercel.app/graph?username=jayf0x&theme=github-light&hide_border=true&hide_title=true&area=true&bg_color=transparent"
   />
 </picture>
 
