@@ -1,10 +1,3 @@
-## FT: auto update resume linkedin
-Automate updating resume via linkedin api.  https://developer.linkedin.com/
-
-Goal: scripts/update-resume.sh should update: pdf, md, linkedin
-
----
-
 ## FT: simplified GitHub profile README + dual output pipeline
 
 ### Goal
@@ -37,8 +30,7 @@ Copy of the **current** `template.readme.j2` — this becomes the 1-1 resume for
 No other changes to this template.
 
 #### 3. Rewrite `resume/gen/template.readme.j2` — new simplified README
-Structure (top to bottom):
-
+Structure example (top to bottom):
 ```
 <h1 align="center">{{ firstname }} <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="25"></h1>
 
@@ -85,6 +77,8 @@ Structure (top to bottom):
 </p>
 ```
 
+> note: this structure serves as example, better ideas are always welcome. See this as index file. Possibly even refer for social to the site as well `https://jayf0x.github.io/#/contact` instead of adding manual badges here.
+
 **Design notes:**
 - No table, no tech stack list, no experience section — all that lives on the site
 - Badge color `#E8612C` = fox orange
@@ -102,6 +96,7 @@ def fetch_npm_packages(github_user: str) -> list[dict]:
     objects = resp.json().get("objects", [])
     return [{"name": o["package"]["name"]} for o in objects]
 ```
+> note: cache results
 
 **Add direct HTML project parsing (no LLM needed for README):**
 ```python
@@ -124,6 +119,9 @@ def get_projects_from_html(html_path: Path) -> list[dict]:
         })
     return projects
 ```
+
+> note: some projects might have a ./assets/preview.gif. Possibly extend to do a simple HEAD call to see if the GIF exists, otherwise fallback to .png.
+
 
 **Update `main()` to render both outputs:**
 - README.md: parsed directly from HTML (no LLM), uses new template.readme.j2, includes `npm_packages`

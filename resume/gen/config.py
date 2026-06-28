@@ -21,19 +21,24 @@ def get_project_root(start: Path = Path(__file__)) -> Path:
 root = get_project_root()
 resumeRoot = root / 'resume'
 
-OUTPUT_MD = root / "README.md"
+# outputs (created on run — not validated)
+OUTPUT_README = root / "README.md"          # simplified visual profile
+OUTPUT_MD = root / "assets/resume.md"        # 1-1 machine-readable resume
 OUTPUT_PDF = root / "assets/Jonatan-Verstraete-resume-2026.pdf"
 
 CACHE_DIR = resumeRoot / ".cache"
+
+# inputs (must exist)
 TEMPLATE_PATH = resumeRoot / "gen/template.readme.j2"
+RESUME_TEMPLATE_PATH = resumeRoot / "gen/template.resume.j2"
 RESUME_HTML_PATH = resumeRoot / "index.html"
 
 MODEL = "qwen3.5:9b"
 GITHUB_USER = "jayf0x"
 TARGET_PROJECTS = 3
 
-# just makign sure all paths actually exist
-for name, value in list(globals().items()):
-    if isinstance(value, Path):
-        if not value.exists():
-            raise FileNotFoundError(f"{name} does not exist: {value}")
+# only inputs must exist; outputs get created on first run
+INPUT_PATHS = [RESUME_HTML_PATH, TEMPLATE_PATH, RESUME_TEMPLATE_PATH]
+for value in INPUT_PATHS:
+    if not value.exists():
+        raise FileNotFoundError(f"input does not exist: {value}")
