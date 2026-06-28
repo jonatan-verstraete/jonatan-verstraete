@@ -11,7 +11,7 @@ if [ "$(pwd)" != "$REPO_ROOT" ]; then
 fi
 
 # means the HTML was updated more recent than the README, so no cache.
-if [[ ./resume/index.html -nt ./README.md ]]; then
+if [[ ./resume/index.html -nt ./README.md ||  ./resume/gen/template.readme.j2 -nt ./README.md ]]; then
     if ! curl http://localhost:11434; then
         echo "Exit. Please boot ollama"
         exit 1
