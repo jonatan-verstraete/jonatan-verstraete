@@ -36,6 +36,8 @@ RESUME_HTML_PATH = resumeRoot / "index.html"
 MODEL = "qwen3.5:9b"
 GITHUB_USER = "jayf0x"
 TARGET_PROJECTS = 3
+NPM_TOP_N = 6              # top packages by weekly downloads
+CACHE_TTL_HOURS = 48       # serve cache up to 48h; keeps us off rate limits
 
 # only inputs must exist; outputs get created on first run
 INPUT_PATHS = [RESUME_HTML_PATH, TEMPLATE_PATH, RESUME_TEMPLATE_PATH]

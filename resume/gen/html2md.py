@@ -8,7 +8,9 @@ from bs4 import BeautifulSoup
 from gen.config import (
     RESUME_HTML_PATH, OUTPUT_MD, OUTPUT_README, CACHE_DIR,
     TEMPLATE_PATH, RESUME_TEMPLATE_PATH, MODEL, GITHUB_USER,
+    NPM_TOP_N, CACHE_TTL_HOURS,
 )
+from gen.cache import load_or_fetch
 
 TEMP_JSON = CACHE_DIR / "resume-data.json"
 NPM_CACHE = CACHE_DIR / "npm-packages.json"
@@ -57,38 +59,50 @@ def get_clean_html(html_path: Path) -> str:
     return soup.find("body").get_text(strip=False)
 
 
-def fetch_npm_packages(github_user: str, use_cache: bool = True) -> list[dict]:
-    """npm packages maintained by the user. Cached to avoid hammering the registry."""
-    if use_cache and NPM_CACHE.exists():
-        try:
-            return json.loads(NPM_CACHE.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+def _weekly_downloads(pkg: str) -> int:
     try:
-        url = f"https://registry.npmjs.org/-/v1/search?text=maintainer:{github_user}&size=20"
+        r = requests.get(f"https://api.npmjs.org/downloads/point/last-week/{pkg}", timeout=5)
+        if r.ok:
+            return r.json().get("downloads", 0)
+    except Exception:
+        pass
+    return 0
+
+
+def fetch_npm_packages(github_user: str, use_cache: bool = True) -> list[dict]:
+    """Top NPM_TOP_N packages maintained by the user, ranked by weekly downloads."""
+    def fetch():
+        url = f"https://registry.npmjs.org/-/v1/search?text=maintainer:{github_user}&size=50"
         resp = requests.get(url, timeout=5)
         resp.raise_for_status()
-        objects = resp.json().get("objects", [])
-        packages = [{"name": o["package"]["name"]} for o in objects]
+        names = [o["package"]["name"] for o in resp.json().get("objects", [])]
+        ranked = sorted(
+            ({"name": n, "downloads": _weekly_downloads(n)} for n in names),
+            key=lambda p: p["downloads"],
+            reverse=True,
+        )
+        return ranked[:NPM_TOP_N]
+
+    try:
+        return load_or_fetch(NPM_CACHE, CACHE_TTL_HOURS if use_cache else 0, fetch)
     except Exception as e:
         print(f"npm lookup failed ({e}) — skipping badges")
         return []
 
-    CACHE_DIR.mkdir(exist_ok=True)
-    NPM_CACHE.write_text(json.dumps(packages, indent=2), encoding="utf-8")
-    return packages
+
+PLACEHOLDER_URL = f"https://raw.githubusercontent.com/{GITHUB_USER}/{GITHUB_USER}/main/assets/placeholder.gif"
 
 
 def _preview_url(repo: str) -> str:
-    """Prefer animated preview.gif, fall back to preview.png."""
-    gif = f"https://raw.githubusercontent.com/{GITHUB_USER}/{repo}/main/assets/preview.gif"
-    png = f"https://raw.githubusercontent.com/{GITHUB_USER}/{repo}/main/assets/preview.png"
-    try:
-        if requests.head(gif, timeout=5, allow_redirects=True).status_code == 200:
-            return gif
-    except Exception:
-        pass
-    return png
+    """Prefer animated preview.gif, fall back to preview.png, then placeholder."""
+    base = f"https://raw.githubusercontent.com/{GITHUB_USER}/{repo}/main/assets/preview"
+    for ext in ("gif", "png"):
+        try:
+            if requests.head(f"{base}.{ext}", timeout=5, allow_redirects=True).status_code == 200:
+                return f"{base}.{ext}"
+        except Exception:
+            pass
+    return PLACEHOLDER_URL
 
 
 def get_projects_from_html(html_path: Path) -> list[dict]:
@@ -109,23 +123,6 @@ def get_projects_from_html(html_path: Path) -> list[dict]:
             "preview_url": _preview_url(repo),
         })
     return projects
-
-
-def build_quote_loop(tagline: str) -> str:
-    """Render the tagline as an ASCII feedback loop, 'learning' closing it."""
-    steps = [s.strip() for s in tagline.split("→") if s.strip()]
-    if not steps:
-        return tagline
-    top = " ──▶ ".join(steps)
-    line1 = "┌──▶ " + top + " ──┐"
-    total = len(line1)
-    line2 = "│" + " " * (total - 2) + "│"
-    label = " learning "
-    inner = total - 2 - 1  # corners + the ◀ glyph
-    left = (inner - len(label)) // 2
-    right = inner - len(label) - left
-    line3 = "└" + "─" * left + "◀" + label + "─" * right + "┘"
-    return "\n".join([line1, line2, line3])
 
 
 def get_readme_data_from_html(html_path: Path) -> dict:
@@ -163,21 +160,13 @@ def main(html_path: Path = RESUME_HTML_PATH, use_cache: bool = True):
     # --- README.md: simplified profile, parsed straight from HTML (no LLM) ---
     readme_data = get_readme_data_from_html(html_path)
     readme_data["npm_packages"] = fetch_npm_packages(GITHUB_USER, use_cache)
-    readme_data["quote"] = build_quote_loop(readme_data.get("tagline", ""))
     readme_data["model"] = MODEL
     readme_data["projects_file_url"] = f"https://github.com/{GITHUB_USER}/{GITHUB_USER}/blob/main/resume/gen/projects.py"
     _render(TEMPLATE_PATH, readme_data, OUTPUT_README)
     print("Updated README.md")
 
     # --- assets/resume.md: full 1-1 resume via LLM (cached) ---
-    data = {}
-    if use_cache and TEMP_JSON.exists():
-        try:
-            data = json.loads(TEMP_JSON.read_text(encoding="utf-8"))
-        except Exception:
-            print("Uups failed to load cache")
-
-    if not data:
+    def parse_resume():
         html_text = get_clean_html(html_path)
         response = chat(
             model=MODEL,
@@ -187,15 +176,13 @@ def main(html_path: Path = RESUME_HTML_PATH, use_cache: bool = True):
             options={"temperature": 0.1, "seed": 42}
         )
         content = response.message.content
-        try:
-            data = json.loads(content) if isinstance(content, str) else content
-            CACHE_DIR.mkdir(exist_ok=True)
-            TEMP_JSON.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        except Exception as e:
-            print("Error parsing LLM output:")
-            print(content)
-            print(e)
-            return
+        return json.loads(content) if isinstance(content, str) else content
+
+    try:
+        data = load_or_fetch(TEMP_JSON, CACHE_TTL_HOURS if use_cache else 0, parse_resume)
+    except Exception as e:
+        print(f"Error parsing LLM output: {e}")
+        return
 
     _render(RESUME_TEMPLATE_PATH, data, OUTPUT_MD)
     print("Updated assets/resume.md")
