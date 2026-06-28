@@ -23,14 +23,12 @@ resumeRoot = root / 'resume'
 
 # outputs (created on run — not validated)
 OUTPUT_README = root / "README.md"          # simplified visual profile
-OUTPUT_MD = root / "assets/resume.md"        # 1-1 machine-readable resume
 OUTPUT_PDF = root / "assets/Jonatan-Verstraete-resume-2026.pdf"
 
 CACHE_DIR = resumeRoot / ".cache"
 
 # inputs (must exist)
 TEMPLATE_PATH = resumeRoot / "gen/template.readme.j2"
-RESUME_TEMPLATE_PATH = resumeRoot / "gen/template.resume.j2"
 RESUME_HTML_PATH = resumeRoot / "index.html"
 
 MODEL = "qwen3.5:9b"
@@ -40,7 +38,7 @@ NPM_TOP_N = 6              # top packages by weekly downloads
 CACHE_TTL_HOURS = 48       # serve cache up to 48h; keeps us off rate limits
 
 # only inputs must exist; outputs get created on first run
-INPUT_PATHS = [RESUME_HTML_PATH, TEMPLATE_PATH, RESUME_TEMPLATE_PATH]
+INPUT_PATHS = [RESUME_HTML_PATH, TEMPLATE_PATH]
 for value in INPUT_PATHS:
     if not value.exists():
         raise FileNotFoundError(f"input does not exist: {value}")

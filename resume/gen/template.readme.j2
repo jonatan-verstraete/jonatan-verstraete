@@ -9,46 +9,47 @@
 </picture>
 
 </div>
-
+{% if bio %}
+<p align="center"><i>{{ bio }}</i></p>
+{% endif %}
 <p align="center">
-  <a href="https://jayf0x.github.io/"><b>jayf0x.github.io</b></a>
-  &nbsp;•&nbsp;
-  <a href="https://jayf0x.github.io/#/contact">Contact</a>
-  &nbsp;•&nbsp;
-  <a href="{{ contact.linkedin }}">LinkedIn</a>
+  <a href="https://jayf0x.github.io/#/contact"><b>jayf0x.github.io</b></a>
 </p>
+
+---
+
+<h3 align="center">🚀 Projects</h3>
+
+<p align="center"><sub>top {{ projects|length }} selection by <code>{{ model }}</code> · <a href="{{ projects_file_url }}">ℹ️ how it's picked</a></sub></p>
+
+<table align="center">
+{% for row in projects|batch(3) %}
+<tr>
+{% for project in row %}
+<td align="center" width="320" valign="top">
+  <a href="{{ project.link }}" title="{{ project.description }}">
+    <img src="{{ project.preview_url }}" width="300" alt="{{ project.name }}"/>
+    <br/><b>{{ project.name }}</b>
+  </a>
+  {% if project.description %}<br/><sub>{{ project.description }}</sub>{% endif %}
+</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
 
 ---
 {% if npm_packages %}
 <h3 align="center">📦 npm</h3>
 
-<p align="center">
-{% for pkg in npm_packages -%}
-<a href="https://www.npmjs.com/package/{{ pkg.name }}"><img src="https://img.shields.io/npm/dm/{{ pkg.name }}?style=flat-square&color=E8612C&logo=npm&logoColor=white&label={{ pkg.name }}" alt="{{ pkg.name }} downloads"/></a>
-{% endfor -%}
-</p>
+{% for pkg in npm_packages %}
+- **[{{ pkg.name }}](https://www.npmjs.com/package/{{ pkg.name }})** &nbsp;<img src="https://img.shields.io/npm/dm/{{ pkg.name }}?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="{{ pkg.name }} weekly downloads" valign="middle"/>
+{% endfor %}
 
 <p align="center"><sub><a href="https://jayf0x.github.io/#/127-0-0-1?tag=npm">view all →</a></sub></p>
-{% endif %}
-{% if projects %}
-<h3 align="center">🚀 Projects</h3>
 
-<p align="center"><sub>top {{ projects|length }} selection by <code>{{ model }}</code> · <a href="{{ projects_file_url }}">ℹ️ how it's picked</a></sub></p>
-
-{% for project in projects %}
-<p align="center">
-  <a href="{{ project.link }}" title="{{ project.description }}">
-    <picture>
-      <source srcset="{{ project.preview_url }}"/>
-      <img src="/assets/placeholder.gif" width="520" alt="{{ project.name }} — {{ project.description }}"/>
-    </picture>
-  </a>
-  {% if project.description %}<br/><sub>{{ project.description }}</sub>{% endif %}
-</p>
-{% endfor %}
-{% endif %}
 ---
-
+{% endif %}
 <h3 align="center">📈 Activity</h3>
 
 <p align="center">
@@ -61,8 +62,6 @@
 
 <p align="center">
   <a href="https://jayf0x.github.io/#/resume"><b>📄 Résumé</b></a>
-</p>
-
-<p align="center">
-  <sub><a href="https://raw.githubusercontent.com/jayf0x/jayf0x/main/assets/resume.md">.md for agents</a> · <a href="https://raw.githubusercontent.com/jayf0x/jayf0x/main/assets/Jonatan-Verstraete-resume-2026.pdf">PDF ↓</a></sub>
+  &nbsp;·&nbsp;
+  <sub><a href="https://raw.githubusercontent.com/jayf0x/jayf0x/main/assets/Jonatan-Verstraete-resume-2026.pdf">PDF ↓</a></sub>
 </p>

@@ -1,62 +1,34 @@
-import json, argparse
+import argparse, subprocess
 import requests
-from ollama import chat
 from jinja2 import Template
 from pathlib import Path
 from bs4 import BeautifulSoup
 
 from gen.config import (
-    RESUME_HTML_PATH, OUTPUT_MD, OUTPUT_README, CACHE_DIR,
-    TEMPLATE_PATH, RESUME_TEMPLATE_PATH, MODEL, GITHUB_USER,
+    RESUME_HTML_PATH, OUTPUT_README, CACHE_DIR,
+    TEMPLATE_PATH, MODEL, GITHUB_USER,
     NPM_TOP_N, CACHE_TTL_HOURS,
 )
 from gen.cache import load_or_fetch
 
-TEMP_JSON = CACHE_DIR / "resume-data.json"
 NPM_CACHE = CACHE_DIR / "npm-packages.json"
-
-PROMPT = """
-Extract resume data from HTML into the following JSON format.
-Be concise and accurate and keep original content.
-
-JSON Structure:
-{{
-  "firstname": "",
-  "lastname": "",
-  "tagline": "",
-  "location": "",
-  "contact": {{"email": "", "linkedin": ""}},
-  "experience": [
-    {{"role": "", "company": "", "period": "", "bullets": [""]}}
-  ],
-  "projects": [
-    {{"name": "", "link": "", "description": ""}}
-  ],
-  "skills": {{"core": [], "ai_tooling": [], "ecosystem": [], "experienced": [], "languages": []}}
-}}
-
-Rules:
-- Output ONLY valid **JSON data**.
-- No markdown formatting in the response.
-- Ensure skills are categorized into the exact keys: core, ai_tooling, ecosystem, experienced, languages.
-- Extract links (a) from a project and add as `link`. Leave empty if there is no link.
-- `projects` must only include items from the "Project Highlights" section — NOT from experience/work history.
-- if key is not found (eg. no experience[0].name), use an empty string
-
-HTML:
-{html_content}
-"""
+BIO_CACHE = CACHE_DIR / "bio.json"
 
 
-def get_clean_html(html_path: Path) -> str:
-    if not html_path.exists():
-        raise FileNotFoundError(f"Oops. Missing {html_path}")
-    soup = BeautifulSoup(html_path.read_text(encoding="utf-8"), "html.parser")
-    for a in soup.find_all("a"):
-        text = a.get_text(strip=True)
-        href = a.get("href", "")
-        a.replace_with(f"{text} ({href})")
-    return soup.find("body").get_text(strip=False)
+def fetch_bio(use_cache: bool = True) -> str:
+    """GitHub profile bio (plain text)."""
+    def fetch():
+        out = subprocess.run(
+            ["gh", "api", "user", "--jq", ".bio"],
+            capture_output=True, text=True, check=True,
+        )
+        return {"bio": out.stdout.strip()}
+
+    try:
+        return load_or_fetch(BIO_CACHE, CACHE_TTL_HOURS if use_cache else 0, fetch)["bio"]
+    except Exception as e:
+        print(f"bio lookup failed ({e})")
+        return ""
 
 
 def _weekly_downloads(pkg: str) -> int:
@@ -86,7 +58,7 @@ def fetch_npm_packages(github_user: str, use_cache: bool = True) -> list[dict]:
     try:
         return load_or_fetch(NPM_CACHE, CACHE_TTL_HOURS if use_cache else 0, fetch)
     except Exception as e:
-        print(f"npm lookup failed ({e}) — skipping badges")
+        print(f"npm lookup failed ({e}) — skipping packages")
         return []
 
 
@@ -131,18 +103,9 @@ def get_readme_data_from_html(html_path: Path) -> dict:
 
     title = soup.find(class_="main-title")
     fullname = title.get_text(strip=True) if title else ""
-    tagline_el = soup.find(class_="tagline")
-
-    linkedin = ""
-    for a in soup.find_all("a", href=True):
-        if "linkedin.com" in a["href"]:
-            linkedin = a["href"]
-            break
 
     return {
         "firstname": fullname.split()[0] if fullname else "",
-        "tagline": tagline_el.get_text(strip=True) if tagline_el else "",
-        "contact": {"linkedin": linkedin},
         "projects": get_projects_from_html(html_path),
     }
 
@@ -153,43 +116,22 @@ def _render(template_path: Path, data: dict, out_path: Path):
 
 
 def main(html_path: Path = RESUME_HTML_PATH, use_cache: bool = True):
-    if not TEMPLATE_PATH.exists() or not RESUME_TEMPLATE_PATH.exists():
+    if not TEMPLATE_PATH.exists():
         print("Oi.. template file missing")
         return
 
-    # --- README.md: simplified profile, parsed straight from HTML (no LLM) ---
-    readme_data = get_readme_data_from_html(html_path)
-    readme_data["npm_packages"] = fetch_npm_packages(GITHUB_USER, use_cache)
-    readme_data["model"] = MODEL
-    readme_data["projects_file_url"] = f"https://github.com/{GITHUB_USER}/{GITHUB_USER}/blob/main/resume/gen/projects.py"
-    _render(TEMPLATE_PATH, readme_data, OUTPUT_README)
+    data = get_readme_data_from_html(html_path)
+    data["bio"] = fetch_bio(use_cache)
+    # selection by downloads, display sorted by name
+    data["npm_packages"] = sorted(fetch_npm_packages(GITHUB_USER, use_cache), key=lambda p: p["name"].lower())
+    data["model"] = MODEL
+    data["projects_file_url"] = f"https://github.com/{GITHUB_USER}/{GITHUB_USER}/blob/main/resume/gen/projects.py"
+    _render(TEMPLATE_PATH, data, OUTPUT_README)
     print("Updated README.md")
-
-    # --- assets/resume.md: full 1-1 resume via LLM (cached) ---
-    def parse_resume():
-        html_text = get_clean_html(html_path)
-        response = chat(
-            model=MODEL,
-            messages=[{"role": "user", "content": PROMPT.format(html_content=html_text)}],
-            format="json",
-            think=False,
-            options={"temperature": 0.1, "seed": 42}
-        )
-        content = response.message.content
-        return json.loads(content) if isinstance(content, str) else content
-
-    try:
-        data = load_or_fetch(TEMP_JSON, CACHE_TTL_HOURS if use_cache else 0, parse_resume)
-    except Exception as e:
-        print(f"Error parsing LLM output: {e}")
-        return
-
-    _render(RESUME_TEMPLATE_PATH, data, OUTPUT_MD)
-    print("Updated assets/resume.md")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate a GitHub profile README + machine-readable resume from an HTML resume.")
-    parser.add_argument("--no-cache", action="store_false", dest="use_cache", help="Skip cache and force LLM generation")
+    parser = argparse.ArgumentParser(description="Generate a GitHub profile README from an HTML resume.")
+    parser.add_argument("--no-cache", action="store_false", dest="use_cache", help="Skip cache and force a refetch")
     args = parser.parse_args()
     main(use_cache=args.use_cache)
