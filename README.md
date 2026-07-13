@@ -27,27 +27,27 @@
 <tr>
 
 <td align="center" width="320" valign="top">
-  <a href="https://github.com/jayf0x/timesheet-automation-snapshot" title="Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into a optional quick review.">
+  <a href="https://github.com/jayf0x/timesheet-automation-snapshot" title="Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into an optional quick review.">
     <img src="https://raw.githubusercontent.com/jayf0x/jayf0x/main/assets/placeholder.gif" width="300" alt="Timesheet Automation"/>
     <br/><b>Timesheet Automation</b>
   </a>
-  <br/><sub>Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into a optional quick review.</sub>
+  <br/><sub>Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into an optional quick review.</sub>
 </td>
 
 <td align="center" width="320" valign="top">
-  <a href="https://github.com/jayf0x/fluidity" title="React library for interactive fluid effects on text and images — water, ink, glass, aurora. Runs off the main thread, works in all modern browsers.">
-    <img src="https://raw.githubusercontent.com/jayf0x/fluidity/main/assets/preview.gif" width="300" alt="fluidity"/>
-    <br/><b>fluidity</b>
+  <a href="https://github.com/jayf0x/fluidity" title="Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI, npm.">
+    <img src="https://raw.githubusercontent.com/jayf0x/fluidity/main/assets/preview.gif" width="300" alt="Fluidity-js"/>
+    <br/><b>Fluidity-js</b>
   </a>
-  <br/><sub>React library for interactive fluid effects on text and images — water, ink, glass, aurora. Runs off the main thread, works in all modern browsers.</sub>
+  <br/><sub>Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI, npm.</sub>
 </td>
 
 <td align="center" width="320" valign="top">
-  <a href="https://github.com/jayf0x/compress-shader-literals" title="Size matters — minify GLSL/WGSL shader literals at build time. One unplugin for Vite, Rollup, webpack, esbuild, Rspack, Rolldown & Farm.">
-    <img src="https://raw.githubusercontent.com/jayf0x/compress-shader-literals/main/assets/preview.png" width="300" alt="compress-shader-literals"/>
-    <br/><b>compress-shader-literals</b>
+  <a href="https://github.com/jayf0x/PIIPAYA/" title="Local macOS app (Tauri/Svelte/Python) that redacts PII from documents while keeping the narrative coherent — James instead of NAME. OCR, PDF/DOCX, file batching; fully offline, shipped releases.">
+    <img src="https://raw.githubusercontent.com/jayf0x/PIIPAYA/main/assets/preview.png" width="300" alt="PIIPAYA"/>
+    <br/><b>PIIPAYA</b>
   </a>
-  <br/><sub>Size matters — minify GLSL/WGSL shader literals at build time. One unplugin for Vite, Rollup, webpack, esbuild, Rspack, Rolldown & Farm.</sub>
+  <br/><sub>Local macOS app (Tauri/Svelte/Python) that redacts PII from documents while keeping the narrative coherent — James instead of NAME. OCR, PDF/DOCX, file batching; fully offline, shipped releases.</sub>
 </td>
 
 </tr>
@@ -61,15 +61,15 @@
 
 - **[@jayf0x/fluidity-js](https://www.npmjs.com/package/@jayf0x/fluidity-js)** &nbsp;<img src="https://img.shields.io/npm/dm/@jayf0x/fluidity-js?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="@jayf0x/fluidity-js weekly downloads" valign="middle"/>
 
-- **[@jayf0x/npm-exists](https://www.npmjs.com/package/@jayf0x/npm-exists)** &nbsp;<img src="https://img.shields.io/npm/dm/@jayf0x/npm-exists?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="@jayf0x/npm-exists weekly downloads" valign="middle"/>
-
 - **[byte-snap](https://www.npmjs.com/package/byte-snap)** &nbsp;<img src="https://img.shields.io/npm/dm/byte-snap?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="byte-snap weekly downloads" valign="middle"/>
 
 - **[compress-shader-literals](https://www.npmjs.com/package/compress-shader-literals)** &nbsp;<img src="https://img.shields.io/npm/dm/compress-shader-literals?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="compress-shader-literals weekly downloads" valign="middle"/>
 
+- **[plugin-include](https://www.npmjs.com/package/plugin-include)** &nbsp;<img src="https://img.shields.io/npm/dm/plugin-include?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="plugin-include weekly downloads" valign="middle"/>
+
 - **[react-flip-cards](https://www.npmjs.com/package/react-flip-cards)** &nbsp;<img src="https://img.shields.io/npm/dm/react-flip-cards?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="react-flip-cards weekly downloads" valign="middle"/>
 
-- **[usight](https://www.npmjs.com/package/usight)** &nbsp;<img src="https://img.shields.io/npm/dm/usight?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="usight weekly downloads" valign="middle"/>
+- **[taglify](https://www.npmjs.com/package/taglify)** &nbsp;<img src="https://img.shields.io/npm/dm/taglify?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="taglify weekly downloads" valign="middle"/>
 
 
 <p align="center"><sub><a href="https://jayf0x.github.io/#/127-0-0-1?tag=npm">view all →</a></sub></p>
