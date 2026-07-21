@@ -10,7 +10,7 @@
       font-src 'none';
       connect-src 'none';
     "> -->
-    <title>Jonatan Verstraete — Frontend Engineer</title>
+    <title>Jonatan Verstraete — Software Engineer</title>
     <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
@@ -25,7 +25,7 @@
   <body>
     <header>
       <h1 class="main-title">Jonatan Verstraete</h1>
-      <p class="tagline">Friction → Focus → Solution</p>
+      <p class="tagline">Follow the friction</p>
       <div class="contact-row">
         <div>Ghent, Belgium</div>
         <a href="https://jayf0x.github.io/">Website</a>
@@ -97,7 +97,7 @@
         <span class="project-name">
           <a href="https://github.com/jayf0x/fluidity">Fluidity-js</a>
         </span>
-        <span class="project-desc">Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI, npm.</span>
+        <span class="project-desc">Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI. Shipped on npm as <code>@jayf0x/fluidity-js</code>.</span>
       </div>
 
       <div class="project">
@@ -171,13 +171,13 @@
         <span class="skill-value">React · TypeScript · JavaScript · Tailwind/SASS</span>
 
         <span class="skill-label">AI/Tooling</span>
-        <span class="skill-value">Claude Code · Python · Ollama · WhisperX · Bash</span>
+        <span class="skill-value">Claude Code · Python · Ollama · Bash</span>
 
         <span class="skill-label">Ecosystem</span>
-        <span class="skill-value">TanStack · Zustand · Node · Vite · Redux · ChakraUI</span>
+        <span class="skill-value">TanStack · Zustand · Node · Vite</span>
 
         <span class="skill-label">Experienced</span>
-        <span class="skill-value">Vue2 · Playwright · Figma · Keycloakify · Tauri · Three.js</span>
+        <span class="skill-value">Vue2 · Playwright · Tauri · Three.js · Figma</span>
 
         <span class="skill-label">Languages</span>
         <span class="skill-value">Dutch (native) · English (C2) · French (B1)</span>
@@ -194,14 +194,14 @@
         <div class="entry-sub">Artevelde University of Applied Sciences, Gent</div>
         <ul>
           <li>Full dev lifecycle: Concept → design (Adobe XD) → product (React/Python) → marketing (Indesign)</li>
-          <li>Graduation project: developing route-optimization and map digitalization for city waste management services Renewi.</li>
+          <li>Graduation project: developing route-optimizations for city waste management services Renewi.</li>
         </ul>
       </div>
     </section>
 
     <section>
       <h2>Personal</h2>
-      <p class="profile">Once spent a whole year building JS animations, simulations and games just to understand building from the ground up — now happy that AI does the scaffolding while I think in intent. Roots in arts and classical music: infinite patience for pixel perfection, sensitive to friction. Off-screen: chess at the local club, BJJ, and one day, wingsuiting with a carpet.</p>
+      <p class="profile">History and philosophy nerd. Chess with Boomers. Wear odd socks on purpose.</p>
     </section>
 
     <footer>References available on request</footer>
@@ -228,8 +228,8 @@
       /* --serif: 'Libre Baskerville', Georgia, serif; */
       --sans: "Inter", system-ui, sans-serif;
       --serif: "Inter", system-ui, sans-serif;
-      /* --link: #0066cc; */
-      --link: #828386;
+      --accent: #2f6f6a;
+      --link: #2f6f6a;
 
       font-size: 11px;
     }
@@ -241,7 +241,14 @@
     a {
       color: var(--link) !important;
       text-decoration: underline;
-      text-decoration-color: var(--rule);
+      text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+      text-underline-offset: 2px;
+    }
+
+    code {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.85em;
+      color: var(--accent);
     }
 
     li::marker {
@@ -287,12 +294,12 @@
       background-position: top center;
       background-repeat: no-repeat;
       background-clip: text; */
-      color: #777;
+      color: var(--ink);
     }
 
     .tagline {
       font-size: 1rem;
-      color: var(--mid);
+      color: var(--accent);
       font-weight: 400;
       font-style: italic;
       font-family: var(--serif);
@@ -334,10 +341,10 @@
       font-weight: 700;
       letter-spacing: 0.4px;
       text-transform: uppercase;
-      color: var(--soft);
+      color: var(--accent);
       margin-bottom: 0.8rem;
-      /* padding-bottom: 0.5rem; */
-      border-bottom: 1px solid var(--rule);
+      padding-bottom: 0.3rem;
+      border-bottom: 1.5px solid color-mix(in srgb, var(--accent) 25%, var(--rule));
       width: 100%;
     }
 
