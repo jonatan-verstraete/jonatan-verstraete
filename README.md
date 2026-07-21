@@ -10,7 +10,7 @@
 
 </div>
 
-<p align="center"><i>Fox: cunning yet pragmatic. Adaptable, autonomous, thriving on stealth, strategy, and simplicity over brute force.</i></p>
+<p align="center"><i>A fox: cunning yet pragmatic. Adaptable, autonomous, thriving on stealth, strategy, and simplicity over brute force.</i></p>
 
 <p align="center">
   <a href="https://jayf0x.github.io/#/contact"><b>jayf0x.github.io</b></a>
@@ -35,11 +35,11 @@
 </td>
 
 <td align="center" width="320" valign="top">
-  <a href="https://github.com/jayf0x/fluidity" title="Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI, npm.">
+  <a href="https://github.com/jayf0x/fluidity" title="Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI. Shipped on npm as@jayf0x/fluidity-js.">
     <img src="https://raw.githubusercontent.com/jayf0x/fluidity/main/assets/preview.gif" width="300" alt="Fluidity-js"/>
     <br/><b>Fluidity-js</b>
   </a>
-  <br/><sub>Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI, npm.</sub>
+  <br/><sub>Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI. Shipped on npm as@jayf0x/fluidity-js.</sub>
 </td>
 
 <td align="center" width="320" valign="top">
