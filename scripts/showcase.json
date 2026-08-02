@@ -1,0 +1,45 @@
+{
+  "$comment": "Hand-picked. Order = layout order: 1 hero, 2 medium, rest go in the strip. No LLM, no scraping — curation is the signal.",
+  "user": "jayf0x",
+  "projects": [
+    {
+      "repo": "fluidity",
+      "title": "Fluidity",
+      "tagline": "WebGL fluid effects for React text & images",
+      "accent": "#4cc9f0",
+      "npm": "@jayf0x/fluidity-js"
+    },
+    {
+      "repo": "PIIPAYA",
+      "title": "PIIPAYA",
+      "tagline": "Offline PII redaction that keeps documents readable",
+      "accent": "#f72585"
+    },
+    {
+      "repo": "timesheet-automation-snapshot",
+      "title": "Timesheet Automation",
+      "tagline": "Git commits in, filled-in R&D timesheets out",
+      "accent": "#ffb703"
+    },
+    {
+      "repo": "weighted-grid",
+      "title": "weighted-grid",
+      "tagline": "Weight in, layout out",
+      "accent": "#8b5cf6",
+      "npm": "weighted-grid"
+    },
+    {
+      "repo": "taglify",
+      "title": "taglify",
+      "tagline": "Generated blocks, always in sync",
+      "accent": "#22c55e",
+      "npm": "taglify"
+    },
+    {
+      "repo": "conways-life",
+      "title": "conways-life",
+      "tagline": "Game of Life on the GPU",
+      "accent": "#38bdf8"
+    }
+  ]
+}

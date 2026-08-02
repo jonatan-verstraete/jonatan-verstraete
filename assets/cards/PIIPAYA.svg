@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="424" height="156" viewBox="0 0 424 156" role="img" aria-label="PIIPAYA">
+  
+  <style>
+    .bg   { fill: #ffffff; }
+    .glow { stop-opacity: 0.10; }
+    .fade { stop-opacity: 0.15; }
+    .edge { stroke: #d8dee4; }
+    .t    { fill: #1f2328; font-weight: 640; }
+    .m    { fill: #59636e; }
+    .pill { fill: #f1f3f5; stroke: #d8dee4; }
+    .pt   { fill: #59636e; font-weight: 600; }
+    text  { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
+    @media (prefers-color-scheme: dark) {
+      .bg   { fill: #0d1117; }
+      .glow { stop-opacity: 0.30; }
+      .fade { stop-opacity: 0.26; }
+      .edge { stroke: #30363d; }
+      .t    { fill: #e6edf3; }
+      .m    { fill: #8b949e; }
+      .pill { fill: #161b22; stroke: #30363d; }
+      .pt   { fill: #8b949e; }
+    }
+  </style>
+  <defs>
+    <radialGradient id="glow" cx="0" cy="0" r="265" gradientUnits="userSpaceOnUse">
+      <stop class="glow" offset="0" stop-color="#f72585"/>
+      <stop offset="1" stop-color="#f72585" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop class="fade" offset="0" stop-color="#f72585"/>
+      <stop offset="1" stop-color="#f72585" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hfade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0.30" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.62" stop-color="#fff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="edgefade"><rect width="424" height="156" fill="url(#hfade)"/></mask>
+  </defs>
+  <clipPath id="clip"><rect x="0" y="0" width="424" height="156" rx="14"/></clipPath>
+  <rect class="bg edge" x="0.5" y="0.5" width="423" height="155" rx="14"/>
+  <rect x="0" y="0" width="424" height="156" rx="14" fill="url(#glow)"/>
+  <g clip-path="url(#clip)" mask="url(#edgefade)">
+    <path d="M178.0,120.7Q178.0,120.7 185.7,108.0Q193.4,95.2 201.1,94.6Q208.8,94.0 216.4,103.3Q224.1,112.6 231.8,131.2Q239.5,149.8 247.2,152.9Q254.9,156.0 262.6,156.0Q270.3,156.0 277.9,156.0Q285.6,156.0 293.3,156.0Q301.0,156.0 308.7,156.0Q316.4,156.0 324.1,156.0Q331.8,156.0 339.4,156.0Q347.1,156.0 354.8,156.0Q362.5,156.0 370.2,156.0Q377.9,156.0 385.6,156.0Q393.3,156.0 400.9,156.0Q408.6,156.0 416.3,156.0L424.0,156.0L424,156L178,156Z" fill="url(#fade)"/>
+    <path d="M178.0,120.7Q178.0,120.7 185.7,108.0Q193.4,95.2 201.1,94.6Q208.8,94.0 216.4,103.3Q224.1,112.6 231.8,131.2Q239.5,149.8 247.2,152.9Q254.9,156.0 262.6,156.0Q270.3,156.0 277.9,156.0Q285.6,156.0 293.3,156.0Q301.0,156.0 308.7,156.0Q316.4,156.0 324.1,156.0Q331.8,156.0 339.4,156.0Q347.1,156.0 354.8,156.0Q362.5,156.0 370.2,156.0Q377.9,156.0 385.6,156.0Q393.3,156.0 400.9,156.0Q408.6,156.0 416.3,156.0L424.0,156.0" fill="none" stroke="#f72585" stroke-width="1.6" stroke-opacity="0.85" stroke-linecap="round"/>
+  </g>
+  <text class="t" x="24" y="41.22" font-size="21">PIIPAYA</text>
+  <text class="m" x="24" y="66.87" font-size="13.5">Offline PII redaction that keeps documents readable</text>
+  <circle cx="29" cy="132" r="5" fill="#ff3e00"/>
+  <text class="m" x="41" y="136" font-size="12.5">Svelte</text>
+</svg>

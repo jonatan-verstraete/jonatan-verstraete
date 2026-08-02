@@ -1,51 +1,27 @@
-#/bin/bash
+#!/bin/bash
+# Refresh the profile README (cards + stats) and re-print the résumé PDF.
+#   ./scripts/update-resume.sh       # just update
+#   ./scripts/update-resume.sh -y    # ...and commit + push
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-export PYTHONPATH="$REPO_ROOT/resume"
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$REPO_ROOT"
 
-if [ "$(pwd)" != "$REPO_ROOT" ]; then
-    echo "Must exec from repo root."
-    exit 1
+# The résumé HTML is the PDF's only input, so only reprint when it actually moved.
+if [[ resume/index.html -nt assets/Jonatan-Verstraete-resume-2026.pdf ]]; then
+    python3 resume/pdf.py
 fi
 
-# means the HTML was updated more recent than the README, so no cache.
-if [[ ./resume/index.html -nt ./README.md ||  ./resume/gen/template.readme.j2 -nt ./README.md ]]; then
-    if ! curl http://localhost:11434; then
-        echo "Exit. Please boot ollama"
-        exit 1
-    fi
-    echo "Run without using cache"
-    python3 -m gen --no-cache
+# Bypass the network cache when the showcase config or the card design changed.
+if [[ scripts/showcase.json -nt README.md || scripts/cards.ts -nt README.md ]]; then
+    bun scripts/readme.ts --no-cache
 else
-    python3 -m gen
+    bun scripts/readme.ts
 fi
-
-# Update site assets
-# SITE_ASSETS="$REPO_ROOT/site/src/assets"
-
-# for pdf in $REPO_ROOT/assets/*.pdf; do
-#     rm -f $SITE_ASSETS/resume.pdf $TARGET/resume.png &> /dev/null
-#     magick -density 300 -quality 100 "$pdf" "$SITE_ASSETS/resume.png"
-#     cp "$pdf" "$SITE_ASSETS/resume.pdf"
-#     break
-# done
-
-# python3 "$SCRIPT_DIR/precommit.py"
-
-
 
 if [ "${1:-}" ]; then
-    # has been changed by the command above
-    # if find README.md -mmin -1 -ls; then
-    #     echo "README is unchanged"
-    #     exit
-    # fi
-
-    git add -- . ':!site'
-    git commit -m "(job: update resume)"
-    # redo due to precommit hook
-    git add -- . ':!site'
+    git add -A -- . ':!web'
+    git diff --cached --quiet && { echo "Nothing changed."; exit 0; }
+    git commit -m "(job: update profile)"
     git push origin main
 fi

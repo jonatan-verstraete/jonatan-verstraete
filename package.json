@@ -1,6 +1,12 @@
 {
   "scripts": {
+    "readme": "bun scripts/readme.ts",
+    "pdf": "python3 resume/pdf.py",
     "update": "bash ./scripts/update-resume.sh",
     "run": "bash ./scripts/update-resume.sh -y"
+  },
+  "devDependencies": {
+    "taglify": "^1.2.1",
+    "weighted-grid": "^1.6.1"
   }
 }

@@ -8,75 +8,32 @@
   <img alt="Focus" src="./assets/loop-light.gif"/>
 </picture>
 
+<a href="https://jayf0x.github.io/#/contact"><b>jayf0x.github.io</b></a>
+
 </div>
 
-<p align="center"><i>A fox: cunning yet pragmatic. Adaptable, autonomous, thriving on stealth, strategy, and simplicity over brute force.</i></p>
+---
 
-<p align="center">
-  <a href="https://jayf0x.github.io/#/contact"><b>jayf0x.github.io</b></a>
-</p>
+<!-- SHOWCASE:START -->
+<p align="center"><a href="https://github.com/jayf0x/fluidity" title="WebGL fluid effects for React text & images"><img src="./assets/cards/fluidity.svg" width="860" alt="Fluidity — WebGL fluid effects for React text & images"/></a></p>
+
+<p align="center"><a href="https://github.com/jayf0x/PIIPAYA" title="Offline PII redaction that keeps documents readable"><img src="./assets/cards/PIIPAYA.svg" width="424" alt="PIIPAYA — Offline PII redaction that keeps documents readable"/></a>
+<a href="https://github.com/jayf0x/timesheet-automation-snapshot" title="Git commits in, filled-in R&D timesheets out"><img src="./assets/cards/timesheet-automation-snapshot.svg" width="424" alt="Timesheet Automation — Git commits in, filled-in R&D timesheets out"/></a></p>
+
+<p align="center"><a href="https://github.com/jayf0x/weighted-grid" title="Weight in, layout out"><img src="./assets/cards/weighted-grid.svg" width="278" alt="weighted-grid — Weight in, layout out"/></a>
+<a href="https://github.com/jayf0x/taglify" title="Generated blocks, always in sync"><img src="./assets/cards/taglify.svg" width="278" alt="taglify — Generated blocks, always in sync"/></a>
+<a href="https://github.com/jayf0x/conways-life" title="Game of Life on the GPU"><img src="./assets/cards/conways-life.svg" width="278" alt="conways-life — Game of Life on the GPU"/></a></p>
+<!-- SHOWCASE:END -->
 
 ---
 
-<h3 align="center">🚀 Projects</h3>
+<!-- NPM:START -->
+<p align="center"><img src="./assets/npm.svg" width="860" alt="npm weekly downloads"/></p>
+<!-- NPM:END -->
 
-<p align="center"><sub>top 3 selection by <code>qwen3.5:9b</code> · <a href="https://github.com/jayf0x/jayf0x/blob/main/resume/gen/projects.py">ℹ️ how it's picked</a></sub></p>
-
-<table align="center">
-
-<tr>
-
-<td align="center" width="320" valign="top">
-  <a href="https://github.com/jayf0x/timesheet-automation-snapshot" title="Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into an optional quick review.">
-    <img src="https://raw.githubusercontent.com/jayf0x/jayf0x/main/assets/placeholder.gif" width="300" alt="Timesheet Automation"/>
-    <br/><b>Timesheet Automation</b>
-  </a>
-  <br/><sub>Headless background process and CLI that pulls Git commits and PR data to auto-fill R&D entries into the internal Bricsys timesheets app. Turned a slow manual daily/weekly process - on an outdated UI - into an optional quick review.</sub>
-</td>
-
-<td align="center" width="320" valign="top">
-  <a href="https://github.com/jayf0x/fluidity" title="Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI. Shipped on npm as@jayf0x/fluidity-js.">
-    <img src="https://raw.githubusercontent.com/jayf0x/fluidity/main/assets/preview.gif" width="300" alt="Fluidity-js"/>
-    <br/><b>Fluidity-js</b>
-  </a>
-  <br/><sub>Published React library for interactive fluid effects on text and images — water, ink, glass, aurora. WebGL shaders running off the main thread via a Web Worker; strict TypeScript, CI. Shipped on npm as@jayf0x/fluidity-js.</sub>
-</td>
-
-<td align="center" width="320" valign="top">
-  <a href="https://github.com/jayf0x/PIIPAYA/" title="Local macOS app (Tauri/Svelte/Python) that redacts PII from documents while keeping the narrative coherent — James instead of NAME. OCR, PDF/DOCX, file batching; fully offline, shipped releases.">
-    <img src="https://raw.githubusercontent.com/jayf0x/PIIPAYA/main/assets/preview.png" width="300" alt="PIIPAYA"/>
-    <br/><b>PIIPAYA</b>
-  </a>
-  <br/><sub>Local macOS app (Tauri/Svelte/Python) that redacts PII from documents while keeping the narrative coherent — James instead of NAME. OCR, PDF/DOCX, file batching; fully offline, shipped releases.</sub>
-</td>
-
-</tr>
-
-</table>
+<p align="center"><sub><a href="https://jayf0x.github.io/#/127-0-0-1?tag=npm">all packages →</a></sub></p>
 
 ---
-
-<h3 align="center">📦 npm</h3>
-
-
-- **[@jayf0x/fluidity-js](https://www.npmjs.com/package/@jayf0x/fluidity-js)** &nbsp;<img src="https://img.shields.io/npm/dm/@jayf0x/fluidity-js?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="@jayf0x/fluidity-js weekly downloads" valign="middle"/>
-
-- **[byte-snap](https://www.npmjs.com/package/byte-snap)** &nbsp;<img src="https://img.shields.io/npm/dm/byte-snap?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="byte-snap weekly downloads" valign="middle"/>
-
-- **[compress-shader-literals](https://www.npmjs.com/package/compress-shader-literals)** &nbsp;<img src="https://img.shields.io/npm/dm/compress-shader-literals?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="compress-shader-literals weekly downloads" valign="middle"/>
-
-- **[plugin-include](https://www.npmjs.com/package/plugin-include)** &nbsp;<img src="https://img.shields.io/npm/dm/plugin-include?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="plugin-include weekly downloads" valign="middle"/>
-
-- **[react-flip-cards](https://www.npmjs.com/package/react-flip-cards)** &nbsp;<img src="https://img.shields.io/npm/dm/react-flip-cards?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="react-flip-cards weekly downloads" valign="middle"/>
-
-- **[taglify](https://www.npmjs.com/package/taglify)** &nbsp;<img src="https://img.shields.io/npm/dm/taglify?style=flat-square&color=E8612C&logo=npm&logoColor=white&label=" alt="taglify weekly downloads" valign="middle"/>
-
-
-<p align="center"><sub><a href="https://jayf0x.github.io/#/127-0-0-1?tag=npm">view all →</a></sub></p>
-
----
-
-<h3 align="center">📈 Activity</h3>
 
 <p align="center">
 <picture>

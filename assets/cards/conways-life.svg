@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="278" height="74" viewBox="0 0 278 74" role="img" aria-label="conways-life">
+  
+  <style>
+    .bg   { fill: #ffffff; }
+    .glow { stop-opacity: 0.10; }
+    .fade { stop-opacity: 0.15; }
+    .edge { stroke: #d8dee4; }
+    .t    { fill: #1f2328; font-weight: 640; }
+    .m    { fill: #59636e; }
+    .pill { fill: #f1f3f5; stroke: #d8dee4; }
+    .pt   { fill: #59636e; font-weight: 600; }
+    text  { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; }
+    @media (prefers-color-scheme: dark) {
+      .bg   { fill: #0d1117; }
+      .glow { stop-opacity: 0.30; }
+      .fade { stop-opacity: 0.26; }
+      .edge { stroke: #30363d; }
+      .t    { fill: #e6edf3; }
+      .m    { fill: #8b949e; }
+      .pill { fill: #161b22; stroke: #30363d; }
+      .pt   { fill: #8b949e; }
+    }
+  </style>
+  <defs>
+    <radialGradient id="glow" cx="0" cy="0" r="126" gradientUnits="userSpaceOnUse">
+      <stop class="glow" offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop class="fade" offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hfade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0.30" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.62" stop-color="#fff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="edgefade"><rect width="278" height="74" fill="url(#hfade)"/></mask>
+  </defs>
+  <clipPath id="clip"><rect x="0" y="0" width="278" height="74" rx="10"/></clipPath>
+  <rect class="bg edge" x="0.5" y="0.5" width="277" height="73" rx="10"/>
+  <rect x="0" y="0" width="278" height="74" rx="10" fill="url(#glow)"/>
+  <g clip-path="url(#clip)">
+    <path d="M0.0,74.0Q0.0,74.0 12.6,74.0Q25.3,74.0 37.9,74.0Q50.5,74.0 63.2,74.0Q75.8,74.0 88.5,74.0Q101.1,74.0 113.7,74.0Q126.4,74.0 139.0,74.0Q151.6,74.0 164.3,74.0Q176.9,74.0 189.5,74.0Q202.2,74.0 214.8,74.0Q227.5,74.0 240.1,62.0Q252.7,50.0 265.4,44.0L278.0,38.0L278,74L0,74Z" fill="url(#fade)"/>
+    <path d="M0.0,74.0Q0.0,74.0 12.6,74.0Q25.3,74.0 37.9,74.0Q50.5,74.0 63.2,74.0Q75.8,74.0 88.5,74.0Q101.1,74.0 113.7,74.0Q126.4,74.0 139.0,74.0Q151.6,74.0 164.3,74.0Q176.9,74.0 189.5,74.0Q202.2,74.0 214.8,74.0Q227.5,74.0 240.1,62.0Q252.7,50.0 265.4,44.0L278.0,38.0" fill="none" stroke="#38bdf8" stroke-width="1.6" stroke-opacity="0.85" stroke-linecap="round"/>
+  </g>
+  <text class="t" x="18" y="30.299999999999997" font-size="15">conways-life</text>
+</svg>
